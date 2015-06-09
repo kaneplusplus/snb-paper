@@ -1,21 +1,10 @@
-
-
-
-
 %                 Doubly-Stopped Binomial Distribution
-
-
 %                        Kane and Zelterman
-
-
-
-
 \typeout{}\typeout{}\typeout{}\typeout{}
 \typeout{ Two-Stage, Phase II Designs }
 \typeout{}\typeout{}
 \typeout{ Michael Kane \& Dan Zelterman }
 \typeout{}\typeout{}\typeout{}\typeout{}
-
 
 \documentclass[12pt]{article}         %LaTeX preamble
 \parskip   .4em
@@ -36,18 +25,10 @@
 \usepackage{url}
 \begin{document}
 
-%\font\fiverm=cmr5                     % Font definition for PicTex
-%\input{prepic.tex}                    % Input three PicTeX files
-%\input{pictex.tex}
-%\input{postpic.tex}
-
 \newtheorem{prop}{Proposition}
 
 
 % --------------- New command definitions ----------------------
-
-%  These commands allow exercises listed as \item[]'s to be listed in
-%  the .aux file and referenced in the text.
 
 \newcounter{bibno}%            Bibliographic counter
 
@@ -138,12 +119,7 @@
 michael.kane@yale.edu}.  This research was supported by grants 
 	R01CA131301, R01CA157749, R01CA148996, R01CA168733 awarded by the National Cancer Institute, and support from the Yale Comprehensive Cancer Center.
 
-
-
 % ------------------------ Abstract ----------------------------
-
-
-
 
 \newpage
 \thispagestyle{empty}
@@ -156,25 +132,48 @@ This paper introduces a new discrete distribution suggested by curtailed samplin
 
 \noindent{\bf Keywords:}  discrete distribution; curtailed sampling
 
-
 % ---------------------------------------------------------------
-
 
 \thispagestyle{empty}
 \setcounter{page}{1}
-
 
 % --------------------  1. Introduction   ----------------------
 \section            {Introduction and Motivation}
 % --------------------------------------------------------------
 
 
-In the classic Simon 2-stage Optimal Design, Phase II clinical trial [\ref{Simon 1989}] a small number of patients are enrolled onto a therapeutic protocol for an initial stage and assess either success according to a clinically useful criteria or else as treatment failure. Failure might include adverse reaction to the drug or withdrawal due to toxicity. We use a large number of these early successes as evidence for whether to additional patients for a second stage. A statistically small number of successes lead us to terminate the trial.
+In the Simon 2-stage Phase II clinical trial [\ref{Simon 1989}], a small 
+number of patients are enrolled onto a therapeutic 
+protocol for an initial stage. Fore each patient, we assess either success 
+or failure according to a 
+clinically useful criteria. Success might include tumor response to treatment
+or perhaps that the response is maintained for a minimum specified duration.
+In addition to failing to achieve the primary endpoint, treatment failure 
+might include adverse reaction to the drug or withdrawal due to toxicity. We 
+use a large number of these early successes as evidence for whether to enroll
+additional patients for a second stage. A statistically small number of 
+successes in Stage I would lead us to terminate the trial without entering 
+Stage II.
 
-Consider the Phase 2 clinical trial that investigates the efficacy of iniparib (BSI-201/SAR240550) in patients with breast cancer gene-associated (BRCA) ovarian cancer [\ref{Sanofi 2013}]. In the first stage 12 patients were treated with iniparib (BSI-201/SAR240550). If at least two of those patients respond, as defined by Response Evaluation Criteria in Solid Tumor (RECIST), then the trial proceeds to the next stage where additional patients were treated.
+Consider the Phase II clinical trial that investigates the efficacy of 
+iniparib in patients with breast cancer gene-associated (BRCA) ovarian 
+cancer [\ref{Sanofi 2013}]. In the first stage 12 patients were treated with 
+iniparib (BSI-201/SAR240550). The endpoint was defined by Response Evaluation 
+Criteria in Solid Tumor (RECIST). If at least two Stage I patients succeeded,
+then the trial would proceed to the next stage where additional patients were 
+treated. If fewer than two of the 12 Stage I patients is successful then 
+the trial would terminate. 
 
-If, in the first stage, two or more are successful then we are lead to believe that the therapy is useful and will proceed to the second stage. Otherwise, the trial will terminate. Our goal is to know the distribution of the sample size of the design for planning purposes.
-If all 12 patients are enrolled at once, as in the classic design, then the sample size is 12. However, in most clinical trials, the patients are enrolled sequentially, often with one patient's outcome realized before the next one enters the trial. In the present example, observing two successful patients allows us to proceed to the next stage. Similarly 11 observed treatment failures also ends the stage. This sampling mechanism, in which the experiment ends as soon as any of the endpoints is reached, is call {\em curtailed sampling}. Under curtailed sampling the range of the sample size is between two and 11.
+Our goal is to know the distribution of the sample size of the design for 
+planning purposes.  If all 12 patients are enrolled at once, as in the classic 
+design, then the sample size is 12. However, in most clinical trials, the 
+patients are enrolled sequentially, often with one patient's outcome realized 
+before the next one enters the trial. In the present example, observing two 
+successful patients allows us to proceed to the next stage. Similarly 11 
+observed treatment failures also ends the stage. This sampling mechanism, in 
+which the experiment ends as soon as any of the endpoints is reached, is 
+call {\em curtailed sampling}. Under curtailed sampling the range of the 
+sample size is between two and 12.
 
 We will assume each of the patient enrollments can be modeled as independent, identically distributed Bernoulli($p$) random variables. The realization of the trial is a sequence of these random variables that stops when either a specified number of success or failures is reached. As an example, suppose in the previously described trial, two successes were reached after enrolling 10 patients (one in the third step and one at the $10^{th}$). The trial is visualized in Fig \ref{fig:kane_viz}. The vertical axis denotes the number of successful outcomes. The horizontal axis denotes the number of patients that have been enrolled. The horizontal and vertical line segments represent endpoints for the trial. 
 
@@ -199,14 +198,21 @@ The next section of this paper introduces our notation and basic results includi
 \label{notation.section}
 % --------------------------------------------------------------
 
-Let $\,B_1, B_2, \ldots \,$ denote a sequence of independent, identically distributed, Bernoulli random variables with 
-$\mathbb{P}\{B_i=1\}=p$, for probability parameter $p \in \{0\leq p\leq 1\}$. Let $s$ and $t$ be positive integers. Define the Stopped Negative Binomial (SNB) random variable $Y$ as the smallest integer value such that $\,\{B_1, \ldots , B_Y\}\,$ contains either $\,s\,$ successes or else $\,t\,$ failures. The distribution of $\,Y\,$ has support on integer values in the range 
+Let $\,B_1, B_2, \ldots \,$ denote a sequence of independent, identically 
+distributed, Bernoulli random variables with $\mathbb{P}\{B_i=1\}=p$, for 
+probability parameter $0\leq p \leq 1$. In the clinical trial setting 
+$\,B_i = 0$ corresponds to a successful enrollment. 
+Let $s$ and $t$ be positive integers. 
+Define the stopped negative binomial (SNB) random variable $Y$ as the smallest 
+integer value such that $\,\{B_1, \ldots , B_Y\}\,$ contains {\em either} 
+$\,s\,$ successes or else $\,t\,$ failures. The distribution of $\,Y\,$ has 
+support on integer values in the range 
 \begin{equation*}                                     %   (3)
      \min(s,t) \leq \; Y \;\leq s+t-1  \label{range.y.eq}
 \end{equation*}
 and it is distributed as
 \begin{equation} \label{eqn:pmf}
-\mathbb{P}\{Y=k\} = S(k, p, s)  \{s \leq k \leq s+t-1\} + T(k, p, t) \{t \leq k \leq s+t-1 \} 
+\mathbb{P}\{Y=k\} = S(k, p, s)  \{s \leq k\} + T(k, p, t) \{t \leq k \} 
 \end{equation}
 where
 \begin{equation} \label{eqn:N}
@@ -223,9 +229,10 @@ is the negative binomial probability of $t$ failures.
 %\label{random.walk.section}
 % --------------------------------------------------------------
 
-To show that (\ref{eqn:pmf}) is the distribution of $Y$, consider the process $\mathbf{X} = \{X(k) : k \in \mathbb{Z}_{\ge 0} \}$ with $X(0)=0$ and
+To illustrate that (\ref{eqn:pmf}) is the distribution of $Y$, consider the 
+process $\mathbf{X} = \{X(k) : k \in \mathbb{Z}_{\ge 0} \}$ with $X(0)=0$ and
 \begin{equation*} \label{eqn:proc}
-X_{k+1} = X_k + B_{k+1} \{ s \leq X_k \leq k-t \}
+X_{k+1} = X_k + B_{k+1} \{ k-t < X_k < s \}
 \end{equation*}
 where $B_{k+1}$ is once again distributed as Bernoulli($p$) for all $k$ in the domain of $\mathbf{X}$. The process can be conceptualized as a series of coin flips that stops when either $s$ heads or $t$ tails are reached. At each step a coin is flipped. If it is heads, the process advances one diagonally in the positive horizontal and vertical direction. Otherwise, it advances in the positive horizontal direction only. The process stops, $X_k$'s value does not change, after either $X_k = s$ or $X_k = k-t$. One example is given in Fig. \ref{fig:kane_viz}.
 
@@ -235,33 +242,38 @@ The distribution of the stopping time $\{k: s \leq X_k \leq k-t \}$ is equal to 
 \begin{proof}
 The proof will proceed in two parts. First, a combinatorial justification will be given for the probability mass value on each element of the support. Second, it will be shown that the sum of the masses over the support sums to one.
 
-The probability that a given realization of $\mathbf{X}$ reaches $s$ at time $k$ is  the probability that, at time $k-1$ there are $s-1$ successful coin flips and $k-s$ unsuccessful coin flips times the probability of a successful coin flip at time $k$ (\ref{eqn:N}). The probability $X_k = k-t$ is the probability that, at time $k-1$ there are $k-t$ successful coin flips and $t-1$ unsuccessful coin flips times the probability of an unsuccessful coin flip at time $k$ (\ref{eqn:R}).
-
-Next, we need to show that the sum
+The probability that a given realization of $\mathbf{X}$ reaches $s$ at 
+time $k$ is  the probability that, at time $k-1$ there are $s-1$ successful 
+coin flips and $k-s$ unsuccessful coin flips times the probability of a 
+successful coin flip at time $k$ (\ref{eqn:N}). The probability $X_k = k-t$ 
+is the probability that, at time $k-1$ there are $k-t$ successful coin flips 
+and $t-1$ unsuccessful coin flips times the probability of an unsuccessful 
+coin flip at time $k$ (\ref{eqn:R}).  Next, we need to show that the sum
 \begin{equation} \label{eqn:sum_proof}
 R = \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s (1-p)^{k-s} + \sum_{k=t}^{s+t-1} {k-1 \choose k-t} p^{k-t} (1-p)^t
 \end{equation}
 is equal to one.
 First, substitute $i=k-s$ in the first summation and
-$j=k-t$ in the second. Then (\ref{eqn:sum_proof}) becomes:
-\begin{equation*}
-R = \sum_{i=0}^{t-1} {i+s-1 \choose s-1} p^s (1-p)^i +
-\sum_{j=0}^{s-1} {j+t-1 \choose j} p^j (1-p)^t.
-\end{equation*}
-Write   
+$j=k-t$ in the second. 
 \begin{equation*}
 {j+s-1 \choose s-1} = {j+s-1 \choose j}
 \end{equation*}
-and so $R$ can be written
+Then %(\ref{eqn:sum_proof}) becomes:
+%\begin{equation*}
+%R = \sum_{i=0}^{t-1} {i+s-1 \choose s-1} p^s (1-p)^i +
+%\sum_{j=0}^{s-1} {j+t-1 \choose j} p^j (1-p)^t.
+%\end{equation*}
+$R$ can be written
 as the cumulative distribution function of two 
 negative binomial distributions
 \begin{equation} \label{eqn:transformed_sum}
-R = \sum_{i=0}^{t-1} {i+s-1 \choose i} p^s (1-p)^i +
+R = \sum_{i=0}^{t-1} {i+s-1 \choose i} p^s (1-p)^i \; + \;
 \sum_{j=0}^{s-1} {j+t-1 \choose j} p^j (1-p)^t.
 \end{equation}
-Let $I_p(s, t)$ be the {\em regularized incomplete beta function}, which is also one minus the c.d.f. of the negative
-binomial distribution, and $I_p(s, t) = I_{1-p}(t, s)$.
-Then the result can be proven as:
+
+Let $I_p(s, t)$ be the {\em regularized incomplete beta function}, which is 
+also one minus the c.d.f. of the negative binomial distribution. This
+function satisfies $I_p(s, t) = I_{1-p}(t, s)$.  Then 
 \begin{align*}
 R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
 \sum_{j=0}^{s-1}  {j+t-1 \choose j} p^j  (1-p)^t \\
@@ -269,6 +281,8 @@ R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
    &= 1. 
 \end{align*}
 \end{proof}
+Proving that \label{eqn:pmf} is a valid probability mass function.
+
 From (\ref{eqn:pmf}) one can see that the mass at any point on the support of the distribution may come from either $X_k = s$, captured in the function $S$, or $X_k = k-t$, captured in the function $T$. The support of $S$ is defined by $s \leq S \leq s+t+1$ and the support of $T$ is defined by $t \leq T \leq s+t+1$.
 
 \begin{figure}[p!]
@@ -280,17 +294,15 @@ From (\ref{eqn:pmf}) one can see that the mass at any point on the support of th
 
 The probability mass function of $\,Y\,$ has a variety of shapes for different choices of the parameters $(s,\, t,\,p)$.
 These shapes are illustrated in Fig.~\ref{shapes.fig}.
-The SNB is related to the negative binomial distribution. Specifically, if $t$ is infinitely large then the $Y-s$ has a negative binomial distribution with
+The SNB is related to the negative binomial distribution. Specifically, if 
+$t$ is infinitely large then the $Y-s$ has a negative binomial distribution 
+with
 \begin{equation*}                                    %   (1)
    \mathbb{P}\{Y=s+j \}        \label{nb1.eq}
           = {{s+j-1}\choose{s-1}} p^s (1-p)^j
 \end{equation*}
-for $\,j=0, 1,\ldots\,$.
-Similarly, if $s$ is infinitely large then $\,Y - t\,$ has a negative binomial distribution with
-\begin{equation*}                                    %   (2)
-    \mathbb{P}\{Y=t+j \}        \label{nb2.eq} 
-               = {{t+j-1}\choose{t-1}} p^j(1-p)^t.
-\end{equation*}
+for $\,j=0, 1,\ldots\,$. A similar statement can be made when $s$ is large
+and $t$ is small.
 
 For the special case of $\,s=t,$ the distribution of $\,Y\,$ is the riff-shuffle, or minimum negative binomial distribution~[\ref{Uppuluri 1970}].
 Similar derivations of the closely-related maximum negative binomial discrete distributions also appear in~[\ref{Zhang 2000}, \ref{Zelterman 2004}].
