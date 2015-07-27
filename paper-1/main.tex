@@ -150,8 +150,8 @@ clinically useful criteria. Success might include tumor response to treatment
 or perhaps that the response is maintained for a minimum specified duration.
 In addition to failing to achieve the primary endpoint, treatment failure 
 might include adverse reaction to the drug or withdrawal due to toxicity. We 
-use a large number of these early successes as evidence for whether to enroll
-additional patients for a second stage. A statistically small number of 
+use a large number of these early successes as evidence for whether to treat
+additional patients in a second stage. A statistically small number of 
 successes in Stage I would lead us to terminate the trial without entering 
 Stage II.
 
@@ -273,7 +273,7 @@ R = \sum_{i=0}^{t-1} {i+s-1 \choose i} p^s (1-p)^i \; + \;
 
 Let $I_p(s, t)$ be the {\em regularized incomplete beta function}, which is 
 also one minus the c.d.f. of the negative binomial distribution. This
-function satisfies $I_p(s, t) = I_{1-p}(t, s)$.  Then 
+function satisfies $I_p(s, t) = 1-I_{1-p}(t, s)$.  Then 
 \begin{align*}
 R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
 \sum_{j=0}^{s-1}  {j+t-1 \choose j} p^j  (1-p)^t \\
@@ -283,7 +283,11 @@ R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
 \end{proof}
 Proving that \label{eqn:pmf} is a valid probability mass function.
 
-From (\ref{eqn:pmf}) one can see that the mass at any point on the support of the distribution may come from either $X_k = s$, captured in the function $S$, or $X_k = k-t$, captured in the function $T$. The support of $S$ is defined by $s \leq S \leq s+t+1$ and the support of $T$ is defined by $t \leq T \leq s+t+1$.
+From (\ref{eqn:pmf}) one can see that the mass at any point on the support 
+of the distribution may come from either $X_k = s$, captured in the 
+function $S$, or $X_k = k-t$, captured in the function $T$. The support of 
+$S$ is defined by $s \leq S \leq s+t-1$ and the support of $T$ is defined 
+by $t \leq T \leq s+t-1$.
 
 \begin{figure}[p!]
 \begin{center}
@@ -354,24 +358,64 @@ The result follows by applying the definition of the Beta function to the integr
 
 \section{A Bayesian Exploration Simon Two-stage Optimal Design}
 
-Returning to the breast cancer trial introduced in the first section, a response rate of 2/12 in the first stage corresponds to an individual probability of responding of $p=0.1667$. The standard deviation of this probability is $\sqrt{p(1-p)/12}=0.1076$. If we were to use the Central Limit Theorem then the 95\% confidence interval around the mean would be $[-0.0442, 0.1076]$. While this approach is problematic since the number of samples (12 in this case) is small it does indicate how much uncertainty is built into the first stage. If we consider samples from both stages then the standard deviation drops to 0.0630 and the 95\% confidence interval would be $[0.0432, 0.2901]$.
+Returning to the breast cancer trial introduced in the first section, a 
+response rate of 2/12 in the first stage corresponds to an individual 
+probability of responding of $p=0.1667$. The standard deviation of this 
+probability is $\sqrt{p(1-p)/12}=0.1076$. If we were to use the Central 
+Limit Theorem then the 95\% confidence interval around the mean would 
+be $[-0.0442, 0.3776]$. While this approach is problematic since the number 
+of samples (12 in this case) is small it does indicate how much uncertainty 
+is built into the first stage. If we consider samples from both stages then 
+the standard deviation drops to 0.0630 and the 95\% confidence interval 
+would be $[0.0432, 0.2901]$.
 
-These calculations expose two difficulties with the Simon Two-stage Optimal Design. First, success in the first stage is not a good indicator of success in the second stage and at the same time failure in first stage in no way implies failure in the second stage, especially when $p$ is close to it's threshold value. The variance in the estimate so large that it is a poor estimator. The second, difficulty is that the design is not {\em enrollment efficient}. That is, if the first stage is successful then additional patients are enrolled. Enrollment, especially for certain types of cancer, can be very difficult and it can taken time to find eligible patients. Furthermore, if all 12 of the patients in the first stage respond positively, should we really need to enroll additional patients?
+These calculations expose two difficulties with the Simon Two-stage Optimal 
+Design. First, success in the first stage is not a good indicator of success 
+in the second stage and at the same time failure in first stage in no way 
+implies failure in the second stage, especially when $p$ is close to it's 
+threshold value. The variance in the estimate is so large that it is a poor 
+estimator. The second difficulty is that the design is not {\em enrollment 
+efficient}. That is, if the first stage is successful then additional patients 
+are enrolled. Enrollment, especially for certain types of cancer, can be very 
+difficult and can take time to find eligible patients. Furthermore, if 
+all 12 of the patients in the first stage respond positively, should we 
+really need to enroll additional patients?
 
-Properly quantifying uncertainty in the process implies quantifying uncertainty in $p$, which stems from two sources. First is the number of samples we receive. Any estimate of $p$ will be based on data and generally the more data we have, the better our estimate. If the data are small, as they often are in clinical trials, the less reliable our estimate is. The second source comes from heterogeneity in the data. While models may assume that the probability of success $p$ is a single value this is often not the case in real-world data. In clinical trials for example an individuals chance of having an adverse outcome may be influenced by any number of underlying factors, which may vary across individual. In these cases $p$ may not be a single numeric value and may be better conceptualized as a realization over an entire distribution. A frequentest approach will not capture this variation.
+Properly quantifying uncertainty in the process implies quantifying 
+uncertainty in $p$, which stems from two sources. First is the number of 
+samples we receive. An estimate of $p$ will be based on data and generally 
+the more data we have, the better our estimate. If the data are small, as 
+they often are in clinical trials, the less reliable our estimate is. The 
+second source comes from heterogeneity in the data. While models may assume 
+that the probability of success $p$ is a single value this is often not the 
+case in real-world data. In clinical trials for example an individual's chance 
+of having an adverse outcome may be influenced by any number of underlying 
+factors, which may vary across individual. In these cases $p$ may not be a 
+single numeric value and may be better conceptualized as a realization over 
+an entire distribution. A frequentest approach will not capture this variation.
 
 We would like to be able to estimate $p$ and capture both sources of uncertainty. For cases where the process has not yet reached an endpoint, we would like to be able to provide updated estimates of $p$, its uncertainty, and the probabilities of hitting each endpoint. If the process has reached an endpoint, we would again like a estimate of $p$ and its uncertainty along with the probability that another endpoint could have been reached, given the data. 
 
 \subsection{Quantifying Uncertainty in the Simon Two-stage Optimal Design}
 
-Both of the problems in the Simon Two-stage Optimal Design stem from the fact that it fails to quantify the uncertainty in the estimate of the success probability. A framework based on Stopped Negative Binomial distribution addresses this failure and provides the added features of monitoring the trial as new results are received, providing estimates of how many new enrollees are needed to complete a trial, and quantifying the uncertainty in the success probability.
+Both of the problems in the Simon Two-stage Optimal Design stem from the fact that it fails to quantify the uncertainty in the estimate of the success probability. A framework based on the SNB distribution addresses this failure and 
+provides the added features of monitoring the trial as new results are 
+received, providing estimates of how many new enrollees are needed to complete 
+a trial, and quantifying the uncertainty in the success probability.
 
-Let's start by recasting the breast cancer study in the context of the Stopped Negative Binomial framework, assuming sequential enrollment. The first stage will stop when either two positive responses are reached or 11 negative responses. This corresponds to a Stopped Negative Binomial Distribution with $s=2$ and $t=11$. Next, lets assume that, in the first stage, there were two successes. A second success could occur during the second, through a tenth enrollment. At each of these times we would like to know the estimate for $p$ along with the lower five percent quantile of the distribution.
+Let's start by recasting the breast cancer study in the context of the SNB 
+framework, assuming sequential enrollment. The first stage will stop when 
+either two positive responses are reached or 11 negative responses. This 
+corresponds to a SNB distribution with $s=2$ and $t=11$. Next, let's assume 
+that, in the first stage, there were two successes. A second success could 
+occur during the second, through a tenth enrollment. At each of these times we 
+would like to know the estimate for $p$ along with the lower five percent 
+quantile of the distribution.
 
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{uncertainty.pdf}
 \caption{
-A visualization of the mode and the 0.05\% quantile of the estimate of the distribution of $p$.
+A visualization of the mode and the 5\% quantile of the estimate of the distribution of $p$.
 }
 \label{fig:simon}
 \end{figure}
@@ -395,7 +439,7 @@ To better understand how the distributional estimate of $p$ changes in the numbe
 \end{tabular} 
 \end{center}
 \caption{
-A table of the mode and the 0.05\% quantile of the estimate of the distribution of $p$.
+A table of the mode and the 5\% quantile of the estimate of the distribution of $p$.
 }
 \label{tab:simon}
 \end{table} 
@@ -409,12 +453,16 @@ Like most Bayesian Adaptive Clinical trials the SNB approach allows for monitori
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{hypo_traj.pdf}
 \caption{
-A visualization of the mode and the 0.05\% quantile of the estimate of the distribution of $p$ for a hypothetical sequence of patient enrollments.
+A visualization of the mode and the 5\% quantile of the estimate of the distribution of $p$ for a hypothetical sequence of patient enrollments.
 }
 \label{fig:hypo}
 \end{figure}
 
-Consider the trial described above. Suppose eight patients were enrolled and there was a single success on the third trial (visualized in Fig. \ref{fig:hypo}). Since the mode of the beta distribution can only be calculated when there is at least one success the maximum of the mean and the mode of the distribution is shown as the estimate. At the third time step there is an increase in the estimate and the 0.05 \% quantile corresponding to the success. 
+Consider the trial described above. Suppose eight patients were enrolled and 
+there was a single success on the third trial (visualized in Fig. 
+\ref{fig:hypo}). The mode of the beta distribution can only be calculated when 
+there is at least one success. The mean of the distribution can be
+taken otherwise. At the third time step there is an increase in the estimate and the 5\% quantile corresponding to the success. 
 
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{conditional_snb.pdf}
@@ -424,13 +472,26 @@ The conditional Stopped Negative Binomial distribution after eight patients with
 \label{fig:conditional_snb}
 \end{figure}
 
-Fig. \ref{fig:conditional_snb} shows the conditional, compound SNB distribution. In each of the following enrollment a success would end the trial. If none of the following enrollments are success then the trial will stop at the eleventh patient. From Fig. \ref{fig:hypo} we know that the estimate of $p$ is about 0.19. The conditional compound distribution gives the probability of another success as 0.3883 and the probability of no more success (and the first stage failing) as 0.6117. Furthermore, we can see that the probability that the trial ends in the next step is approximately 20\% and the probability the trials end with the $11^{th}$ patient is about 65\%.
+Fig. \ref{fig:conditional_snb} shows the compound SNB distribution. In each of the following enrollment a success would end the trial. If none of the following enrollments are success then the trial will stop at the eleventh patient. From Fig. \ref{fig:hypo} we know that the estimate of $p$ is about 0.19. The compound distribution gives the probability of another success as 0.3883 and the probability of no more success (and the first stage failing) as 0.6117. Furthermore, we can see that the probability that the trial ends in the next step is approximately 20\% and the probability the trials end with the $11^{th}$ patient is about 65\%.
 
 \subsection{Post-hoc Evaluation}
 
-Suppose that in our example trial that a second successful outcome is reached on the $10^th$ patient. From the data collected we have shown how to create an estimate for the distribution of $p$. Based on that estimate we may like to see the probability of a different outcome. That is, what is the probability that we don't get two successful outcomes based on the data we have collected and what is the posterior distribution for the number of patients enrolled for the study?
+Suppose that, in our example trial, a second successful outcome was reached 
+on the $10^{th}$ patient. From the data collected we have shown how to create 
+an estimate for the distribution of $p$. Based on that estimate we may like to 
+see the probability of a different outcome. We may want to answer the
+question, "What is the probability that we don't get two successful outcomes?" 
+We may also ask what is the distribution for the number of patients 
+enrolled for a similar study?
 
-In this case the success probability $p$ is distributed as $Beta(2.5, 8.8)$. Using the mode a point estimate yields $\hat{p} = 0.1667$. The standard deviation of the estimate is 0.1210. The probability of two successes during the trial is 0.6843 and the probability of failure is 0.3157. The distribution of the stopping times, along with contributions from two positive events and less than two positive events is shown below.
+If there are two successful enrollments with the second one occurring 
+on the $10^{th}$ trial the success probability $p$ is distributed as 
+$Beta(2.5, 8.8)$. 
+Using the mode, a point estimate yields $\hat{p} = 0.1667$. The standard 
+deviation of the estimate is 0.1210. The probability of two successes during 
+the trial is 0.6843 and the probability of failure is 0.3157. The distribution 
+of the stopping times, along with contributions from two positive events and 
+less than two positive events is shown below.
 
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{post_hoc.pdf}

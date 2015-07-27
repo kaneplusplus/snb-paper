@@ -1,9 +1,9 @@
 
 clean:
-	rm *.aux *.bbl *.blg *.log *.out rm main.pdf
+	rm rf *.aux *.bbl *.blg *.log *.out rm main.pdf
 
 bib:
-	bibtex bibliography
+	bibtex main
 
 doc:
 	pdflatex main.tex
