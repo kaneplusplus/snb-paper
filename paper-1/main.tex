@@ -165,7 +165,9 @@ treated. If fewer than two of the 12 Stage I patients is successful then
 the trial would terminate. 
 
 Our goal is to know the distribution of the sample size of the design for 
-planning purposes.  If all 12 patients are enrolled at once, as in the classic 
+planning purposes and to characterize the uncertainty in the estimate of the
+success probability.  If all 12 patients are enrolled at once, 
+as in the classic 
 design, then the sample size is 12. However, in most clinical trials, the 
 patients are enrolled sequentially, often with one patient's outcome realized 
 before the next one enters the trial. In the present example, observing two 
@@ -187,7 +189,16 @@ A hypothetical realization of the breast cancer trial.
 
 %Our goals for this paper are three-fold. First, we derive the distribution for the number patients that need to be enrolled in the described sequential trial, which we refer to as the {\em Stopped Negative Binomial} (SNB) distribution. Using a sequential trial it is often possible to reduce the number of patients needed when compared to traditional design. Understanding of this distribution allows to create better, more {\em enrollment efficient} designs. Second, assuming a Beta distribution on the probability of success, we will derive the compound distribution of the SNB. Both the success probability and the SNB compound distribution can be updated as the individual outcome of patients are known and, as a result, better estimates of the distribution of patient-enrollment size can be derived as new data are received. Third, we will use the derived results to propose an enrollment design framework alternative to the Simon Two-stage Optimal trial design. We will show a hypothetical but representative case where the number of enrollments is less than those proposed by the Simon Two-stage and the uncertainty associated with both the individual success outcome as well as the trial is fully characterized.
 
-The next section of this paper introduces our notation and basic results including the density of the SNB and compound SNB along with a description of it's relation to other distributions. Sections 2 and 3 derive the distribution based on a defined Bernoulli process and give some basic properties of the distribution. Section 4 derives the compound distribution using a Beta prior. Section 5 develops a post-hoc analysis of a completed trial. Section 6 is devoted to discussion and conclusions. The simulations, model fitting routines, and visualizations presented in this paper were generated using the snb package [\ref{Kane 2015}] for the R programming environment [\ref{R Core Team 2015}]
+The next section of this paper introduces our notation and basic results 
+including the density of the distribution along with a description of 
+it's relation to other distributions. Sections 2 and 3 derive the distribution 
+based on a defined Bernoulli process and give some basic properties of the 
+distribution. Section 4 derives the compound distribution using a Beta prior. 
+Section 5 develops a post-hoc analysis of a completed trial. Section 6 is 
+devoted to discussion and conclusions. The simulations, model fitting 
+routines, and visualizations presented in this paper were generated using the 
+snb package [\ref{Kane 2015}] for the R programming 
+environment [\ref{R Core Team 2015}]
 
 %Their individual outcomes are summarized as independent Bernoulli, %with either success according to a clinically useful criteria or else %as treatment failure. Failure might include adverse reaction to the %drug or withdrawal due to toxicity. Successes occur with probability %$\,p\; (0\leq p\leq 1)$.   
 
@@ -350,7 +361,7 @@ For notational simplicity, assume that $s,t \leq k \leq s+k-1$. When this is not
 \begin{align*}
 f(k | s, t, \alpha, \beta) = \frac{1}{B(\alpha, \beta)} & \int_0^1 {k-1 \choose s-1} p^{\alpha +s -1} \left(1-p\right)^{k-s+\beta-1} + \\
  & {k-1 \choose k-t} p^{k-t+\alpha-1}\left(1-p\right)^{t+b-1} dp \\
-= \frac{1}{B(\alpha, \beta)}  {k-1 \choose s-1} & \int_0^1  p^{\alpha +s -1} \left(1-p\right)^{k-s+\beta-1} + \\
+= \frac{1}{B(\alpha, \beta)}  {k-1 \choose s-1} & \int_0^1  p^{\alpha +s -1} \left(1-p\right)^{k-s+\beta-1} dp + \\
  & \frac{1}{B(\alpha, \beta)} {k-1 \choose k-t} \int_0^1  p^{k-t+\alpha-1}\left(1-p\right)^{t+b-1} dp
 \end{align*}
 The result follows by applying the definition of the Beta function to the integral terms.
@@ -448,7 +459,15 @@ Table \ref{tab:simon} shows the actual values used to generate Fig. \ref{fig:sim
 
 \subsection{Trial Monitoring}
 
-Like most Bayesian Adaptive Clinical trials the SNB approach allows for monitoring of trial and can be updated as new results are received without losing power. Essentially this is because the object under investigation is not a point estimate of the success probability. It is the uncertainty in the distribution of the success probability. Point estimates of the success probability can be regarded as artifacts of our parameterization of the underlying distribution. Every point estimate calculated is accompanied by the quantification of the uncertainty around it. This estimate and it's uncertainty can be calculated at any time and may be useful in evaluating ongoing trials as well as providing a post-hoc evaluation of trials that have been completed.
+Like most Bayesian Adaptive Clinical trials the SNB approach allows for monitoring of trial and can be updated as new results are received without losing 
+power. This is because the object under investigation is not a point estimate 
+of the success probability; it is the uncertainty in the distribution of the 
+success probability. Point estimates of the success probability can be 
+regarded as artifacts of our parameterization of the underlying distribution. 
+Every point estimate calculated is accompanied by the quantification of the 
+uncertainty around it. This estimate and its uncertainty can be calculated at 
+any time and may be useful in evaluating ongoing trials as well as providing a 
+post-hoc evaluation of trials that have been completed.
 
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{hypo_traj.pdf}
@@ -472,7 +491,13 @@ The conditional Stopped Negative Binomial distribution after eight patients with
 \label{fig:conditional_snb}
 \end{figure}
 
-Fig. \ref{fig:conditional_snb} shows the compound SNB distribution. In each of the following enrollment a success would end the trial. If none of the following enrollments are success then the trial will stop at the eleventh patient. From Fig. \ref{fig:hypo} we know that the estimate of $p$ is about 0.19. The compound distribution gives the probability of another success as 0.3883 and the probability of no more success (and the first stage failing) as 0.6117. Furthermore, we can see that the probability that the trial ends in the next step is approximately 20\% and the probability the trials end with the $11^{th}$ patient is about 65\%.
+Fig \ref{fig:hypo} shows that at the eight enrollment the estimate of $p$ is 
+about 0.19 and, from the lower 5\% quantile, we can see that there is
+a 95\% probability that $p$ is greater than 2.5\%. 
+Fig. \ref{fig:conditional_snb} shows the compound SNB distribution for this 
+hypothetical trial at the eighth step.  Successes may occur 
+at steps nine through 11 with probability 26.7\%. The remaining probability
+mass corresponds to reaching the $11^{th}$ step without a second success.
 
 \subsection{Post-hoc Evaluation}
 
@@ -480,7 +505,7 @@ Suppose that, in our example trial, a second successful outcome was reached
 on the $10^{th}$ patient. From the data collected we have shown how to create 
 an estimate for the distribution of $p$. Based on that estimate we may like to 
 see the probability of a different outcome. We may want to answer the
-question, "What is the probability that we don't get two successful outcomes?" 
+question, ``What is the probability that we don't get two successful outcomes?''
 We may also ask what is the distribution for the number of patients 
 enrolled for a similar study?
 
