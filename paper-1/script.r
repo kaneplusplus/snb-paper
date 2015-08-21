@@ -56,20 +56,7 @@ ggsave("KanePlot.pdf", p3, width=7, height=5)
 s=2
 t=11
 trial = c(0, 0, 1, 0, 0, 0, 0, 0)
-fit = fit_flips(trial, s=s, t=t)
-# Use the mode for the 
-phat = (fit['shape1'] - 1) / (fit['shape1'] + fit['shape2'] - 2)
-total_range = s+t-1
-conditional_range = (length(trial):total_range)
-conditional_s = s - sum(trial)
-conditional_t = t - sum(1-trial)
-# Use the mode unless we don't have enough data.
-p_hat = if(fit[1] < 1 || fit[2] < 1) {
-          fit[1] / (fit[1] + fit[2]) 
-        } else {
-          (fit[1] - 1) / (fit[1] + fit[2] - 2)
-        }
+p4 = cdsnb_stack_plot(trial, s, t)
+ggsave("conditional_snb.pdf", p4, width=7, height=5)
 
-step_offset = length(trial)
-p4 = dsnb_stack_plot(p_hat, conditional_s, conditional_t, offset=step_offset)
-ggsave("conditional_snb.pdf", width=7, height=5)
+cdsnb(trial, s, t)
