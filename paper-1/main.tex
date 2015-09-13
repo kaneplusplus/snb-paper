@@ -131,7 +131,15 @@ michael.kane@yale.edu}.  This research was supported by grants
 
 \section*    {\bf   Abstract}
 
-This paper introduces a new discrete distribution suggested by curtailed sampling rules common in early-stage clinical trials. We derive the distribution of the smallest number of independent Bernoulli($p$) trials needed in order to observe either $s$ successes or $t$ failures. The closed form expression for the distribution as well as the compound distribution are derived. Properties of the distribution are shown and discussed. A case study is presented showing how the distribution can be used to monitor sequential enrollment of clinical trials with binary outcomes as well as providing post-hoc analysis of completed trials.
+This paper introduces a new discrete distribution suggested by curtailed 
+sampling rules common in early-stage clinical trials. We derive the 
+distribution of the smallest number of independent Bernoulli($p$) trials 
+needed in order to observe either $s$ successes or $t$ failures. The closed 
+form expression for the distribution as well as the compound distribution are 
+derived. Properties of the distribution are shown and discussed. A case study 
+is presented showing how the distribution can be used to monitor sequential 
+enrollment of clinical trials with binary outcomes as well as providing 
+post-hoc analysis of completed trials.
 
 \bigskip
 
@@ -160,17 +168,17 @@ additional patients in a second stage. A statistically small number of
 successes in Stage I would lead us to terminate the trial without entering 
 Stage II.
 
-Consider the Phase II clinical trial that investigates the efficacy of 
+Consider the Phase II clinical trial that investigated the efficacy of 
 iniparib in patients with breast cancer gene-associated (BRCA) ovarian 
 cancer [\ref{Sanofi 2013}]. In the first stage 12 patients were treated with 
 iniparib (BSI-201/SAR240550). The endpoint was defined by Response Evaluation 
 Criteria in Solid Tumor (RECIST). If at least two Stage I patients succeeded,
-then the trial would proceed to the next stage where additional patients were 
-treated. If fewer than two of the 12 Stage I patients is successful then 
-the trial would terminate. 
+then the trial would have proceed to the next stage where additional patients 
+were treated. If fewer than two of the 12 Stage I patients is successful then 
+the trial would have terminated. 
 
-Our goal is to know the distribution of the sample size of the design for 
-planning purposes and to characterize the uncertainty in the estimate of the
+Our goal is to describe the distribution of the sample size of the design for 
+planning purposes and to use this distribution to estimate the
 success probability.  If all 12 patients are enrolled at once, 
 as in the classic 
 design, then the sample size is 12. However, in most clinical trials, the 
@@ -182,7 +190,16 @@ which the experiment ends as soon as any of the endpoints is reached, is
 call {\em curtailed sampling}. Under curtailed sampling the range of the 
 sample size is between two and 12.
 
-We will assume each of the patient enrollments can be modeled as independent, identically distributed Bernoulli($p$) random variables. The realization of the trial is a sequence of these random variables that stops when either a specified number of success or failures is reached. As an example, suppose in the previously described trial, two successes were reached after enrolling 10 patients (one in the third step and one at the $10^{th}$). The trial is visualized in Fig \ref{fig:kane_viz}. The vertical axis denotes the number of successful outcomes. The horizontal axis denotes the number of patients that have been enrolled. The horizontal and vertical line segments represent endpoints for the trial. 
+We assume each of the patient outcomes can be modeled as independent, 
+identically distributed Bernoulli($p$) random variables. The realization of 
+the trial is a sequence of these random variables that stops when either a 
+specified number of success or failures is reached. As an example, suppose in 
+the previously described trial, two successes were reached after enrolling 10 
+patients (one in the third step and one at the $10^{th}$). The trial is 
+visualized in Fig \ref{fig:kane_viz}. The vertical axis denotes the number of 
+successful outcomes. The horizontal axis denotes the number of patients that 
+have been enrolled. The horizontal and vertical line segments represent 
+endpoints for the trial. 
 
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{KanePlot.pdf}
@@ -214,61 +231,80 @@ environment [\ref{R Core Team 2015}]
 \label{notation.section}
 % --------------------------------------------------------------
 
-Let $\,B_1, B_2, \ldots \,$ denote a sequence of independent, identically 
-distributed, Bernoulli random variables with $\mathbb{P}\{B_i=1\}=p$, for 
+Let $\,b_1, b_2, \ldots \,$ denote a sequence of independent, identically 
+distributed, Bernoulli random variables with $\mathbb{P}\{b_i=1\}=p$, for 
 probability parameter $0\leq p \leq 1$. In the clinical trial setting 
-$\,B_i = 0$ corresponds to a successful enrollment. 
-Let $s$ and $t$ be positive integers. 
-Define the stopped negative binomial (SNB) random variable $Y$ as the smallest 
-integer value such that $\,\{B_1, \ldots , B_Y\}\,$ contains {\em either} 
-$\,s\,$ successes or else $\,t\,$ failures. The distribution of $\,Y\,$ has 
+$\,b_i = 0$ corresponds to an unsuccessful outcome.  Let $s$ and $t$ be 
+positive integers.  Define the stopped negative binomial (SNB) random 
+variable $Y$ as the smallest 
+integer value such that $\,\{b_1, \ldots , b_Y\}\,$ contains {\em either} 
+$\,s\,$ successes {\em or} $\,t\,$ failures. The distribution of $\,Y\,$ has 
 support on integer values in the range 
 \begin{equation*}                                     %   (3)
      \min(s,t) \leq \; Y \;\leq s+t-1  \label{range.y.eq}
 \end{equation*}
 and it is distributed as
 \begin{equation} \label{eqn:pmf}
-\mathbb{P}\{Y=k\} = S(k, p, s)  \{s \leq k\} + T(k, p, t) \{t \leq k \} 
+\mathbb{P}[Y=k] = S(k, p, s)  [s \leq k] + T(k, p, t) [t \leq k ] 
 \end{equation}
-where
+where 
 \begin{equation} \label{eqn:N}
 S(k, p, s) = {k-1 \choose s-1} p^s (1-p)^{k-s} 
 \end{equation}
-is the negative binomial probability of $s$ successes and
+is the negative binomial probability of $s$ successful outcomes and
 \begin{equation} \label{eqn:R}
 T(k, p, t) = {k-1 \choose k-t} p^{k-t} (1-p)^t
 \end{equation}
-is the negative binomial probability of $t$ failures. It should be noted that
-this result expressed using the de Finetti where indicator functions and
-sets are equivalent. A more complete explanation of this equivalence can be 
-found in [\ref{Pollard 2002}]. 
+is the negative binomial probability of $t$ unsuccessful outcomes. 
+From (\ref{eqn:pmf}) one can see that the mass at any point on the support 
+of the distribution may come from either $X_k = s$, captured in the 
+function $S$, or $X_k = k-t$, captured in the function $T$. The support of 
+$S$ is defined by $s \leq S \leq s+t-1$ and the support of $T$ is defined 
+by $t \leq T \leq s+t-1$.
+
+%It should be noted that
+%this result expressed using the de Finetti where indicator functions and
+%sets are equivalent. A more complete explanation of this equivalence can be 
+%found in [\ref{Pollard 2002}]. 
 
 % ------------   Section 3: Random Walk  --------------
 %\section {Deriving the SNB with a Random Walk}
 %\label{random.walk.section}
 % --------------------------------------------------------------
 
-To illustrate that (\ref{eqn:pmf}) is the distribution of $Y$, consider the 
+To show the result in Equation (\ref{eqn:pmf}) consider the 
 process $\mathbf{X} = \{X(k) : k \in \mathbb{Z}_{\ge 0} \}$ with $X(0)=0$ and
 \begin{equation*} \label{eqn:proc}
-X_{k+1} = X_k + B_{k+1} \left[ k-t < X_k < s \right]
+X_{k+1} = X_k + b_{k+1} \left[ k-t < X_k < s \right].
 \end{equation*}
-where $B_{k+1}$ is once again distributed as Bernoulli($p$) for all $k$ in the domain of $\mathbf{X}$. The process can be conceptualized as a series of coin flips that stops when either $s$ heads or $t$ tails are reached. At each step a coin is flipped. If it is heads, the process advances one diagonally in the positive horizontal and vertical direction. Otherwise, it advances in the positive horizontal direction only. The process stops, $X_k$'s value does not change, after either $X_k = s$ or $X_k = k-t$. One example is given in Fig. \ref{fig:kane_viz}.
+As before the $b_{k+1}$'s are distributed as Bernoulli($p$) for all $k$ in the 
+domain of $\mathbf{X}$. The process can be conceptualized as a series of coin 
+flips that stops when either $s$ heads or $t$ tails are reached. At each step 
+a coin is flipped. If it is heads, the process advances one diagonally in the 
+positive horizontal and vertical direction. Otherwise, it advances in the 
+positive horizontal direction only. When the process stops, $X_k$'s and 
+remains either $X_k = s$ or $X_k = k-t$. One example is given in 
+Fig. \ref{fig:kane_viz}.
 
 \begin{prop}
 The distribution of the stopping time $\argminl_k [X_k \geq s, X_k \leq k-t]$ 
 is equal to the SNB and is given in (\ref{eqn:pmf}). 
 \end{prop}
 \begin{proof}
-The proof will proceed in two parts. First, a combinatorial justification will be given for the probability mass value on each element of the support. Second, it will be shown that the sum of the masses over the support sums to one.
+%The proof will proceed in two parts. First, a combinatorial justification 
+%will be given for the probability mass value on each element of the support. 
+%Second, it will be shown that the sum of the masses over the support sums to 
+%one.
 
 The probability that a given realization of $\mathbf{X}$ reaches $s$ at 
-time $k$ is  the probability that, at time $k-1$ there are $s-1$ successful 
-coin flips and $k-s$ unsuccessful coin flips times the probability of a 
-successful coin flip at time $k$ (\ref{eqn:N}). The probability $X_k = k-t$ 
-is the probability that, at time $k-1$ there are $k-t$ successful coin flips 
-and $t-1$ unsuccessful coin flips times the probability of an unsuccessful 
-coin flip at time $k$ (\ref{eqn:R}).  Next, we need to show that the sum
+the $k$th outcome is the probability that, at time $k-1$ there are $s-1$ 
+successful outcomes and $k-s$ unsuccessful outcomes multiplied by 
+the probability of a 
+success at time $k$ (\ref{eqn:N}). The probability $X_k = k-t$ 
+is the probability that, at outcome $k-1$ there are $k-t$ successful outcomes 
+and $t-1$ unsuccessful outcomes multiplied by the probability of an 
+unsuccessful outcome at time $k$ (\ref{eqn:R}).  Finally, we need to show that 
+the sum
 \begin{equation} \label{eqn:sum_proof}
 R = \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s (1-p)^{k-s} + \sum_{k=t}^{s+t-1} {k-1 \choose k-t} p^{k-t} (1-p)^t
 \end{equation}
@@ -293,7 +329,9 @@ R = \sum_{i=0}^{t-1} {i+s-1 \choose i} p^s (1-p)^i \; + \;
 
 Let $I_p(s, t)$ be the {\em regularized incomplete beta function}, which is 
 also one minus the c.d.f. of the negative binomial distribution. This
-function satisfies $I_p(s, t) = 1-I_{1-p}(t, s)$.  Then 
+function satisfies $I_p(s, t) = 1-I_{1-p}(t, s)$.  Then it can be proven
+that \ref{eqn:pmf} is a valid probability mass by showing that the
+probability mass function sums to one.
 \begin{align*}
 R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
 \sum_{j=0}^{s-1}  {j+t-1 \choose j} p^j  (1-p)^t \\
@@ -301,13 +339,41 @@ R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
    &= 1. 
 \end{align*}
 \end{proof}
-Proving that \ref{eqn:pmf} is a valid probability mass function.
 
-From (\ref{eqn:pmf}) one can see that the mass at any point on the support 
-of the distribution may come from either $X_k = s$, captured in the 
-function $S$, or $X_k = k-t$, captured in the function $T$. The support of 
-$S$ is defined by $s \leq S \leq s+t-1$ and the support of $T$ is defined 
-by $t \leq T \leq s+t-1$.
+
+\begin{prop} Let $S$ be distributed SNB with parameters $p$, $s$, and $t$.
+Then the moment generating function (MGF) of $S$ is
+\begin{equation} \label{eqn:mgf}
+\mathbb{E}~e^{xS} = \frac{p e^x}{1 - qe^x} I_{qe^x} (s, t) + \frac{qe^x}{1-pe^x} I_{pe^x}(s, t)
+\end{equation}
+for $q = 1-p$ when $x \leq -\log(q)$ and $x \leq -\log(p)$.
+\end{prop}
+\begin{proof}
+By definition, the MFG of the SNB is:
+\begin{equation*}
+\mathbb{E}~e^{xS} = \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s q^{k-s} e^{kx} 
+  + \sum_{k=t}^{s+t-1} {k-1 \choose k-t} p^{k-t} q^t e^{kx}
+\end{equation*}
+and this can be rewritten as:
+\begin{equation} \label{eqn:first_sum}
+\mathbb{E}~e^{xS} = \sum_{k=s}^{s+t-1}{k-1 \choose s-1} (pe)^{sx} (qe^x)^{k-s} 
+  + \sum_{k=t}^{s+t-1}{k-1 \choose k-t} (qe^x)^t (pe^x)^{k-t}.
+\end{equation}
+Taking the first summation in Equation \ref{eqn:first_sum}:
+\begin{align*}
+\sum_{k=s}^{s+t-1}{k-1 \choose s-1} (pe)^{sx} (qe^x)^{k-s} &= 
+  \left(\frac{pe^x}{1 - qe^x}\right)^s \ \ \sum_{k=s}^{s+t-1} {k-1 \choose s-1} 
+    (qe^x)^{k-s} (1-qe^x)^s) \\
+  &= \left(\frac{pe^x}{1 - qe^x}\right)^s I_{qe^x}(s, t).
+\end{align*}
+Since the incomplete beta function has support on zero to one 
+$qe^x \leq 1$. This implies that $x \leq -\log(q)$.
+
+A similar expression can be derived using the same calculation with 
+the constraint that $x \leq -\log(p)$. The result
+follows from the afore mentioned property of the regularized incomplete
+beta function.
+\end{proof}
 
 \begin{figure}[p!]
 \begin{center}
@@ -320,7 +386,7 @@ mass contributed by hitting $t$. \label{shapes.fig}}
 The probability mass function of $\,Y\,$ has a variety of shapes for different choices of the parameters $(s,\, t,\,p)$.
 These shapes are illustrated in Fig.~\ref{shapes.fig}.
 The SNB is related to the negative binomial distribution. Specifically, if 
-$t$ is infinitely large then the $Y-s$ has a negative binomial distribution 
+$t$ is large then the $Y-s$ has a negative binomial distribution 
 with
 \begin{equation*}                                    %   (1)
    \mathbb{P}\{Y=s+j \}        \label{nb1.eq}
@@ -332,16 +398,16 @@ and $t$ is small.
 For the special case of $\,s=t,$ the distribution of $\,Y\,$ is the 
 riff-shuffle, or minimum negative binomial distribution~[\ref{Uppuluri 1970}].
 Similar derivations of the closely-related maximum negative binomial discrete 
-distributions also appear in~[\ref{Zhang 2000}, \ref{Zelterman 2004}]. However,
-where the maximum negative binomial is the smallest number of coin-flips 
-to observe at least $c$ successes {\em and} $c$ failures, the snb give
+distributions also appear in~[\ref{Zhang 2000}, \ref{Zelterman 2004}]. 
+The maximum negative binomial is the smallest number of outcomes necessary
+to observe at least $c$ successes {\em and} $c$ failures, but the SNB give
 the number of coin flips to observe {\em either} $s$ heads or $t$ tails.
 
 %\subsection{Updating the SNB distribution}
 
 %Under the presented random walk construction if the process is observed before reaching one of its endpoints the conditional distribution is a reparametrized SNB distribution whose parameters are determined by $X_k$ and $k$, the process value and time step. For example, in the breast cancer trial the distribution of the number of patients is parameterized as $SNB(2, 11, p)$. At the third enrollment there is one successful outcome. Conditioned on this information, the number of additional patient enrollments is $SNB(1, 9, p)$. As new outcomes are collected the conditional distribution can be re-derived to get better estimates of the total patient enrollment. Furthermore, if our task is to estimate $p$ along with the patient enrollment distribution, this parameter can also be updated as new data are received.  
 
-\section{The Posterior Distribution}
+\section{A Bayesian Analysis}
 
 %The previous section derives a new distribution for a sequential Bernoulli process where the process is stopped when either a total number of successes is reached or a total number of failure is reached. The process can be alternatively conceptualize as a series of coin flips that stops when either $s$ heads or $t$ tails are reached. At each step a coin is flipped. If it is heads then one step is taken in the positive direction on the vertical axis. Otherwise, a step is taken in the positive direction on the horizontal axis. The walk stops when either $s$ is reached on the vertical axis or $t$ is reached on the horizontal axis. A visual example is shown in Fig. \ref{fig:zelterman_viz}.
 
@@ -354,23 +420,22 @@ the number of coin flips to observe {\em either} $s$ heads or $t$ tails.
 %\label{fig:zelterman_viz}
 %\end{figure}
 
-If we assume that $p$ has a Beta distribution, with constant prior parameters $\alpha$ and $\beta$ then we can calculate the closed form posterior 
-distribution of the SNB as
+Let us assume that $p$ has a Beta distribution, with constant prior 
+parameters $\alpha$ and $\beta$. Then the closed form 
+posterior distribution of the SNB is
 \begin{align}
-\mathbb{P} \{Y = k | \mathbf{B}, \alpha, \beta \} &= {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} \{s \leq k \leq s+k-1\} + \nonumber \\
-& {k-1 \choose k-t} \frac{B\left(\alpha + k - t, t+\beta\right)}{B(\alpha, \beta)} \{t \leq k \leq s+k-1\}
+\mathbb{P} \left[Y = k | \mathbf{b}, \alpha, \beta \right] &= 
+  {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} 
+  [s \leq k \leq s+k-1] + \nonumber \\
+  & {k-1 \choose k-t} 
+  \frac{B\left(\alpha + k - t, t+\beta\right)}{B(\alpha, \beta)} 
+  [t \leq k \leq s+k-1]
 \end{align}
-where $B$ is the Beta function and $\mathbf{B}$ is the sequence of Bernoulli data.
+where $B$ is the Beta function and $\mathbf{b}$ is the sequence of Bernoulli data.
 
-When $p$ is known, the probability mass function (PMF) of the number of steps 
-until the process is stopped is given by (\ref{eqn:pmf}). However, many times 
-this is not the case. In Phase II clinical trials for example patients are 
-often enrolled sequentially until there are enough patients to guarantee the 
-desired level of power or until a specified number of adverse events are 
-recorded. In cases such as these the endpoints $s$ and $t$ are known and we 
-would like to be able to estimate $p$ either during enrollment to provide odds 
-of successful enrollment or after an endpoint has been reached to determine 
-the amount of uncertainty in the endpoint. 
+%When $p$ is known, the probability mass function (PMF) of the number of steps 
+%until the process is stopped is given by (\ref{eqn:pmf}). However, many times 
+%this is not the case. 
 %To do this, we will assume that $p$'s probability in the absence of 
 %available data is $\text{Beta}(1/2, 1/2)$, the Jeffrey's prior. This 
 %distribution was chosen for two reasons. First, it is the conjugate prior 
@@ -382,14 +447,17 @@ the amount of uncertainty in the endpoint.
 
 \begin{prop}
 The posterior PMF of the Stopped Negative Binomial distribution with a Beta($\alpha$, $\beta$) prior is:
-\begin{align}
-f(k | s, t, \alpha, \beta) &= {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} \{s \leq k \leq s+k-1\} + \nonumber \\
-& {k-1 \choose k-t} \frac{B\left(\alpha + k - t, t+\beta\right)}{B(\alpha, \beta)} \{t \leq k \leq s+k-1\}
+\begin{align} \label{eqn:posterior}
+f(k | s, t, \alpha, \beta) &= 
+  {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)}     [s \leq k \leq s+k-1] + \nonumber \\
+  & {k-1 \choose k-t} 
+    \frac{B\left(\alpha + k - t, t+\beta\right)}{B(\alpha, \beta)} 
+    [t \leq k \leq s+k-1]
 \end{align}
 where $B$ is the Beta function.
 \end{prop}
 \begin{proof}
-For notational simplicity, assume that $s,t \leq k \leq s+k-1$. When this is not the case appropriate terms should be removed as dictated by the indicator functions.
+For notational simplicity, assume that $s,t \leq k \leq s+t-1$. When this is not the case appropriate terms should be removed as dictated by the indicator functions.
 \begin{align*}
 f(k | s, t, \alpha, \beta) = \frac{1}{B(\alpha, \beta)} & \int_0^1 {k-1 \choose s-1} p^{\alpha +s -1} \left(1-p\right)^{k-s+\beta-1} + \\
  & {k-1 \choose k-t} p^{k-t+\alpha-1}\left(1-p\right)^{t+b-1} dp \\
@@ -399,22 +467,32 @@ f(k | s, t, \alpha, \beta) = \frac{1}{B(\alpha, \beta)} & \int_0^1 {k-1 \choose 
 The result follows by applying the definition of the Beta function to the integral terms.
 \end{proof}
 
-\section{A Bayesian Exploration Simon Two-stage Optimal Design}
+Equation \ref{eqn:posterior} suggests an alternative construction for 
+Phase II clinical trials.  Patients could be 
+enrolled sequentially until there are enough patients to guarantee the 
+desired level of power or until a specified number of adverse events are 
+recorded. In cases such as these the endpoints $s$ and $t$ are known and 
+new outcomes can be incorporated into the estimate of
+$p$ to provide updated odds of successful enrollment. Later it will be shown 
+that estimates of the distribution of $p$ can even be used after an endpoint 
+has been reached to determine the amount of uncertainty in the endpoint. 
 
-Returning to the breast cancer trial introduced in the first section, consider
-the first stage, having a sampel size of 12. A
-response rate of 2/12 stage corresponds to an individual 
-probability of responding of $p=0.1667$. The standard deviation of this 
-probability is $\sqrt{p(1-p)/12}=0.1076$. If we were to use the Central 
-Limit Theorem then the 95\% confidence interval around the mean would 
-be $[-0.0442, 0.3776]$. While this approach is problematic since the number 
-of samples (12 in this case) is small it does indicate how much uncertainty 
-is built into the first stage. If we consider samples from both stages then 
-the standard deviation drops to 0.0630 and the 95\% confidence interval 
-would be $[0.0432, 0.2901]$.
+\section{A Bayesian Design for Clinical Trials}
 
-These calculations expose two difficulties with the Simon Two-stage Optimal 
-Design. First, success in the first stage is not a good indicator of success 
+%Returning to the breast cancer trial introduced in the first section, consider
+%the first stage, having a sample size of 12. A
+%response rate of 2/12 stage corresponds to an individual 
+%probability of responding of $p=0.1667$. The standard deviation of this 
+%probability is $\sqrt{p(1-p)/12}=0.1076$. If we were to use the Central 
+%Limit Theorem then the 95\% confidence interval around the mean would 
+%be $[-0.0442, 0.3776]$. While this approach is problematic since the number 
+%of samples (12 in this case) is small it does indicate how much uncertainty 
+%is built into the first stage. If we consider samples from both stages then 
+%the standard deviation drops to 0.0630 and the 95\% confidence interval 
+%would be $[0.0432, 0.2901]$.
+
+The Simon Two-stage Optimal Design faces two problems. 
+First, success in the first stage is not a good indicator of success 
 in the second stage and at the same time failure in first stage in no way 
 implies failure in the second stage, especially when $p$ is close to it's 
 threshold value. The variance in the estimate is so large that it is a poor 
@@ -611,9 +689,9 @@ success probability with a minimum number of patient enrollees.
 \item[\bibref{Kane 2015}]
 Kane MJ. (2015). snb: The Stopped Negative Binomial. R package version 0.1. 2015. Available from \url{https://github.com/kaneplusplus/snb}
 
-\item[\bibref{Pollard 2002}]
-Pollard D. {\it A User's Guide to Measure Theoretic Probability}, 
-Cambridge University Press, 2002.
+%\item[\bibref{Pollard 2002}]
+%Pollard D. {\it A User's Guide to Measure Theoretic Probability}, 
+%Cambridge University Press, 2002.
 
 \item[\bibref{R Core Team 2015}]
 R Core Team (2015). R: A language and environment for statistical
