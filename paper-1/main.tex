@@ -3,8 +3,9 @@
 \typeout{}\typeout{}\typeout{}\typeout{}
 \typeout{ Two-Stage, Phase II Designs }
 \typeout{}\typeout{}
-\typeout{ Michael Kane \& Dan Zelterman }
+\typeout{ Michelle DeVeaux \& Michael Kane \& Dan Zelterman }
 \typeout{}\typeout{}\typeout{}\typeout{}
+
 
 \documentclass[12pt]{article}         %LaTeX preamble
 \parskip   .4em
@@ -23,6 +24,8 @@
 \usepackage{amsfonts}
 \usepackage{amsthm}
 \usepackage{url}
+\DeclareMathOperator*{\argmin}{argmin}
+\newcommand*{\argminl}{\argmin\limits}
 \begin{document}
 
 \newtheorem{prop}{Proposition}
@@ -84,6 +87,7 @@
 \newcommand{\y}{\mbox{\boldmath $y$}}         %  bold y in math mode
 \newcommand{\z}{\mbox{\boldmath $z$}}         %  bold z in math mode
 
+
 % ------------------- my hyphenation rules ---------------------
 
 \hyphenation{general-iza-tions}
@@ -100,6 +104,7 @@
 
 \vspace*{1.25in}
 \begin{tabular}{l} 
+ {\bf Michelle DeVeaux} \\
  {\bf Michael Kane${}^*$} \\
  {\bf Daniel Zelterman}  \\[.1in]
 
@@ -144,7 +149,7 @@ This paper introduces a new discrete distribution suggested by curtailed samplin
 
 In the Simon 2-stage Phase II clinical trial [\ref{Simon 1989}], a small 
 number of patients are enrolled onto a therapeutic 
-protocol for an initial stage. Fore each patient, we assess either success 
+protocol for an initial stage. For each patient, we assess either success 
 or failure according to a 
 clinically useful criteria. Success might include tumor response to treatment
 or perhaps that the response is maintained for a minimum specified duration.
@@ -205,7 +210,7 @@ environment [\ref{R Core Team 2015}]
 %More generally, suppose we have a sequence of independent Bernoulli$(p)\,$random variables $\,Z_1, Z_2, \ldots$. For positive integers $\,s\,$ and $\,t,$  we study the distribution of the smallest number $\,Y\,$ such that $\,Z_1, Z_2, \ldots, Z_Y\,$ %contains either $\,s\,$ successes of $\,t\,$ failures.
 
 % ---------------------------  2. Notation ----------------------
-\section   {Notation and summary of distributional results}
+\section   {Notation and Summary of Distributional Results}
 \label{notation.section}
 % --------------------------------------------------------------
 
@@ -233,7 +238,10 @@ is the negative binomial probability of $s$ successes and
 \begin{equation} \label{eqn:R}
 T(k, p, t) = {k-1 \choose k-t} p^{k-t} (1-p)^t
 \end{equation}
-is the negative binomial probability of $t$ failures.
+is the negative binomial probability of $t$ failures. It should be noted that
+this result expressed using the de Finetti where indicator functions and
+sets are equivalent. A more complete explanation of this equivalence can be 
+found in [\ref{Pollard 2002}]. 
 
 % ------------   Section 3: Random Walk  --------------
 %\section {Deriving the SNB with a Random Walk}
@@ -243,12 +251,13 @@ is the negative binomial probability of $t$ failures.
 To illustrate that (\ref{eqn:pmf}) is the distribution of $Y$, consider the 
 process $\mathbf{X} = \{X(k) : k \in \mathbb{Z}_{\ge 0} \}$ with $X(0)=0$ and
 \begin{equation*} \label{eqn:proc}
-X_{k+1} = X_k + B_{k+1} \{ k-t < X_k < s \}
+X_{k+1} = X_k + B_{k+1} \left[ k-t < X_k < s \right]
 \end{equation*}
 where $B_{k+1}$ is once again distributed as Bernoulli($p$) for all $k$ in the domain of $\mathbf{X}$. The process can be conceptualized as a series of coin flips that stops when either $s$ heads or $t$ tails are reached. At each step a coin is flipped. If it is heads, the process advances one diagonally in the positive horizontal and vertical direction. Otherwise, it advances in the positive horizontal direction only. The process stops, $X_k$'s value does not change, after either $X_k = s$ or $X_k = k-t$. One example is given in Fig. \ref{fig:kane_viz}.
 
 \begin{prop}
-The distribution of the stopping time $\{k: s \leq X_k \leq k-t \}$ is equal to the SNB and is given in (\ref{eqn:pmf}). 
+The distribution of the stopping time $\argminl_k [X_k \geq s, X_k \leq k-t]$ 
+is equal to the SNB and is given in (\ref{eqn:pmf}). 
 \end{prop}
 \begin{proof}
 The proof will proceed in two parts. First, a combinatorial justification will be given for the probability mass value on each element of the support. Second, it will be shown that the sum of the masses over the support sums to one.
@@ -292,7 +301,7 @@ R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
    &= 1. 
 \end{align*}
 \end{proof}
-Proving that \label{eqn:pmf} is a valid probability mass function.
+Proving that \ref{eqn:pmf} is a valid probability mass function.
 
 From (\ref{eqn:pmf}) one can see that the mass at any point on the support 
 of the distribution may come from either $X_k = s$, captured in the 
@@ -302,9 +311,10 @@ by $t \leq T \leq s+t-1$.
 
 \begin{figure}[p!]
 \begin{center}
-\includegraphics[scale=.9]{shapes.pdf}
+\includegraphics[width=\textwidth]{shapes.pdf}
 \end{center}
-\caption{Different shapes of the SNB distribution with parameters ($s$, $t$, $p$), as given. \label{shapes.fig}}
+\caption{Different shapes of the SNB distribution with parameters ($s$, $t$, $p$), as given. Red indicates mass contributed by hitting $s$, teal indicates
+mass contributed by hitting $t$. \label{shapes.fig}}
 \end{figure}
 
 The probability mass function of $\,Y\,$ has a variety of shapes for different choices of the parameters $(s,\, t,\,p)$.
@@ -319,14 +329,19 @@ with
 for $\,j=0, 1,\ldots\,$. A similar statement can be made when $s$ is large
 and $t$ is small.
 
-For the special case of $\,s=t,$ the distribution of $\,Y\,$ is the riff-shuffle, or minimum negative binomial distribution~[\ref{Uppuluri 1970}].
-Similar derivations of the closely-related maximum negative binomial discrete distributions also appear in~[\ref{Zhang 2000}, \ref{Zelterman 2004}].
+For the special case of $\,s=t,$ the distribution of $\,Y\,$ is the 
+riff-shuffle, or minimum negative binomial distribution~[\ref{Uppuluri 1970}].
+Similar derivations of the closely-related maximum negative binomial discrete 
+distributions also appear in~[\ref{Zhang 2000}, \ref{Zelterman 2004}]. However,
+where the maximum negative binomial is the smallest number of coin-flips 
+to observe at least $c$ successes {\em and} $c$ failures, the snb give
+the number of coin flips to observe {\em either} $s$ heads or $t$ tails.
 
 %\subsection{Updating the SNB distribution}
 
 %Under the presented random walk construction if the process is observed before reaching one of its endpoints the conditional distribution is a reparametrized SNB distribution whose parameters are determined by $X_k$ and $k$, the process value and time step. For example, in the breast cancer trial the distribution of the number of patients is parameterized as $SNB(2, 11, p)$. At the third enrollment there is one successful outcome. Conditioned on this information, the number of additional patient enrollments is $SNB(1, 9, p)$. As new outcomes are collected the conditional distribution can be re-derived to get better estimates of the total patient enrollment. Furthermore, if our task is to estimate $p$ along with the patient enrollment distribution, this parameter can also be updated as new data are received.  
 
-\section{The Compound Distribution}
+\section{The Posterior Distribution}
 
 %The previous section derives a new distribution for a sequential Bernoulli process where the process is stopped when either a total number of successes is reached or a total number of failure is reached. The process can be alternatively conceptualize as a series of coin flips that stops when either $s$ heads or $t$ tails are reached. At each step a coin is flipped. If it is heads then one step is taken in the positive direction on the vertical axis. Otherwise, a step is taken in the positive direction on the horizontal axis. The walk stops when either $s$ is reached on the vertical axis or $t$ is reached on the horizontal axis. A visual example is shown in Fig. \ref{fig:zelterman_viz}.
 
@@ -339,17 +354,34 @@ Similar derivations of the closely-related maximum negative binomial discrete di
 %\label{fig:zelterman_viz}
 %\end{figure}
 
-If we assume that $p$ has a Beta distribution, with constant prior parameters $\alpha$ and $\beta$ then we can calculate the closed form compound distribution of the SNB as
+If we assume that $p$ has a Beta distribution, with constant prior parameters $\alpha$ and $\beta$ then we can calculate the closed form posterior 
+distribution of the SNB as
 \begin{align}
 \mathbb{P} \{Y = k | \mathbf{B}, \alpha, \beta \} &= {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} \{s \leq k \leq s+k-1\} + \nonumber \\
 & {k-1 \choose k-t} \frac{B\left(\alpha + k - t, t+\beta\right)}{B(\alpha, \beta)} \{t \leq k \leq s+k-1\}
 \end{align}
 where $B$ is the Beta function and $\mathbf{B}$ is the sequence of Bernoulli data.
 
-When $p$ is known, the probability mass function (PMF) of the number of steps until the process is stopped is given by (\ref{eqn:pmf}). However, many times this is not the case. In Phase II clinical trials for example patients are often enrolled sequentially until there are enough patients to guarantee the desired level of power or until a specified number of adverse events are recorded. In cases such as these the endpoints $s$ and $t$ are known and we would like to be able to estimate $p$ either during enrollment to provide odds of successful enrollment or after an endpoint has been reached to determine the amount of uncertainty in the endpoint. To do this, we will assume that $p$'s probability in the absence of available data is $\text{Beta}(1/2, 1/2)$, the Jeffrey's prior. This distribution was chosen for two reasons. First, it is the conjugate prior of the (Negative) Binomial distribution and updating the distribution as data are received is straightforward. Second, it is objective and limits the number of ``prior coin-flips'' to one. This means that data are more heavily influence the distributional characteristics of $p$ with more data providing more proportional influence.
+When $p$ is known, the probability mass function (PMF) of the number of steps 
+until the process is stopped is given by (\ref{eqn:pmf}). However, many times 
+this is not the case. In Phase II clinical trials for example patients are 
+often enrolled sequentially until there are enough patients to guarantee the 
+desired level of power or until a specified number of adverse events are 
+recorded. In cases such as these the endpoints $s$ and $t$ are known and we 
+would like to be able to estimate $p$ either during enrollment to provide odds 
+of successful enrollment or after an endpoint has been reached to determine 
+the amount of uncertainty in the endpoint. 
+%To do this, we will assume that $p$'s probability in the absence of 
+%available data is $\text{Beta}(1/2, 1/2)$, the Jeffrey's prior. This 
+%distribution was chosen for two reasons. First, it is the conjugate prior 
+%of the (Negative) Binomial distribution and updating the distribution as data 
+%are received is straightforward. Second, it is objective and limits the number 
+%of ``prior coin-flips'' to one. This means that data are more heavily 
+%influence the distributional characteristics of $p$ with more data providing 
+%more proportional influence.
 
 \begin{prop}
-The compound PMF of the Stopped Negative Binomial distribution with a Beta($\alpha$, $\beta$) prior is:
+The posterior PMF of the Stopped Negative Binomial distribution with a Beta($\alpha$, $\beta$) prior is:
 \begin{align}
 f(k | s, t, \alpha, \beta) &= {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} \{s \leq k \leq s+k-1\} + \nonumber \\
 & {k-1 \choose k-t} \frac{B\left(\alpha + k - t, t+\beta\right)}{B(\alpha, \beta)} \{t \leq k \leq s+k-1\}
@@ -369,8 +401,9 @@ The result follows by applying the definition of the Beta function to the integr
 
 \section{A Bayesian Exploration Simon Two-stage Optimal Design}
 
-Returning to the breast cancer trial introduced in the first section, a 
-response rate of 2/12 in the first stage corresponds to an individual 
+Returning to the breast cancer trial introduced in the first section, consider
+the first stage, having a sampel size of 12. A
+response rate of 2/12 stage corresponds to an individual 
 probability of responding of $p=0.1667$. The standard deviation of this 
 probability is $\sqrt{p(1-p)/12}=0.1076$. If we were to use the Central 
 Limit Theorem then the 95\% confidence interval around the mean would 
@@ -403,7 +436,7 @@ case in real-world data. In clinical trials for example an individual's chance
 of having an adverse outcome may be influenced by any number of underlying 
 factors, which may vary across individual. In these cases $p$ may not be a 
 single numeric value and may be better conceptualized as a realization over 
-an entire distribution. A frequentest approach will not capture this variation.
+an entire distribution. A frequentist approach will not capture this variation.
 
 We would like to be able to estimate $p$ and capture both sources of uncertainty. For cases where the process has not yet reached an endpoint, we would like to be able to provide updated estimates of $p$, its uncertainty, and the probabilities of hitting each endpoint. If the process has reached an endpoint, we would again like a estimate of $p$ and its uncertainty along with the probability that another endpoint could have been reached, given the data. 
 
@@ -421,7 +454,7 @@ corresponds to a SNB distribution with $s=2$ and $t=11$. Next, let's assume
 that, in the first stage, there were two successes. A second success could 
 occur during the second, through a tenth enrollment. At each of these times we 
 would like to know the estimate for $p$ along with the lower five percent 
-quantile of the distribution.
+quantile of the distribution. 
 
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{uncertainty.pdf}
@@ -431,7 +464,19 @@ A visualization of the mode and the 5\% quantile of the estimate of the distribu
 \label{fig:simon}
 \end{figure}
 
-To better understand how the distributional estimate of $p$ changes in the number of steps needed for two successes data were simulated for each potential stopping point from two to 11. This procedure essentially estimates the shape parameters of a beta distribution. Fig. \ref{fig:simon} shows the change in the mode of the distribution, which is also the Maximum Likelihood Estimator (MLE) as well as the five percent quantile of the distribution. The graph shows, for example, that if a second success is found with the third enrollment then the MLE estimate of $p$ is 0.5 and with 95\% confidence $p$ is at least 0.25. In this case investigators could have moved on to the next stage of the trial with only three enrollments as opposed to 12.
+To better understand how the distributional estimate of $p$ changes in the 
+number of steps needed for two successes data were simulated for each 
+potential stopping point from two to 11. That is, we will fit the
+Beta distribution with the Jeffrey's prior to the sequence of coin flips 
+$\{[1,1], [1, 0, 1], [1, 0, 0, 1], ... \}$ in the support of the SNB with
+$s=2$ and $t=11$.  Fig. \ref{fig:simon} shows the 
+change in the mode of the beta distribution, which is also the Maximum 
+Likelihood Estimator (MLE) as well as the five percent quantile of the 
+distribution.  The graph shows, for example, that if a second success is 
+found with the third enrollment then the MLE estimate of $p$ is 0.5 and with 
+95\% confidence $p$ is at least 0.25. In this case investigators could have 
+moved on to the next stage of the trial with only three enrollments as 
+opposed to 12.
 
 \begin{table}
 \begin{center}
@@ -455,7 +500,14 @@ A table of the mode and the 5\% quantile of the estimate of the distribution of 
 \label{tab:simon}
 \end{table} 
 
-Table \ref{tab:simon} shows the actual values used to generate Fig. \ref{fig:simon}. In the beginning of this section it was shown that, at the end of stage two, the breast cancer study actually tests whether the probability of success is greater than 0.0432 with 95\% confidence and requires 35 patients to do so. With the Stopped Negative Binomial model we only need six patients for the same level of confidence. This represents a tremendous amount of savings in time, effort and resources.
+Table \ref{tab:simon} shows the actual values used to generate Fig. 
+\ref{fig:simon}. 
+%In the beginning of this section it was shown that, at the 
+%end of stage two, the breast cancer study actually tests whether the 
+%probability of success is greater than 0.0432 with 95\% confidence and 
+%requires 35 patients to do so. With the Stopped Negative Binomial model we 
+%only need six patients for the same level of confidence. This represents a 
+%tremendous amount of savings in time, effort and resources.
 
 \subsection{Trial Monitoring}
 
@@ -491,10 +543,10 @@ The conditional Stopped Negative Binomial distribution after eight patients with
 \label{fig:conditional_snb}
 \end{figure}
 
-Fig \ref{fig:hypo} shows that at the eight enrollment the estimate of $p$ is 
+Fig \ref{fig:hypo} shows that at the eighth enrollment the estimate of $p$ is 
 about 0.19 and, from the lower 5\% quantile, we can see that there is
 a 95\% probability that $p$ is greater than 2.5\%. 
-Fig. \ref{fig:conditional_snb} shows the compound SNB distribution for this 
+Fig. \ref{fig:conditional_snb} shows the posterior SNB distribution for this 
 hypothetical trial at the eighth step.  Successes may occur 
 at steps nine through 11 with probability 26.7\%. The remaining probability
 mass corresponds to reaching the $11^{th}$ step without a second success.
@@ -511,7 +563,7 @@ enrolled for a similar study?
 
 If there are two successful enrollments with the second one occurring 
 on the $10^{th}$ trial the success probability $p$ is distributed as 
-$Beta(2.5, 8.8)$. 
+$Beta(2.5, 8.5)$ (assuming the Jeffrey's prior). 
 Using the mode, a point estimate yields $\hat{p} = 0.1667$. The standard 
 deviation of the estimate is 0.1210. The probability of two successes during 
 the trial is 0.6843 and the probability of failure is 0.3157. The distribution 
@@ -528,9 +580,23 @@ The post-hoc Stopped Negative Binomial distribution after the trial ends with 10
 
 \section{Discussion and Conclusion}
 
-We have presented a new discrete distribution by curtailed sampling rules common in early-stage clinical trials, which we refer to as the Stopped Negative Binomial distribution. The distribution models the stopping time of a sequential trial where the trial is stopped when a number of events are accumulated. The compound distribution was derived for the case when the event probability $p$ has a Beta distribution. Using a trial description from \url{clinicaltrials.gov} we showed how the SNB is an integral part of trial monitoring, and post-hoc analysis and can be used in a framework alternative to the Simon two-stage optimal design while providing better estimates of the event probability along with quantifying the uncertainty associated with the estimates. As a result, we were able to show fewer patient enrollments and achieve the same estimates, with added  in a hypothetical, but representative, clinical trial.
+We have presented a new discrete distribution by curtailed sampling rules common in early-stage clinical trials, which we refer to as the Stopped Negative Binomial distribution. The distribution models the stopping time of a sequential trial where the trial is stopped when a number of events are accumulated. The 
+posterior distribution was derived for the case when the event probability $p$ 
+has a Beta distribution. Using a trial description from 
+\url{clinicaltrials.gov} we showed how the SNB is an integral part of trial 
+monitoring, and post-hoc analysis and can be used in a framework alternative 
+to the Simon two-stage optimal design while providing better estimates of the 
+event probability along with quantifying the uncertainty associated with the 
+estimates. As a result, we were able to show fewer patient enrollments and 
+achieve the same estimates, when added in a hypothetical, but representative, 
+clinical trial.
 
-Current work focuses on the generalization of the distribution and the application in other areas of clinical trials. Adverse outcomes in particular are another area that could greatly benefit both from the presented distribution and its framework. For these trials monitoring may need to be performed not only on the outcome of an intervention but also on the safety of the trial. This especially in areas like late-stage cancer treatments where the treatment is harsh and patients may be forced to drop out as a result of the side-effects of the treatment; a matter independent of the outcome. Other application areas include providing design that allows clinicians to balance uncertainty and success probability with a minimum number of patient enrollees.
+Current work focuses on the generalization of the distribution and the application in other areas of clinical trials. Adverse outcomes in particular are another area that could greatly benefit both from the presented distribution and its framework. For these trials monitoring may need to be performed not only on the outcome of an intervention but also on the safety of the trial. This especially 
+true in areas like late-stage cancer treatments where the treatment is harsh 
+and patients may be forced to drop out as a result of the side-effects of the 
+treatment; a matter independent of the outcome. Other application areas 
+include providing designs that allows clinicians to balance uncertainty and 
+success probability with a minimum number of patient enrollees.
 
 %   ------------------------    References     -----------------------
 
@@ -544,6 +610,10 @@ Current work focuses on the generalization of the distribution and the applicati
 
 \item[\bibref{Kane 2015}]
 Kane MJ. (2015). snb: The Stopped Negative Binomial. R package version 0.1. 2015. Available from \url{https://github.com/kaneplusplus/snb}
+
+\item[\bibref{Pollard 2002}]
+Pollard D. {\it A User's Guide to Measure Theoretic Probability}, 
+Cambridge University Press, 2002.
 
 \item[\bibref{R Core Team 2015}]
 R Core Team (2015). R: A language and environment for statistical

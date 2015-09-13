@@ -60,3 +60,42 @@ p4 = cdsnb_stack_plot(trial, s, t)
 ggsave("conditional_snb.pdf", p4, width=7, height=5)
 
 cdsnb(trial, s, t)
+
+
+approx_plots_start = list(
+  dsnb_stack_plot(0.2, 15, 75) + scale_x_discrete(breaks=seq(15, 95, by=10)) + 
+    labs(x="", y="", title="bimodal example (15, 75, .2)"),
+  dsnb_stack_plot(0.35, 50, 50) + scale_x_discrete(breaks=seq(50, 105, by=10))+
+    labs(x="", y="", title="approximate normal (50, 50, .35)"),
+  dsnb_stack_plot(0.06, 10, 10) + scale_x_discrete(breaks=seq(10, 20, by=2))+
+    labs(x="", y="", title="geometric (10, 10, .06)"),
+  dsnb_stack_plot(0.06, 3, 175) + scale_x_discrete(breaks=seq(3, 180, by=30))+ 
+    labs(x="", y="", title="gamma approximation (3, 175, .06)"),
+  dsnb_stack_plot(0.5, 25, 25) + scale_x_discrete(breaks=seq(25, 50, by=5))+
+    labs(x="", y="", title="lower half normal (25, 25, .5)"),
+  dsnb_stack_plot(0.98, 175, 2) + scale_x_discrete(breaks=seq(2, 180, by=20))+
+    labs(x="", y="", title="local mode at top of range (175, 2, .98)"))
+
+library(foreach)
+library(grid)
+
+approx_plots = foreach(p=approx_plots_start) %do% {
+  p + theme(legend.position="none") 
+}
+
+vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
+
+pdf("shapes.pdf", width=10, height=11)
+grid.newpage()
+p = pushViewport(viewport(layout = grid.layout(3, 2)))
+
+k=1
+for (i in 1:3) {
+  for (j in 1:2) {
+    print(approx_plots[[k]], vp=vplayout(i, j))
+    k = k+1
+  }
+}
+dev.off()
+
+
