@@ -121,8 +121,10 @@
 \vspace*{\fill}
 
 \noindent${}^*$Email address for author: {\tt
-michael.kane@yale.edu}.  This research was supported by grants 
-	R01CA131301, R01CA157749, R01CA148996, R01CA168733 awarded by the National Cancer Institute, and support from the Yale Comprehensive Cancer Center.
+michael.kane@yale.edu}.  
+This research was supported by grants R01CA131301, R01CA157749, R01CA148996, 
+R01CA168733, and PC50CA196530 awarded by the National Cancer Institute, and 
+support from the Yale Comprehensive Cancer Center.
 
 % ------------------------ Abstract ----------------------------
 
@@ -155,29 +157,31 @@ post-hoc analysis of completed trials.
 % --------------------------------------------------------------
 
 
-In the Simon 2-stage Phase II clinical trial [\ref{Simon 1989}], a small 
-number of patients are enrolled onto a therapeutic 
-protocol for an initial stage. For each patient, we assess either success 
-or failure according to a 
-clinically useful criteria. Success might include tumor response to treatment
-or perhaps that the response is maintained for a minimum specified duration.
-In addition to failing to achieve the primary endpoint, treatment failure 
-might include adverse reaction to the drug or withdrawal due to toxicity. We 
-use a large number of these early successes as evidence for whether to treat
-additional patients in a second stage. A statistically small number of 
-successes in Stage I would lead us to terminate the trial without entering 
-Stage II.
+%In the Simon 2-stage Phase II clinical trial [\ref{Simon 1989}], a small 
+%number of patients are enrolled onto a therapeutic 
+%protocol for an initial stage. For each patient, we assess either success 
+%or failure according to a 
+%clinically useful criteria. Success might include tumor response to treatment
+%or perhaps that the response is maintained for a minimum specified duration.
+%In addition to failing to achieve the primary endpoint, treatment failure 
+%might include adverse reaction to the drug or withdrawal due to toxicity. We 
+%use a large number of these early successes as evidence for whether to treat
+%additional patients in a second stage. A statistically small number of 
+%successes in Stage I would lead us to terminate the trial without entering 
+%Stage II.
 
-Consider the Phase II clinical trial that investigated the efficacy of 
-iniparib in patients with breast cancer gene-associated (BRCA) ovarian 
-cancer [\ref{Sanofi 2013}]. In the first stage 12 patients were treated with 
-iniparib (BSI-201/SAR240550). The endpoint was defined by Response Evaluation 
-Criteria in Solid Tumor (RECIST). If at least two Stage I patients succeeded,
-then the trial would have proceed to the next stage where additional patients 
-were treated. If fewer than two of the 12 Stage I patients is successful then 
-the trial would have terminated. 
+Consider the design for a Phase II clinical trial to investigated the 
+efficacy of iniparib in patients with breast cancer gene-associated (BRCA) 
+ovarian cancer [\ref{Sanofi 2013}]. In the first stage, 12 patients were 
+treated with iniparib (BSI-201/SAR240550). The endpoint was defined by 
+Response Evaluation Criteria in Solid Tumor (RECIST). If at least two of
+these patients respond favorably, then the trial will proceed to the next 
+stage where additional patients are able to be treated. If fewer than two 
+respond then the trial would be terminated. 
 
-Our goal is to describe the distribution of the sample size of the design for 
+The maxiumu sample size is 12 but the number of patients necessary to 
+reach and endpoint can be less. Our goal is to describe the distribution of 
+the enrollment size of the design for 
 planning purposes and to use this distribution to estimate the
 success probability.  If all 12 patients are enrolled at once, 
 as in the classic 
@@ -193,13 +197,13 @@ sample size is between two and 12.
 We assume each of the patient outcomes can be modeled as independent, 
 identically distributed Bernoulli($p$) random variables. The realization of 
 the trial is a sequence of these random variables that stops when either a 
-specified number of success or failures is reached. As an example, suppose in 
-the previously described trial, two successes were reached after enrolling 10 
+specified number of success or failures is reached. As in the 
+previous example, two successes were reached after enrolling 10 
 patients (one in the third step and one at the $10^{th}$). The trial is 
-visualized in Fig \ref{fig:kane_viz}. The vertical axis denotes the number of 
+visualized in Fig.~\ref{fig:kane_viz}. The vertical axis denotes the number of 
 successful outcomes. The horizontal axis denotes the number of patients that 
 have been enrolled. The horizontal and vertical line segments represent 
-endpoints for the trial. 
+boundayr endpoints for the trial. 
 
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{KanePlot.pdf}
@@ -245,20 +249,19 @@ support on integer values in the range
 \end{equation*}
 and it is distributed as
 \begin{equation} \label{eqn:pmf}
-\mathbb{P}[Y=k] = S(k, p, s)  [s \leq k] + T(k, p, t) [t \leq k ] 
+\mathbb{P}[Y=k] = S(k, p, s)\left[s \leq k\right] + 
+  S(k, 1-p, t) \left[ t \leq k \right]
 \end{equation}
 where 
 \begin{equation} \label{eqn:N}
 S(k, p, s) = {k-1 \choose s-1} p^s (1-p)^{k-s} 
 \end{equation}
-is the negative binomial probability of $s$ successful outcomes and
-\begin{equation} \label{eqn:R}
-T(k, p, t) = {k-1 \choose k-t} p^{k-t} (1-p)^t
-\end{equation}
-is the negative binomial probability of $t$ unsuccessful outcomes. 
-From (\ref{eqn:pmf}) one can see that the mass at any point on the support 
-of the distribution may come from either $X_k = s$, captured in the 
-function $S$, or $X_k = k-t$, captured in the function $T$. The support of 
+$S$ is the negative binomial probability truncated to a subset of the support 
+- in this case, $s$ and $t$ respectively.
+From Eqn.~\ref{eqn:pmf} one can see that the mass at 
+any point on the support of the distribution may come from either 
+$X_k = s$, captured in the function $S$, or $X_k = k-t$, captured in the 
+function $T$. The support of 
 $S$ is defined by $s \leq S \leq s+t-1$ and the support of $T$ is defined 
 by $t \leq T \leq s+t-1$.
 
@@ -272,7 +275,7 @@ by $t \leq T \leq s+t-1$.
 %\label{random.walk.section}
 % --------------------------------------------------------------
 
-To show the result in Equation (\ref{eqn:pmf}) consider the 
+To show the result in Eqn.~\ref{eqn:pmf} consider the 
 process $\mathbf{X} = \{X(k) : k \in \mathbb{Z}_{\ge 0} \}$ with $X(0)=0$ and
 \begin{equation*} \label{eqn:proc}
 X_{k+1} = X_k + b_{k+1} \left[ k-t < X_k < s \right].
@@ -282,9 +285,9 @@ domain of $\mathbf{X}$. The process can be conceptualized as a series of coin
 flips that stops when either $s$ heads or $t$ tails are reached. At each step 
 a coin is flipped. If it is heads, the process advances one diagonally in the 
 positive horizontal and vertical direction. Otherwise, it advances in the 
-positive horizontal direction only. When the process stops, $X_k$'s and 
-remains either $X_k = s$ or $X_k = k-t$. One example is given in 
-Fig. \ref{fig:kane_viz}.
+positive horizontal direction only. When the process stops
+either $X_k = s$ or $X_k = k-t$. One example is given in 
+Fig.~\ref{fig:kane_viz}.
 
 \begin{prop}
 The distribution of the stopping time $\argminl_k [X_k \geq s, X_k \leq k-t]$ 
@@ -349,7 +352,7 @@ Then the moment generating function (MGF) of $S$ is
 for $q = 1-p$ when $x \leq -\log(q)$ and $x \leq -\log(p)$.
 \end{prop}
 \begin{proof}
-By definition, the MFG of the SNB is:
+By definition, the MGF of the SNB is:
 \begin{equation*}
 \mathbb{E}~e^{xS} = \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s q^{k-s} e^{kx} 
   + \sum_{k=t}^{s+t-1} {k-1 \choose k-t} p^{k-t} q^t e^{kx}
@@ -467,7 +470,7 @@ f(k | s, t, \alpha, \beta) = \frac{1}{B(\alpha, \beta)} & \int_0^1 {k-1 \choose 
 The result follows by applying the definition of the Beta function to the integral terms.
 \end{proof}
 
-Equation \ref{eqn:posterior} suggests an alternative construction for 
+Eqn.~\ref{eqn:posterior} suggests an alternative construction for 
 Phase II clinical trials.  Patients could be 
 enrolled sequentially until there are enough patients to guarantee the 
 desired level of power or until a specified number of adverse events are 
