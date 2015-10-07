@@ -179,7 +179,7 @@ these patients respond favorably, then the trial will proceed to the next
 stage where additional patients are able to be treated. If fewer than two 
 respond then the trial would be terminated. 
 
-The maxiumu sample size is 12 but the number of patients necessary to 
+The maximum sample size is 12 but the number of patients necessary to 
 reach and endpoint can be less. Our goal is to describe the distribution of 
 the enrollment size of the design for 
 planning purposes and to use this distribution to estimate the
@@ -203,7 +203,7 @@ patients (one in the third step and one at the $10^{th}$). The trial is
 visualized in Fig.~\ref{fig:kane_viz}. The vertical axis denotes the number of 
 successful outcomes. The horizontal axis denotes the number of patients that 
 have been enrolled. The horizontal and vertical line segments represent 
-boundayr endpoints for the trial. 
+boundary endpoints for the trial. 
 
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{KanePlot.pdf}
@@ -276,7 +276,8 @@ by $t \leq T \leq s+t-1$.
 % --------------------------------------------------------------
 
 To show the result in Eqn.~\ref{eqn:pmf} consider the 
-process $\mathbf{X} = \{X(k) : k \in \mathbb{Z}_{\ge 0} \}$ with $X(0)=0$ and
+process $\mathbf{X} = \left[X(k) : k \in \mathbb{Z}_{\ge 0} \right]$ 
+with $X(0)=0$ and
 \begin{equation*} \label{eqn:proc}
 X_{k+1} = X_k + b_{k+1} \left[ k-t < X_k < s \right].
 \end{equation*}
@@ -306,7 +307,7 @@ the probability of a
 success at time $k$ (\ref{eqn:N}). The probability $X_k = k-t$ 
 is the probability that, at outcome $k-1$ there are $k-t$ successful outcomes 
 and $t-1$ unsuccessful outcomes multiplied by the probability of an 
-unsuccessful outcome at time $k$ (\ref{eqn:R}).  Finally, we need to show that 
+unsuccessful outcome at time $k$.  Finally, we need to show that 
 the sum
 \begin{equation} \label{eqn:sum_proof}
 R = \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s (1-p)^{k-s} + \sum_{k=t}^{s+t-1} {k-1 \choose k-t} p^{k-t} (1-p)^t

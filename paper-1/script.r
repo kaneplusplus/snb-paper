@@ -24,7 +24,60 @@ p1 <- qplot(k, X, data=X1, geom="line") +
   geom_segment(x=0, y=s, xend=t, yend=s, color="red") + 
   geom_segment(x=t, y=0, xend=t, yend=(s-1), color="green")
 
-ggsave("BernoulliProcess.pdf", p1, width=7, height=5)
+stairs = function (p, xstart, xend) {
+    x = c(xstart, rep((xstart + 1):xend, each = 2))
+    y = rep(0:(xend - xstart), each = 2)
+    y = y[-length(y)]
+    for (i in 1:(length(x) - 1)) {
+        p = p + geom_segment(x = x[i], y = y[i], xend = x[i + 
+            1], yend = y[i + 1], color = "green", linetype=1)
+    }
+    p
+}
+
+kplot = function(flips, s, t) 
+{
+  if (!is.list(flips)) {
+    d = flips_to_kplot_df(flips)
+    p = qplot(k, path, data = d, geom = "line") + 
+      scale_x_continuous(breaks = 0:(t + s), limits = c(0, t + s)) + 
+      scale_y_continuous(breaks = 0:s, 
+      limits = c(0, s)) + 
+      geom_segment(x = s, y = s, xend = (t + s - 1), yend = s, color = "red", 
+                   linetype=1)
+    p = stairs(p, t, s + t - 1)
+  } else {
+    flip_set = lapply(flips, flips_to_kplot_df)
+    for (i in 1:length(flip_set)) {
+      flip_set[[i]]$num = as.factor(i)
+      flip_set[[i]]$k = jitter(flip_set[[i]]$k)
+      flip_set[[i]]$k[flip_set[[i]]$k < 0] = 0
+    }
+    d = Reduce(rbind, flip_set)[, -(4:5)]
+    p = qplot(k, path, data = d, geom = "path", group = num) + 
+        scale_x_continuous(breaks = 0:(t + s), limits = c(0, 
+            t + s)) + scale_y_continuous(breaks = 0:s, limits = c(0, 
+        s)) + geom_segment(x = s, y = s, xend = (t + s - 
+        1), yend = s, color = "red")
+    p = stairs(p, t, s + t - 1)
+    p
+  }
+  p
+}
+
+flips_to_kplot_df = function (flips) {
+    d = data.frame(k = 0:length(flips))
+    d$head = c(0, cumsum(flips))
+    d$tail = c(0, cumsum(1 - flips))
+    d$headEnd = c(d$head[-1], NA)
+    d$tailEnd = c(d$tail[-1], NA)
+    d$path = c(0, cumsum(flips))
+    d$k = 0:(nrow(d) - 1)
+    d
+}
+
+
+
 
 X$head <- c(0, cumsum(flips))
 X$tail<- c(0, cumsum(!(flips)))
@@ -43,13 +96,9 @@ p2 <- ggplot(data=X2) + #right, up, data=X) + #, geom="segment") +
 
 ggsave("ZeltermanPlot.pdf", p2, width=7, height=5)
 
-X3 <- X[1:(min(which(X$X >= s), which(X$tail >= t))),]
-p3 <- qplot(k, X, data=X3, geom="line") +
-  scale_x_continuous(breaks=0:(t+s), limits=c(0, t+s)) +
-  scale_y_continuous(breaks=0:s, limits=c(0, s)) +
-  geom_segment(x=0, y=s, xend=(t+s-1), yend=s, color="red") 
 
-p3 <- stairs(p3, 10, 12)
+p3 = kplot( c(rep(0, 3), 1, rep(0, 6), 1), s=2, t=11) + 
+  xlab("Number of Patients Enrolled") + ylab("Number of Responders")
 
 ggsave("KanePlot.pdf", p3, width=7, height=5)
 
