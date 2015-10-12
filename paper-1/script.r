@@ -35,17 +35,14 @@ stairs = function (p, xstart, xend) {
     p
 }
 
-kplot = function(flips, s, t) 
-{
+kplot = function(flips, s, t) {
   if (!is.list(flips)) {
     d = flips_to_kplot_df(flips)
     p = qplot(k, path, data = d, geom = "line") + 
       scale_x_continuous(breaks = 0:(t + s), limits = c(0, t + s)) + 
-      scale_y_continuous(breaks = 0:s, 
-      limits = c(0, s)) + 
-      geom_segment(x = s, y = s, xend = (t + s - 1), yend = s, color = "red", 
-                   linetype=1)
-    p = stairs(p, t, s + t - 1)
+      scale_y_continuous(breaks = 0:s, limits=c(0, s+0.15)) + 
+      geom_segment(x=s, y=s, xend=(t+s-1), yend=s, color="green", linetype=1) +
+      geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, col="red")
   } else {
     flip_set = lapply(flips, flips_to_kplot_df)
     for (i in 1:length(flip_set)) {
@@ -55,11 +52,10 @@ kplot = function(flips, s, t)
     }
     d = Reduce(rbind, flip_set)[, -(4:5)]
     p = qplot(k, path, data = d, geom = "path", group = num) + 
-        scale_x_continuous(breaks = 0:(t + s), limits = c(0, 
-            t + s)) + scale_y_continuous(breaks = 0:s, limits = c(0, 
-        s)) + geom_segment(x = s, y = s, xend = (t + s - 
-        1), yend = s, color = "red")
-    p = stairs(p, t, s + t - 1)
+        scale_x_continuous(breaks=0:(t+s), limits = c(0, t+s)) + 
+        geom_segment(x = s, y = s, xend = (t + s - 1), yend = s, 
+                     color = "green") + 
+        geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, col="red")
     p
   }
   p
@@ -88,7 +84,7 @@ X2 <- X[1:(min(which(X$headEnd >= s), which(X$tailEnd >= t))),]
 
 p2 <- ggplot(data=X2) + #right, up, data=X) + #, geom="segment") +
   scale_x_continuous(breaks=0:t, limits=c(0, t)) +
-  scale_y_continuous(breaks=0:s, limits=c(0, s)) +
+  scale_y_continuous(breaks=0:s, limits=c(0, s), labels=as.character(0:s)) +
   geom_segment(mapping=aes(x=tail, y=head, xend=tailEnd,
     yend=headEnd), arrow=arrow()) +
   geom_segment(x=0, y=s, xend=t-1, yend=s, color="red") +
@@ -98,7 +94,12 @@ ggsave("ZeltermanPlot.pdf", p2, width=7, height=5)
 
 
 p3 = kplot( c(rep(0, 3), 1, rep(0, 6), 1), s=2, t=11) + 
-  xlab("Number of Patients Enrolled") + ylab("Number of Responders")
+  xlab("Number of Patients Enrolled") + ylab("Number of Responders") +
+  geom_text(data=NULL, x=7, y=2.1, label="Success Boundary") +
+  geom_text(data=NULL, x=12, y=0.5, label="Failure Boundary", 
+            angle=80)
+
+
 
 ggsave("KanePlot.pdf", p3, width=7, height=5)
 
