@@ -75,15 +75,12 @@ Center.}
 \address[mymainaddress]{Department of Biostatistics\\ School of Epidemiology and Public Health\\ Yale University, New Haven, CT}
 
 \begin{abstract}
-This paper introduces a new discrete distribution suggested by curtailed
+This paper introduces a novel discrete distribution suggested by curtailed
 sampling rules common in early-stage clinical trials. We derive the
 distribution of the smallest number of independent and identically
 distributed Bernoulli trials needed in order to observe either $s$ successes 
-or $t$ failures. The closed form expression for the distribution as well as 
-the compound distribution are derived. Properties of the distribution are 
-shown and discussed. A case study is presented showing how the distribution 
-can be used to monitor sequential enrollment of clinical trials with binary 
-outcomes as well as providing post-hoc analysis of completed trials.
+or $t$ failures. The closed-form expression for the distribution as well as 
+its characteristics and properties are explored.
 \end{abstract}
 
 \begin{keyword}
@@ -96,36 +93,28 @@ discrete distribution\sep curtailed sampling
 
 \section{Introdution and Motivation}
 
-Consider the design for a Phase II clinical trial that investigates the
-efficacy of iniparib in patients with breast cancer gene-associated (BRCA)
-ovarian cancer [\ref{Sanofi 2013}]. In the first stage, 12 patients were
-treated with iniparib (BSI-201/SAR240550). The outcome was defined by
-Response Evaluation Criteria in Solid Tumor (RECIST). There were two
-endpoints: terminate or enroll additional patients at the end of this
-stage. If at least two of
-these patients respond favorably, then the trial will proceed to the next
-stage where additional patients were able to be treated. If fewer than two
-respond then the trial would have been terminated.
+Consider a prototypical Phase II single-arm clinical trial. 12 patients
+are enrolled and treated. If at least 2 of those patients respond
+favorably, then the trial will proceed to the next stage. If fewer than 
+two respond then the trial would have been terminated.
 
-The maximum sample size was 12 but the number of patients necessary to
+The maximum sample size is 12 but the number of patients necessary to
 reach any endpoint could be less. Our goal is to describe the distribution of
-the enrollment size of the design for
-planning purposes and to use this distribution to estimate the
-success probability.  If all 12 patients are enrolled at once,
-as in the classic
+the enrollment size. This distribution will be used for planning purposes. 
+If all 12 patients are enrolled at once, as in the classic
 design, then the sample size is 12. However, in most clinical trials, the
 patients are enrolled sequentially, often with one patient's outcome realized
 before the next one enters the trial. In the present example, observing two
 successful patients allows us reach one endpoint so the sample required
-could be as small as two. So, 12 might not be necessary. Similarly 11
+could be as small as two - 12 might not be necessary. Similarly 11
 observed treatment failures also ends the stage. This sampling mechanism, in
 which the experiment ends as soon as any of the endpoints is reached, is
 call {\em curtailed sampling}. Under curtailed sampling the range of the
 sample size is between two and 12.
 
-We assume each of the patient outcomes can be modeled as independent,
-identically distributed Bernoulli($p$) random variables. The realization of
-the trial is a sequence of these random variables that stops when either a
+Assume each of patient outcome can be modeled as an independent,
+identically distributed Bernoulli($p$) random variable. The trial is realized
+as a sequence of these random variables that stops when either a
 specified number of success or failures is reached. In the
 previous example suppose two successes were reached after enrolling 10
 patients (one in the third step and one at the $10^{th}$). The sample
@@ -138,23 +127,24 @@ endpoints for the trial.
 \begin{figure}[t!]
 \includegraphics[width=\textwidth]{KanePlot.pdf}
 \caption{
-A hypothetical realization of the breast cancer trial.
+A hypothetical realization of a trial.
 }
 \label{fig:kane_viz}
 \end{figure}
 
-The next section of this paper introduces our notation and basic results
+The rest of this paper derives the distribution for the number of
+patients needed to end a trial and explores the characteristics and
+properties of this distribution.
+The next section introduces our notation and basic results
 including the density of the distribution along with a description of
-it's relation to other distributions. Sections 2 and 3 derive the distribution
-based on a defined Bernoulli process and give some basic properties of the
-distribution. Section 4 derives the compound distribution using a Beta prior.
-Section 5 develops a post-hoc analysis of a completed trial. Section 6 is
-devoted to discussion and conclusions. The simulations, model fitting
-routines, and visualizations presented in this paper were generated using the
-snb package [\ref{Kane 2015}] for the R programming
-environment [\ref{R Core Team 2015}]
+it's relation to other distributions. Sections 2 derives the distribution
+based on a defined Bernoulli process and give some basic properties.
+Section 3 provides a connection to the Binomail tail probability.
+Section 4 derives the posterior distribution using a Beta prior.
+Section 5 provides a brief discussion on the use of the distribution
+in clinical trials along with future avenues for generalization.
 
-\section{Notation and Summary of Distributional Results}
+\section{Distributional Result}
 \label{notation.section}
 
 Let $\,b_1, b_2, \ldots \,$ denote a sequence of independent, identically
@@ -182,11 +172,8 @@ where $I_{\{f\}}$ is one if $f$ is true and zero otherwise and
 S(k, p, s) = {k-1 \choose s-1} p^s (1-p)^{k-s} 
 \end{equation}
 $S$ is the negative binomial probability
-In~\ref{eqn:pmf} we can see that the mass at
-any point on the support of the distribution may come from $S(p)$; $S(1-p)$;
-or both of their probabilities.
 
-To show the result in Eqn.~\ref{eqn:pmf} consider the
+To prove the result in Eqn.~\ref{eqn:pmf} consider the
 process $\mathbf{X} = \left\{X(k) : k = 0,1,... \right\}$
 with $X(0)=0$ and
 \begin{equation*} \label{eqn:proc}
@@ -196,14 +183,14 @@ The process can be conceptualized as a series of coin
 flips that stops when either $s$ successes or $t$ failures are reached.
 At each step a coin is flipped. If it is heads, the process advances
 one diagonally in the
-positive horizontal and vertical direction in Fig.~\ref{fig:kane_viz}.
-Otherwise, it advances in the positive horizontal direction only. When the
-process stops either $X_k = s$ or $X_k = k-t$.
+positive horizontal and vertical direction.
+Otherwise, it advances in the positive horizontal direction only. The
+process stops when either $X_k = s$ or $X_k = k-t$.
 
 \begin{prop}
 The distribution of the stopping time
 $\argminl_k \left\{ X_k \geq s \cup X_k \leq k-t \right\}$
-is equal to the SNB and is given in (\ref{eqn:pmf}).
+is equal to Eqn.~\ref{eqn:pmf}.
 \end{prop}
 \begin{proof}
 %The proof will proceed in two parts. First, a combinatorial justification 
@@ -211,23 +198,31 @@ is equal to the SNB and is given in (\ref{eqn:pmf}).
 %Second, it will be shown that the sum of the masses over the support sums to 
 %one.
 
-The probability that a given realization of $\mathbf{X}$ reaches $s$ at
+The probability a given realization of $\mathbf{X}$ reaches $s$ at
 the $k$th outcome is the probability that, at time $k-1$ there are $s-1$
 successful outcomes and $k-s$ unsuccessful outcomes multiplied by
 the probability of a
-success at time $k$ (\ref{eqn:N}). The probability $X_k = k-t$
+success at time $k$. 
+\begin{equation} \label{stop_s}
+S(k, p, s) = {k-1 \choose s-1} p^s (1-p)^{k-s}
+\end{equation}
+The probability a given realization reaches $k-t$
 is the probability that, at outcome $k-1$ there are $k-t$ successful outcomes
 and $t-1$ unsuccessful outcomes multiplied by the probability of an
-unsuccessful outcome at time $k$.  Finally, we need to show that
-the sum
+unsuccessful outcome at time $k$.  
+\begin{equation} \label{stop_t}
+S'(k, p, t) = {k-1 \choose k-t} p^{k-t} (1-p)^t
+\end{equation}
+It can be shown that $S(k, p, s) = S'(k, 1-p, s)$ by realizing that 
+${k-1 \choose k-s} = {k-1 \choose s-1}$.
+
+To show that sum of Eqn. \ref{stop_s} and \ref{stop_t} sum to one
+over their support 
 \begin{align} \label{eqn:sum_proof}
 R &= \sum_{k=s}^{s+t-1} S(k, p, s) + \sum_{k=t}^{s+t-1} S(k, 1-p, t) \\
   &= \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s (1-p)^{k-s} + \sum_{k=t}^{s+t-1} {k-1 \choose k-t} p^{k-t} (1-p)^t
 \end{align}
-is equal to one.
-
-Substitute $i=k-s$ in the first summation and
-$j=k-t$ in the second.
+substitute $i=k-s$ in the first summation and $j=k-t$ in the second.
 Then $R$ can be written
 as the cumulative distribution function of two
 negative binomial distributions
@@ -236,13 +231,9 @@ R = \sum_{i=0}^{t-1} {i+s-1 \choose i} p^s (1-p)^i \; + \;
 \sum_{j=0}^{s-1} {j+t-1 \choose j} p^j (1-p)^t.
 \end{equation}
 
-Let $\mathcal{I}_p(s, t)$ be the {\em regularized incomplete beta function}, which is
-also one minus the c.d.f. of the negative binomial distribution. This
-function satisfies $\mathcal{I}_p(s, t) = 1-\mathcal{I}_{1-p}(t, s)$
-\citep{Abramowitz1964}.
-Then it can be proven
-that \ref{eqn:pmf} is a valid probability mass by showing that the
-probability mass function sums to one.
+Let $\mathcal{I}_p(s, t)$ be the {\em regularized incomplete beta function}
+and recall this function satisfies 
+$\mathcal{I}_p(s, t) = 1-\mathcal{I}_{1-p}(t, s)$ \citep{Abramowitz1964}.
 \begin{align*}
 R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
 \sum_{j=0}^{s-1}  {j+t-1 \choose j} p^j  (1-p)^t \\
@@ -250,6 +241,73 @@ R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
    &= 1. 
 \end{align*}
 \end{proof}
+
+\section{Shape and Basic Properties}
+
+\begin{figure}[p!]
+\begin{center}
+\includegraphics[width=\textwidth]{shapes.pdf}
+\end{center}
+\caption{Different shapes of the SNB distribution with parameters ($s$, $t$, $p$), as given. Red indicates mass contributed by hitting $s$, teal indicates
+mass contributed by hitting $t$. \label{shapes.fig}}
+\end{figure}
+
+The probability mass function of $\,Y\,$ has a variety of shapes for different 
+choices of the parameters $(s,\, t,\,p)$.  These shapes are illustrated in 
+Fig.~\ref{shapes.fig}. The SNB is related to the negative binomial 
+distribution. Specifically, if $t$ is large then the $Y-s$ has a negative 
+binomial distribution with
+\begin{equation*}                                    %   (1)   
+\mathbb{P}[Y=s+j]        \label{nb1.eq}          
+  = {{s+j-1}\choose{s-1}} p^s (1-p)^j
+\end{equation*}
+for $\,j=0, 1,\ldots\,$. A similar statement can be made when $s$ is large
+and $t$ is small.
+
+For the special case of $\,s=t,$ the distribution of $\,Y\,$ is the
+riff-shuffle, or minimum negative binomial distribution~\citep{Uppuluri1970}.
+Similar derivations of the closely-related maximum negative binomial 
+discrete distributions also appear in~\cite{Zhang2000}
+and \cite{Zelterman2005}.
+The maximum negative binomial is the smallest number of outcomes necessary to 
+observe at least $c$ successes {\em and} $c$ failures, but the SNB givethe 
+number of coin flips to observe {\em either} $s$ heads or $t$ tails.
+
+\section{Connection to the Binomial Tail Probability}
+
+
+\begin{prop} Let $Y$ be distributed as SNB($p$, $s$, $t$) and let 
+$B$ be distributed Binomial with size $n=s+t-1$ and success probability
+$p$. Then
+\begin{equation}
+\mathbb{P}[B \geq s] = \mathbb{P} [Y \leq n | \text{\#success} = s].
+\end{equation}
+That is, the probability that the number of successes is at least $s$
+in the Binomial model is the same that the trial stops with $s$ 
+successes in the SNB model.
+\end{prop}
+\begin{proof}
+The Binomial tail probability is
+\begin{align*}
+\mathbb{P}[B \geq s] &= \sum_{k=s}^{s+t-1} {n \choose k} p^k (1-p)^{n-k} \\
+  &= 1 - \sum_{k=0}^{s-1} p^k (1-p)^{n-k} \\
+  & 1 - \mathcal{I}_{1-p}.
+\end{align*}
+Next, consider the SNB probability
+\begin{equation*}
+\mathbb{P} [Y \leq n | \text{\#success} = s] = \sum_{k=s}^{s+t-1}
+  {k-1 \choose s-1} p^s (1-p)^k-s.
+\end{equation*}
+Let $i=k-s$ then using the fact that ${i+s-1 \choose s-1} = {i+s-1 \choose i}$
+the summation can be rewritten as
+\begin{align}
+\mathbb{P} [Y \leq n | \text{\#success} = s] &= \sum_{i=0}^{t-1} 
+  {i+s-1 \choose i} p^s (1-p)^i\\
+  &= 1 - \mathcal{I}_{1-p}(t, s).
+\end{align}
+\end{proof}
+
+\section{The Moment Generating Function}
 
 \begin{prop} Let $S$ be distributed SNB with parameters $p$, $s$, and $t$.
 Then the moment generating function (MGF) of $S$ is
@@ -265,7 +323,7 @@ By definition, the MGF of the SNB is:
 \mathbb{E}~e^{xS} = \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s q^{k-s} e^{kx} 
   + \sum_{k=t}^{s+t-1} {k-1 \choose k-t} p^{k-t} q^t e^{kx}
 \end{equation*}
-and this can be rewritten as:
+and can be rewritten as:
 \begin{equation} \label{eqn:first_sum}
 \mathbb{E}~e^{xS} = \sum_{k=s}^{s+t-1}{k-1 \choose s-1} (pe)^{sx} (qe^x)^{k-s} 
   + \sum_{k=t}^{s+t-1}{k-1 \choose k-t} (qe^x)^t (pe^x)^{k-t}.
@@ -285,37 +343,6 @@ the constraint that $x \leq -\log(p)$. The result
 follows from the afore mentioned property of the regularized incomplete
 beta function.
 \end{proof}
-
-
-\begin{figure}[p!]
-\begin{center}
-\includegraphics[width=\textwidth]{shapes.pdf}
-\end{center}
-\caption{Different shapes of the SNB distribution with parameters ($s$, $t$, $p$), as given. Red indicates mass contributed by hitting $s$, teal indicates
-mass contributed by hitting $t$. \label{shapes.fig}}
-\end{figure}
-
-The probability mass function of $\,Y\,$ has a variety of shapes for different choices of the parameters $(s,\, t,\,p)$.  These shapes are illustrated in 
-Fig.~\ref{shapes.fig}.The SNB is related to the negative binomial 
-distribution. Specifically, if $t$ is large then the $Y-s$ has a negative 
-binomial distribution with
-\begin{equation*}                                    %   (1)   
-\mathbb{P}\{Y=s+j \}        \label{nb1.eq}          
-  = {{s+j-1}\choose{s-1}} p^s (1-p)^j
-\end{equation*}
-for $\,j=0, 1,\ldots\,$. A similar statement can be made when $s$ is large
-and $t$ is small.
-
-For the special case of $\,s=t,$ the distribution of $\,Y\,$ is the
-riff-shuffle, or minimum negative binomial distribution~\citep{Uppuluri1970}.
-Similar derivations of the closely-related maximum negative binomial 
-discretedistributions also appear in~\cite{Zhang 2000}
-and \cite{Zelterman2004}.
-The maximum negative binomial is the smallest number of outcomes necessary to 
-observe at least $c$ successes {\em and} $c$ failures, but the SNB givethe 
-number of coin flips to observe {\em either} $s$ heads or $t$ tails.
-
-\section{Connection to the Binomial Tail Probability}
 
 \section{The Posterior Distribution}
 
@@ -355,16 +382,6 @@ f(k | s, t, \alpha, \beta) = \frac{1}{B(\alpha, \beta)} & \int_0^1 {k-1 \choose 
 \end{align*}
 The result follows by applying the definition of the Beta function to the integral terms.
 \end{proof}
-
-Eqn.~\ref{eqn:posterior} suggests an alternative construction for
-Phase II clinical trials.  Patients could be
-enrolled sequentially until there are enough patients to guarantee the
-desired level of power or until a specified number of adverse events are
-recorded. In cases such as these the endpoints $s$ and $t$ are known and
-new outcomes can be incorporated into the estimate of
-$p$ to provide updated odds of successful enrollment. Later it will be shown
-that estimates of the distribution of $p$ can even be used after an endpoint
-has been reached to determine the amount of uncertainty in the endpoint.
 
 \section{Discussion and Conclusion}
 
