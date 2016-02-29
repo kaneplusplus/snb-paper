@@ -6,6 +6,7 @@
 \usepackage{amsfonts}
 \usepackage{amsthm}
 \usepackage{url}
+\usepackage{subfig}
 \DeclareMathOperator*{\argmin}{argmin}
 \newcommand*{\argminl}{\argmin\limits}
 \newtheorem{prop}{Proposition}
@@ -252,17 +253,18 @@ R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
 mass contributed by hitting $t$. \label{shapes.fig}}
 \end{figure}
 
-The probability mass function of $\,Y\,$ has a variety of shapes for different 
-choices of the parameters $(s,\, t,\,p)$.  These shapes are illustrated in 
-Fig.~\ref{shapes.fig}. The SNB is related to the negative binomial 
-distribution. Specifically, if $t$ is large then the $Y-s$ has a negative 
-binomial distribution with
+The SNB is related to the negative 
+binomial distribution. Specifically, if $t$ is large then the $Y-s$ has a 
+negative binomial distribution with
 \begin{equation*}                                    %   (1)   
 \mathbb{P}[Y=s+j]        \label{nb1.eq}          
   = {{s+j-1}\choose{s-1}} p^s (1-p)^j
 \end{equation*}
 for $\,j=0, 1,\ldots\,$. A similar statement can be made when $s$ is large
-and $t$ is small.
+and $t$ is small. As a result, with proper parameter choice, the SNB
+can mimic other probability distributions in a manner similar to 
+that described in \cite{Peizer1968} and \cite{Best1974}. Examples are
+shown in in Fig.~\ref{shapes.fig}. 
 
 For the special case of $\,s=t,$ the distribution of $\,Y\,$ is the
 riff-shuffle, or minimum negative binomial distribution~\citep{Uppuluri1970}.
@@ -270,11 +272,23 @@ Similar derivations of the closely-related maximum negative binomial
 discrete distributions also appear in~\cite{Zhang2000}
 and \cite{Zelterman2005}.
 The maximum negative binomial is the smallest number of outcomes necessary to 
-observe at least $c$ successes {\em and} $c$ failures, but the SNB givethe 
+observe at least $c$ successes {\em and} $c$ failures. The SNB is the 
 number of coin flips to observe {\em either} $s$ heads or $t$ tails.
 
 \section{Connection to the Binomial Tail Probability}
 
+\begin{figure}[t!]
+\centering
+\subfloat[The SNB distribution.]{\includegraphics[width=0.5\textwidth]{snb_density.pdf}}
+\hfill
+\subfloat[The Binomial distribution.]{\includegraphics[width=0.5\textwidth]{bin_density.pdf}}
+\caption{
+SNB(0.2, 2, 12) with mass contributed from 
+$s$ successes (red) or $t$ failures (teal) along with Bin(0.2, 13) with
+at least 2 successes (red) or fewer (teal).
+}
+\label{fig:kane_viz}
+\end{figure}
 
 \begin{prop} Let $Y$ be distributed as SNB($p$, $s$, $t$) and let 
 $B$ be distributed Binomial with size $n=s+t-1$ and success probability
