@@ -210,7 +210,7 @@ successful outcomes. The horizontal axis counts the number of patients that
 have been enrolled. The horizontal and vertical boundaries represent 
 endpoints for the trial. 
 
-\begin{figure}[ht]
+\begin{figure}[t!]
 \includegraphics[width=\textwidth]{KanePlot.pdf}
 \caption{
 A hypothetical realization of the breast cancer trial.
@@ -241,15 +241,15 @@ environment [\ref{R Core Team 2015}]
 % --------------------------------------------------------------
 
 Let $\,b_1, b_2, \ldots \,$ denote a sequence of independent, identically 
-distributed, Bernoulli random variables with $\mathbb{E}I_{\{b_i=1\}}=p$ and
-$\mathbb{E}I_{\{b_i = 0\}} = 1-p$, for 
+distributed, Bernoulli random variables with $\mathbb{P}[b_i=1]=p$ and
+$\mathbb{P}[b_i = 0] = 1-p$, for 
 probability parameter $0\leq p \leq 1$. In the clinical trial setting 
 $\,b_i = 1$ corresponds to a successful outcome.  Let $s$ and $t$ be 
 positive integers.  Define the stopped negative binomial (SNB) random 
 variable $Y$ as the smallest 
 integer value such that $\,\{b_1, \ldots , b_Y\}\,$ contains {\em either} 
 $\,s\,$ successes {\em or} $\,t\,$ failures. That is, either 
-$\sum_i^Y b_i s$ or else $\sum_i^Y 1-b_i = t$.
+$\sum_i^Y b_i = s$ or $\sum_i^Y 1-b_i = t$.
 
 The distribution of $\,Y\,$ has support on integer values in the range 
 \begin{equation*}               
@@ -257,8 +257,8 @@ The distribution of $\,Y\,$ has support on integer values in the range
 \end{equation*}
 and it is distributed as
 \begin{equation} \label{eqn:pmf}
-\mathbb{E}\  I_{\{Y=k\}} = S(k, p, s) I_{\{s \leq k\}} + 
-  S(k, 1-p, t) I_{\{ t \leq k \}}
+\mathbb{E}\  I_{\{Y=k\}} = S(k, p, s) \ I_{\{s \leq k\}} + 
+  S(k, 1-p, t) \ I_{\{ t \leq k \}}
 \end{equation}
 where $I_{\{f\}}$ is one if $f$ is true and zero otherwise and
 \begin{equation} \label{eqn:N}
@@ -283,7 +283,7 @@ To show the result in Eqn.~\ref{eqn:pmf} consider the
 process $\mathbf{X} = \left\{X(k) : k = 0,1,... \right\}$ 
 with $X(0)=0$ and
 \begin{equation*} \label{eqn:proc}
-X_{k+1} = X_k + b_{k+1} I_{\{ k-t < X_k < s\}}.
+X_{k+1} = X_k + b_{k+1} \ I_{\{ k-t < X_k < s\}}.
 \end{equation*}
 The process can be conceptualized as a series of coin 
 flips that stops when either $s$ successes or $t$ failures are reached. 
@@ -339,7 +339,8 @@ R = \sum_{i=0}^{t-1} {i+s-1 \choose i} p^s (1-p)^i \; + \;
 
 Let $\mathcal{I}_p(s, t)$ be the {\em regularized incomplete beta function}, which is 
 also one minus the c.d.f. of the negative binomial distribution. This
-function satisfies $\mathcal{I}_p(s, t) = 1-\mathcal{I}_{1-p}(t, s)$.  
+function satisfies $\mathcal{I}_p(s, t) = 1-\mathcal{I}_{1-p}(t, s)$
+[\ref{abramowitz1964}].
 Then it can be proven
 that \ref{eqn:pmf} is a valid probability mass by showing that the
 probability mass function sums to one.
@@ -438,10 +439,10 @@ posterior distribution of the SNB is
 \begin{align}
 f \left(k | \mathbf{b}, \alpha, \beta \right) &= 
   {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} 
-  I_{\{s \leq k \leq s+k-1\}} + \nonumber \\
+  \ I_{\{s \leq k \leq s+k-1\}} + \nonumber \\
   & {k-1 \choose k-t} 
   \frac{B\left(\alpha + k - t, t+\beta\right)}{B(\alpha, \beta)} 
-  I_{\{t \leq k \leq s+k-1\}}
+  \ I_{\{t \leq k \leq s+k-1\}}
 \end{align}
 where $B$ is the Beta function and $\mathbf{b}$ is the realization 
 of Bernoulli data.
@@ -701,7 +702,7 @@ success probability with a minimum number of patient enrollees.
 \begin{enumerate}
 
 \item[\bibref{Kane 2015}]
-Kane MJ. (2015). snb: The Stopped Negative Binomial. R package version 0.1. 2015. Available from \url{https://github.com/kaneplusplus/snb}
+MJ Kane. (2015). snb: The Stopped Negative Binomial. R package version 0.1. 2015. Available from \url{https://github.com/kaneplusplus/snb}
 
 %\item[\bibref{Pollard 2002}]
 %Pollard D. {\it A User's Guide to Measure Theoretic Probability}, 
@@ -711,17 +712,22 @@ Kane MJ. (2015). snb: The Stopped Negative Binomial. R package version 0.1. 2015
 R Core Team (2015). R: A language and environment for statistical
 computing. R Foundation for Statistical Computing, Vienna, Austria. 2015. URL \url{http://www.R-project.org/}.
 
+\item[\bibref{abramowitz1964}]
+M Abramowitz, IA Stegun. {\it Handbook of mathematical functions: with 
+formulas, graphs, and mathematical tables}. Courier Corporation. 1964;
+{\bf 55}: 263.
+
 \item[\bibref{Sanofi 2013}]
 Sanofi Pharmaceutical Company. A Phase 2, Single Arm Study of BSI-201 in Patients With BRCA-1 or BRCA-2 Associated Advanced Epithelial Ovarian, Fallopian Tube, or Primary Peritoneal Cancer. In: ClinicalTrials.gov [Internet]. Bethesda (MD): National Library of Medicine (US). 2000- [cited 2015 March 27]. Available from: \url{https://clinicaltrials.gov/ct2/show/study/NCT00677079} Identifier: NCT00677079.
 
 \item[\bibref{Simon 1989}]
-Simon R.  Optimal two-stage designs for Phase II clinical trials. {\it Controlled Clinical Trials\/} 1989; {\bf 10}: 1--10.
+R Simon.  Optimal two-stage designs for Phase II clinical trials. {\it Controlled Clinical Trials\/} 1989; {\bf 10}: 1--10.
 
 \item[\bibref{Uppuluri 1970}] 
-Uppuluri VRR, Blot WJ. ``A probability distribution arising in a riff-shuffle.'' {\it Random Counts  in Scientific Work, 1: Random Counts in Models and Structures}, 1970. G.P. Patil (editor), University Park: Pennsylvania State University Press, pp  23--46.
+VRR Uppuluri, WJ Blot. ``A probability distribution arising in a riff-shuffle.'' {\it Random Counts  in Scientific Work, 1: Random Counts in Models and Structures}, 1970. G.P. Patil (editor), University Park: Pennsylvania State University Press, pp  23--46.
 
 \item[\bibref{Zhang 2000}]
-Zhang Z, Burtness BA, Zelterman D.  The maximum negative binomial distribution. {\em Journal of Statistical Planning and Inference\/}  2000; {\bf 87}: 1--19.
+Z Zhang, BA Burtness, D Zelterman.  The maximum negative binomial distribution. {\em Journal of Statistical Planning and Inference\/}  2000; {\bf 87}: 1--19.
 
 \item[\bibref{Zelterman 2004}]
 D Zelterman. {\it Discrete Distributions: Application in 
