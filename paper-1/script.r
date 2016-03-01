@@ -165,8 +165,6 @@ p6 = ggplot(x, aes(x=x, y=y, group=id)) +
 ggsave("Region-s-eq-t.pdf", p6, width=7, height=5)
 
 
-stop("here")
-
 d = snb:::flips_to_kplot_df(flips)
 qplot(k, path, data = d, geom = "blank") +
   scale_x_continuous(breaks = 0:(t + s), limits = c(0, t + s)) +
@@ -186,17 +184,17 @@ cdsnb(trial, s, t)
 
 approx_plots_start = list(
   dsnb_stack_plot(0.2, 15, 75) + scale_x_discrete(breaks=seq(15, 95, by=10)) + 
-    labs(x="", y="", title="bimodal example (15, 75, .2)"),
+    labs(x="", y="", title="bimodal example (0.2, 15, 75)"),
   dsnb_stack_plot(0.35, 50, 50) + scale_x_discrete(breaks=seq(50, 105, by=10))+
-    labs(x="", y="", title="approximate normal (50, 50, .35)"),
+    labs(x="", y="", title="approximate normal (0.35, 50, 50)"),
   dsnb_stack_plot(0.06, 10, 10) + scale_x_discrete(breaks=seq(10, 20, by=2))+
-    labs(x="", y="", title="geometric (10, 10, .06)"),
+    labs(x="", y="", title="geometric (0.06, 10, 10)"),
   dsnb_stack_plot(0.06, 3, 175) + scale_x_discrete(breaks=seq(3, 180, by=30))+ 
-    labs(x="", y="", title="gamma approximation (3, 175, .06)"),
+    labs(x="", y="", title="gamma approximation (0.06, 3, 175)"),
   dsnb_stack_plot(0.5, 25, 25) + scale_x_discrete(breaks=seq(25, 50, by=5))+
-    labs(x="", y="", title="lower half normal (25, 25, .5)"),
+    labs(x="", y="", title="lower half normal (0.5, 25, 25)"),
   dsnb_stack_plot(0.98, 175, 2) + scale_x_discrete(breaks=seq(2, 180, by=20))+
-    labs(x="", y="", title="local mode at top of range (175, 2, .98)"))
+    labs(x="", y="", title="local mode at top of range (0.98, 175, 2)"))
 
 library(foreach)
 library(grid)

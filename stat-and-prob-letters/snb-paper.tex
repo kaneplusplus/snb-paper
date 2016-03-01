@@ -133,14 +133,38 @@ A hypothetical realization of a trial.
 \label{fig:kane_viz}
 \end{figure}
 
-The rest of this paper derives the distribution for the number of
-patients needed to end a trial and explores the characteristics and
-properties of this distribution.
+\begin{table}[t!]
+\caption{Stopped Negative Binomial Distribution Characteristics}
+\label{tab:snb}
+\begin{center}
+\begin{tabular}{|c|l|} \hline
+Notation & SNB($p$, $s$, $t$) \\ \hline
+Parameters & $p$ the success probability ($q = 1-p$) \\
+           & $s$ the number of successes before stopping \\
+           & $t$ the number of failures before stopping \\ \hline
+Support & min$(s,t) \leq k \leq s+t-1$  \\ \hline
+PMF & ${k-1 \choose s-1} p^s (1-p)^{k-s} + {k-1 \choose t-1} (1-p)^s p^{k-t}$\\ \hline
+CDF & $2 - \mathcal{I}_{1-p}(k+1, s) - \mathcal{I}_{p}(k+1, t)$\\ 
+    & where $\mathcal{I}$ is the regularized incomplete beta function.\\ \hline
+Mean & $\frac{s}{p} \mathcal{I}_p(s,t) + \frac{q^{t-1} p^{s-1}}{B(s,t)} +
+  \frac{t}{q} \mathcal{I}_q(t,s) + \frac{q^{s-1}p^{t-1}}{B(s,t)}$\\ 
+  & where $B$ is the beta function \\ \hline
+MGF & $\left(\frac{p e^x}{1 - qe^x}\right)^s 
+  \mathcal{I}_{1-qe^x} (s, t) + \left(\frac{qe^x}{1-pe^x}\right)^t 
+  \mathcal{I}_{1-pe^x}(t, s) $\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Tab.~\ref{tab:snb} summarizes the distribution and 
+some of its characteristics.
+The rest of this paper derives these results
+and explores properties of the distribution.
 The next section introduces our notation and basic results
 including the density of the distribution along with a description of
 it's relation to other distributions. Sections 2 derives the distribution
 based on a defined Bernoulli process and give some basic properties.
-Section 3 provides a connection to the Binomail tail probability.
+Section 3 provides a connection to the Binomial tail probability.
 Section 4 derives the posterior distribution using a Beta prior.
 Section 5 provides a brief discussion on the use of the distribution
 in clinical trials along with future avenues for generalization.
@@ -190,7 +214,7 @@ process stops when either $X_k = s$ or $X_k = k-t$.
 
 \begin{prop}
 The distribution of the stopping time
-$\argminl_k \left\{ X_k \geq s \cup X_k \leq k-t \right\}$
+$\argminl_k \left[X_k \geq s \cup X_k \leq k-t \right]$
 is equal to Eqn.~\ref{eqn:pmf}.
 \end{prop}
 \begin{proof}
@@ -275,7 +299,47 @@ The maximum negative binomial is the smallest number of outcomes necessary to
 observe at least $c$ successes {\em and} $c$ failures. The SNB is the 
 number of coin flips to observe {\em either} $s$ heads or $t$ tails.
 
-\section{Connection to the Binomial Tail Probability}
+\section{Connection Between $S$ and the Binomial Tail Probability}
+
+\begin{prop} \label{binomial_tail}
+Let $Y$ be distributed as SNB($p$, $s$, $t$) and let 
+$B$ be distributed Binomial with size $n=s+t-1$ and success probability
+$p$. Then
+\begin{equation}
+\mathbb{P}[B \geq s] = \mathbb{P} [Y \leq n\ |\ \text{\#success} = s].
+\end{equation}
+That is, the probability that the number of successes is at least $s$
+in the Binomial model is the same that the trial stops with $s$ 
+successes in the SNB model.
+\end{prop}
+\begin{proof}
+The Binomial tail probability is
+\begin{align*}
+\mathbb{P}[B \geq s] &= \sum_{k=s}^{s+t-1} {n \choose k} p^k (1-p)^{n-k} \\
+  &= 1 - \sum_{k=0}^{s-1} {n \choose k} p^k (1-p)^{n-k} \\
+  & 1 - \mathcal{I}_{1-p}.
+\end{align*}
+Next, consider the SNB probability
+\begin{align*}
+\mathbb{P} [Y \leq n\ |\ \text{\#success}=s] &= \sum_{k=s}^{s+t-1} S(k, p, s)\\
+ &= {k-1 \choose s-1} p^s (1-p)^{k-s}.
+\end{align*}
+Let $i=k-s$ then using the fact that ${i+s-1 \choose s-1} = {i+s-1 \choose i}$
+the summation can be rewritten as
+\begin{align}
+\mathbb{P} [Y \leq n\ |\ \text{\#success} = s] &= \sum_{i=0}^{t-1} 
+  {i+s-1 \choose i} p^s (1-p)^i\\
+  &= 1 - \mathcal{I}_{1-p}(t, s).
+\end{align}
+\end{proof}
+
+This result is visualized in Fig.~\ref{fig:snb_bin_compare} for the case
+where $s=2$, $t=12$, and $p=0.2$. The probability masses represented in
+red are equal as are the masses in teal. The probability that $s$
+successes are reached in the SNB process is the same as the binomial 
+probability of at least two successes. Likewise, the probability that $t$ 
+failures are reached in the SNB process is the same as the binomial
+probability of zero or one successes.
 
 \begin{figure}[t!]
 \centering
@@ -287,66 +351,37 @@ SNB(0.2, 2, 12) with mass contributed from
 $s$ successes (red) or $t$ failures (teal) along with Bin(0.2, 13) with
 at least 2 successes (red) or fewer (teal).
 }
-\label{fig:kane_viz}
+\label{fig:snb_bin_compare}
 \end{figure}
 
-\begin{prop} Let $Y$ be distributed as SNB($p$, $s$, $t$) and let 
-$B$ be distributed Binomial with size $n=s+t-1$ and success probability
-$p$. Then
-\begin{equation}
-\mathbb{P}[B \geq s] = \mathbb{P} [Y \leq n | \text{\#success} = s].
-\end{equation}
-That is, the probability that the number of successes is at least $s$
-in the Binomial model is the same that the trial stops with $s$ 
-successes in the SNB model.
-\end{prop}
-\begin{proof}
-The Binomial tail probability is
-\begin{align*}
-\mathbb{P}[B \geq s] &= \sum_{k=s}^{s+t-1} {n \choose k} p^k (1-p)^{n-k} \\
-  &= 1 - \sum_{k=0}^{s-1} p^k (1-p)^{n-k} \\
-  & 1 - \mathcal{I}_{1-p}.
-\end{align*}
-Next, consider the SNB probability
-\begin{equation*}
-\mathbb{P} [Y \leq n | \text{\#success} = s] = \sum_{k=s}^{s+t-1}
-  {k-1 \choose s-1} p^s (1-p)^k-s.
-\end{equation*}
-Let $i=k-s$ then using the fact that ${i+s-1 \choose s-1} = {i+s-1 \choose i}$
-the summation can be rewritten as
-\begin{align}
-\mathbb{P} [Y \leq n | \text{\#success} = s] &= \sum_{i=0}^{t-1} 
-  {i+s-1 \choose i} p^s (1-p)^i\\
-  &= 1 - \mathcal{I}_{1-p}(t, s).
-\end{align}
-\end{proof}
 
 \section{The Moment Generating Function}
 
-\begin{prop} Let $S$ be distributed SNB with parameters $p$, $s$, and $t$.
-Then the moment generating function (MGF) of $S$ is
+\begin{prop} Let $Y$ be distributed SNB with parameters $p$, $s$, and $t$.
+Then the moment generating function (MGF) of $Y$ is
 \begin{equation} \label{eqn:mgf}
-\mathbb{E}~e^{xS} = \frac{p e^x}{1 - qe^x} \mathcal{I}_{qe^x} (s, t) + 
-  \frac{qe^x}{1-pe^x} \mathcal{I}_{pe^x}(s, t)
+\mathbb{E}~e^{xY} = \left(\frac{p e^x}{1 - qe^x}\right)^s 
+  \mathcal{I}_{1-qe^x} (s, t) + \left(\frac{qe^x}{1-pe^x}\right)^t 
+  \mathcal{I}_{1-pe^x}(t, s)
 \end{equation}
 for $q = 1-p$ when $x \leq -\log(q)$ and $x \leq -\log(p)$.
 \end{prop}
 \begin{proof}
 By definition, the MGF of the SNB is:
 \begin{equation*}
-\mathbb{E}~e^{xS} = \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s q^{k-s} e^{kx} 
+\mathbb{E}~e^{xY} = \sum_{k=s}^{s+t-1} {k-1 \choose k-s} p^s q^{k-s} e^{kx} 
   + \sum_{k=t}^{s+t-1} {k-1 \choose k-t} p^{k-t} q^t e^{kx}
 \end{equation*}
 and can be rewritten as:
 \begin{equation} \label{eqn:first_sum}
-\mathbb{E}~e^{xS} = \sum_{k=s}^{s+t-1}{k-1 \choose s-1} (pe)^{sx} (qe^x)^{k-s} 
+\mathbb{E}~e^{xY} = \sum_{k=s}^{s+t-1}{k-1 \choose k-s} (pe)^{sx} (qe^x)^{k-s} 
   + \sum_{k=t}^{s+t-1}{k-1 \choose k-t} (qe^x)^t (pe^x)^{k-t}.
 \end{equation}
 Taking the first summation in Equation \ref{eqn:first_sum}:
 \begin{align*}
-\sum_{k=s}^{s+t-1}{k-1 \choose s-1} (pe)^{sx} (qe^x)^{k-s} &= 
-  \left(\frac{pe^x}{1 - qe^x}\right)^s \ \ \sum_{k=s}^{s+t-1} {k-1 \choose s-1} 
-    (qe^x)^{k-s} (1-qe^x)^s) \\
+\sum_{k=s}^{s+t-1}{k-1 \choose k-s} (pe)^{sx} (qe^x)^{k-s} &= 
+  \left(\frac{pe^x}{1 - qe^x}\right)^s \ \ \sum_{k=s}^{s+t-1} {k-1 \choose k-s} 
+    (qe^x)^{k-s} (1-qe^x)^s \\
   &= \left(\frac{pe^x}{1 - qe^x}\right)^s \mathcal{I}_{qe^x}(s, t).
 \end{align*}
 Since the incomplete beta function has support on zero to one
@@ -359,20 +394,6 @@ beta function.
 \end{proof}
 
 \section{The Posterior Distribution}
-
-Let us assume that $p$ has a Beta distribution, with constant prior
-parameters $\alpha$ and $\beta$. Then the closed form
-posterior distribution of the SNB is
-\begin{align}
-f \left(k | \mathbf{b}, \alpha, \beta \right) &= 
-  {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} 
-  \ I_{\{s \leq k \leq s+k-1\}} + \nonumber \\
-  & {k-1 \choose k-t} 
-  \frac{B\left(\alpha + k - t, t+\beta\right)}{B(\alpha, \beta)} 
-  \ I_{\{t \leq k \leq s+k-1\}}
-\end{align}
-where $B$ is the Beta function and $\mathbf{b}$ is the realization
-of Bernoulli data.
 
 \begin{prop}
 The posterior PMF of the Stopped Negative Binomial distribution with a Beta($\alpha$, $\beta$) prior is:
