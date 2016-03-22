@@ -10,6 +10,7 @@
 \DeclareMathOperator*{\argmin}{argmin}
 \newcommand*{\argminl}{\argmin\limits}
 \newtheorem{prop}{Proposition}
+\newtheorem{corollary}{Corollary}
 
 \modulolinenumbers[5]
 
@@ -97,8 +98,8 @@ discrete distribution\sep curtailed sampling
 
 Consider a prototypical Phase II single-arm clinical trial in which 12 patients
 are enrolled and treated. If two or more respond then we reject the null
-hypothesis that the treatment is not effective and the trial proceeds to the 
-next stage. If fewer that two respond then the null is not rejected and the 
+hypothesis that the treatment is not effective and the trial is deemed
+successful. If fewer that two respond then the null is not rejected and the 
 trial is terminated.
 
 If all 12 patients are enrolled at once, as in the classic
@@ -112,7 +113,7 @@ which the experiment ends as soon as any of the endpoints is reached, is
 call {\em curtailed sampling}. Under curtailed sampling the range of the
 sample size is between two and 12.
 
-Assume each of patient outcome can be modeled as an independent,
+Assume each patient outcome can be modeled as an independent,
 identically distributed Bernoulli($p$) random variable. The trial is realized
 as a sequence of these random variables that stops when either a
 specified number of success or failures is reached. In the
@@ -206,7 +207,7 @@ with $X(0)=0$ and
 \begin{equation*} \label{eqn:proc}
 X_{k+1} = X_k + b_{k+1} \ I_{\{ k-t < X_k < s\}}.
 \end{equation*}
-At each step a patient's outcome is measured. If it is success, the process 
+At each step a patient's outcome is measured. If it is a success, the process 
 advances one diagonally in the
 positive horizontal and vertical direction.
 Otherwise, it advances in the positive horizontal direction only. The
@@ -238,7 +239,9 @@ Next, define
 S'(k, p, t) = {k-1 \choose k-t} p^{k-t} (1-p)^t
 \end{equation}
 and notice that $S(k, p, s) = S'(k, 1-p, s)$ by writing
-${k-1 \choose k-s} = {k-1 \choose s-1}$.
+\begin{equation*}
+{k-1 \choose k-s} = {k-1 \choose s-1}.
+\end{equation*}
 
 To show that (\ref{eqn:N}) and (\ref{stop_t}) sum to one
 over their support, let
@@ -268,18 +271,32 @@ This completes the proof that (\ref{eqn:pmf}) is a valid probability mass
 function.
 \end{proof}
 
+\begin{corollary} \label{conditional_distribution}
+Assume a trial that stops on the $s$th successs or $t$failure as before. 
+Furthermore, assume we observer $s'$ successes and $t'$ failures
+where $s' < s$ and $t' < t$.
+That is, we see the number of success and failures at a time before
+reaching an endpoint. Then the number of subsequent enrollements needed 
+to reach an endpoint is SNB($p$, $s-s'$, $t-t'$).
+\end{corollary}
+\begin{proof}
+The result follows directly by realizing that, conditioned on $s'$
+success and $t'$ failures, there are $s-s'$ successes needed to reach the
+success endpoint and $t-t'$ failures needed to reach the failure endpoint.
+\end{proof}
+
 \section{Shape and Basic Properties}
 
 \begin{figure}[p!]
 \begin{center}
 \includegraphics[width=\textwidth]{shapes.pdf}
 \end{center}
-\caption{Different shapes of the SNB distribution with parameters ($s$, $t$, $p$), as given. Red indicates mass contributed by hitting $s$, teal indicates
+\caption{Different shapes of the SNB distribution with parameters ($s$, $t$, $p$), as given. Black indicates mass contributed by hitting $s$, grey indicates
 mass contributed by hitting $t$. \label{shapes.fig}}
 \end{figure}
 
 The SNB is a generalization of the negative 
-binomial distribution. If $t$ is large then the $Y-s$ has a 
+binomial distribution. If $t$ is large then $Y-s$ has a 
 negative binomial distribution with
 \begin{equation*}                                    %   (1)   
 \mathbb{P}[Y=s+j]        \label{nb1.eq}          
@@ -298,10 +315,16 @@ discrete distributions also appear in~\cite{Zhang2000}
 and \cite{Zelterman2005}.
 The maximum negative binomial is the smallest number of outcomes necessary to 
 observe at least $s$ successes {\em and} $s$ failures. The SNB is the 
-number of coin flips to observe {\em either} $s$ heads or $t$ tails.
+number of outcomes to observe {\em either} $s$ successes or $t$ failures.
 
 \section{Connection Between the SNB and the Binomial Tail Probability}
 
+The probability of reaching the success endpoint in an 
+SNB($p$, $s$, $t$) random variable is 
+equal to the probability of at least $s$ successes in a Binomial distributed 
+random variable with size $s+t-1$ and success probability $p$. 
+Likewise, the probability of reaching the failure endpoint is equal
+to at most $s-1$ successes in a Binomial distribution.
 \begin{prop} \label{binomial_tail}
 Let $Y$ be distributed as SNB($p$, $s$, $t$) and let 
 $B$ be distributed Binomial with size $n=s+t-1$ and success probability
@@ -337,7 +360,7 @@ completing the proof.
 
 Fig.~\ref{fig:snb_bin_compare} shows the case
 where $s=2$, $t=12$, and $p=0.2$. The probability masses represented in
-red are equal as are the masses in teal. The probability that $s$
+black are equal as are the masses in grey. The probability that $s$
 successes are reached in the SNB process is the same as the binomial 
 probability of at least two successes. Likewise, the probability that $t$ 
 failures are reached in the SNB process is the same as the binomial
@@ -350,14 +373,20 @@ probability of zero or one successes.
 \subfloat[The Binomial distribution.]{\includegraphics[width=0.5\textwidth]{bin_density.pdf}}
 \caption{
 SNB(0.2, 2, 12) with mass contributed from 
-$s$ successes (red) or $t$ failures (teal) along with Bin(0.2, 13) with
-at least 2 successes (red) or fewer (teal).
+$s$ successes (black) or $t$ failures (grey) along with Bin(0.2, 13) with
+at least 2 successes (black) or fewer (grey).
 }
 \label{fig:snb_bin_compare}
 \end{figure}
 
-
 \section{The Moment Generating Function}
+
+The moment generating function is calculated in a manner similar to 
+that of two negative binomial distributions. However, in the negative
+binomial derivation the
+term involving the regularized incomplete beta function integrates to
+one since it is integrated over it's entire support. This is not the
+case in the SNB and it appears in both terms.
 
 \begin{prop} Let $Y$ be distributed SNB with parameters $p$, $s$, and $t$.
 Then the moment generating function (MGF) of $Y$ is
@@ -399,7 +428,7 @@ beta function.
 
 Let us consider a Bayesian analysis where there is a Beta prior distribution
 on $p$.
-\begin{prop}
+\begin{prop} \label{prop:bayesian}
 The posterior PMF of the Stopped Negative Binomial distribution with a Beta($\alpha$, $\beta$) prior is:
 \begin{align} \label{eqn:posterior}
 f(k | s, t, \alpha, \beta) &= 
@@ -421,27 +450,41 @@ f(k | s, t, \alpha, \beta) = \frac{1}{B(\alpha, \beta)} & \int_0^1 {k-1 \choose 
 The result follows by applying the definition of the Beta function to the integral terms.
 \end{proof}
 
-\section{Discussion and Conclusion}
+\section{Discussion}
 
-We have presented a new discrete distribution by curtailed sampling rules 
-common in early-stage clinical trials, which we refer to as the Stopped 
-Negative Binomial distribution. The distribution models the stopping time of 
-a sequential trial where the trial is stopped when a number of events are 
-accumulated. A connection between the Binomial tail probability and the SNB
-distribution was shown; It's MGF was derived; and
-the posterior distribution was derived for the case when the 
-event probability $p$ has a Beta distribution. 
+The SNB can be used to extend clinical trial methodology
+in at least two areas. First, it can be used to construct nested criteria
+for early stopping and efficacy. These trials consist of two-stages.
+If the failure endpoint is reached in the first stage then the 
+trial stops due to futility. Otherwise, the trial enters the second 
+stage, which consists of responders from the first stage along with
+new enrollees in the second. Thus the design provides
+both this provide early testing for futility along with the ability
+to make statistically sound decisions sooner than traditional trials.
 
-Current work focuses on two different areas. First, the distribution
-is being applied to clinical trial design
-where the number of enrollees is smaller than traditional trials.
-This scenario is increasingly common in targeted cancer
-therapy where treatment may only be appropriate for small subpopulations.
-Second, generalizations and extensions of the distribution are being pursued
-for applications power analysis. The posterior construction allows us
-to quantify the uncertainty both in the response probability as well as the
-time until a trial is complete. This suggests new approaches to sample
-size calculations as well as trial monitoring.
+A second avenue for methodological innovation comes directly from
+Corollary \ref{conditional_distribution} and Proposition \ref{prop:bayesian}.
+While a trial is being conducted the response probabilities can be fitted
+and updated as new results are received. The number of individual successes
+and failure are used to learn the shape characteristics of the corresponding
+Beta distribution and resulting posterior
+distribution. An estimate of the probability of reaching the success (and
+failure) endpoints can be provided at each step of the trial.
+
+There are also several avenues for extending the SNB itself. First is the 
+development of a stopped negative multinomial distribution allowing
+for more than two endpoints. This extension would have clinical trial
+applications including dose escalation where the outcomes are response
+to a therapy, failure to respond, and an adverse outcome endpoint where
+and enrollee is removed from the trial with neither response or non-response
+due to side effects.
+
+A second, more theoretical extension is to the asymptotic setting. Under
+proper reparameterization, the process from which the SNB is derived 
+can be shown to converge to a Brownian motion. In this case, we conjecture
+that the SNB can be defined in terms of the L\'{e}vy-Bachelier 
+\citep{Bachelier1900} formula
+thereby relating the SNB to the classic result in stochastic calculus.
 
 \section*{References}
 
