@@ -99,16 +99,16 @@ discrete distribution\sep curtailed sampling
 Consider a prototypical Phase II single-arm clinical trial in which 12 patients
 are enrolled and treated. If two or more respond then we reject the null
 hypothesis that the treatment is not effective and the trial is deemed
-successful. If fewer that two respond then the null is not rejected and the 
+successful. If fewer than two respond then the null is not rejected and the 
 trial is terminated.
 
 If all 12 patients are enrolled at once, as in the classic
 design, then the sample size is 12. However, as in most clinical trials, the
 patients are enrolled sequentially, often with one patient's outcome realized
 before the next one enters the trial. In the present example, observing two
-successful patients allows us reach one endpoint so the sample required
+successful patients allows us to reach one endpoint so the sample required
 could be as small as two. Similarly 11
-observed treatment failures also ends the stage. This sampling mechanism, in
+observed treatment failures also ends the trial. This sampling mechanism, in
 which the experiment ends as soon as any of the endpoints is reached, is
 call {\em curtailed sampling}. Under curtailed sampling the range of the
 sample size is between two and 12.
@@ -116,7 +116,7 @@ sample size is between two and 12.
 Assume each patient outcome can be modeled as an independent,
 identically distributed Bernoulli($p$) random variable. The trial is realized
 as a sequence of these random variables that stops when either a
-specified number of success or failures is reached. In the
+specified number of successes or failures is reached. In the
 previous example suppose two successes were reached after enrolling 10
 patients (one in the third step and one at the $10^{th}$). The sample
 path is illustrated
@@ -164,7 +164,7 @@ The rest of this paper derives these results
 and explores properties of the distribution.
 The next section introduces our notation and basic results
 including the density of the distribution along with a description of
-it's relation to other distributions. Section 2 derives the distribution
+its relation to other distributions. Section 2 derives the distribution
 based on a defined Bernoulli process and gives some basic properties.
 Section 3 provides a connection to the Binomial tail probability.
 Section 4 derives the posterior distribution using a Beta prior.
@@ -272,7 +272,8 @@ function.
 \end{proof}
 
 \begin{corollary} \label{conditional_distribution}
-Assume a trial that stops on the $s$th successs or $t$failure as before. 
+Assume a trial that stops on the $s^{th}$ success or $t^{th}$ failure as 
+before. 
 Furthermore, assume we observer $s'$ successes and $t'$ failures
 where $s' < s$ and $t' < t$.
 That is, we see the number of success and failures at a time before
@@ -359,8 +360,9 @@ completing the proof.
 \end{proof}
 
 Fig.~\ref{fig:snb_bin_compare} shows the case
-where $s=2$, $t=12$, and $p=0.2$. The probability masses represented in
-black are equal as are the masses in grey. The probability that $s$
+where $s=2$, $t=12$, and $p=0.2$.  The probability masses represented in 
+black are equal in a) and b) as are the masses in grey.
+The probability that $s$
 successes are reached in the SNB process is the same as the binomial 
 probability of at least two successes. Likewise, the probability that $t$ 
 failures are reached in the SNB process is the same as the binomial
@@ -420,7 +422,7 @@ $qe^x \leq 1$. This also shows $x \leq -\log(q)$.
 
 A similar expression can be derived using the same calculation with
 the constraint that $x \leq -\log(p)$. The result
-follows from the afore mentioned property of the regularized incomplete
+follows from the aforementioned property of the regularized incomplete
 beta function.
 \end{proof}
 
@@ -459,7 +461,7 @@ If the failure endpoint is reached in the first stage then the
 trial stops due to futility. Otherwise, the trial enters the second 
 stage, which consists of responders from the first stage along with
 new enrollees in the second. Thus the design provides
-both this provide early testing for futility along with the ability
+both early testing for futility along with the ability
 to make statistically sound decisions sooner than traditional trials.
 
 A second avenue for methodological innovation comes directly from
@@ -476,7 +478,7 @@ development of a stopped negative multinomial distribution allowing
 for more than two endpoints. This extension would have clinical trial
 applications including dose escalation where the outcomes are response
 to a therapy, failure to respond, and an adverse outcome endpoint where
-and enrollee is removed from the trial with neither response or non-response
+an enrollee is removed from the trial with neither response or non-response
 due to side effects.
 
 A second, more theoretical extension is to the asymptotic setting. Under
