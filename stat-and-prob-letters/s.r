@@ -7,7 +7,7 @@ kplot = function(flips, s, t) {
   if (!is.list(flips)) {
     d = flips_to_kplot_df(flips)
     p = qplot(k, path, data = d, geom = "line") +
-      scale_x_continuous(breaks = 0:(t + s), limits = c(0, t + s)) +
+      scale_x_continuous(breaks = 0:(t + s), limits = c(0, t + s - 1)) +
       scale_y_continuous(breaks = 0:s, limits=c(0, s+0.15)) +
       geom_segment(x=s, y=s, xend=(t+s-1), yend=s, linetype=2) +
       geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, linetype=2)
@@ -46,14 +46,15 @@ flips_to_kplot_df = function (flips) {
 }
 
 p = kplot( c(rep(0, 3), 1, rep(0, 6), 1), s=2, t=11) +
-  xlab("Number of Patients Enrolled") + ylab("Number of Responders") +
+  xlab("Number of Patients Enrolled") + 
+  ylab("Number of Responders to Treatment") +
   geom_text(data=NULL, x=7, y=2.1, label="Success Boundary") +
-  geom_text(data=NULL, x=12, y=0.5, label="Failure Boundary",
-            angle=(45+90)/2+9) + 
+  geom_text(data=NULL, x=11.75, y=0.45, label="Failure Boundary",
+            angle=(45+90)/2-5) + 
   geom_text(data=NULL, x=7, y=1.1, label="Sample Path") +
   theme_bw() + scale_fill_grey()
 
-ggsave("KanePlot.pdf", p, width=7, height=5)
+ggsave("KanePlot.pdf", p, width=10, height=3.5)
 
 
 # SNB distribution shapes.

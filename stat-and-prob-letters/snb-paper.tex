@@ -82,8 +82,8 @@ We introduce a discrete distribution suggested by curtailed
 sampling rules common in early-stage clinical trials. We derive the
 distribution of the smallest number of independent and identically
 distributed Bernoulli trials needed to observe either $s$ successes 
-or $t$ failures. The closed-form expression for the distribution as well as 
-its characteristics are derived and properties of the distribution are explored.
+or $t$ failures. This report provides a closed-form expression for the 
+mass function and illustrates limiting approximations.
 \end{abstract}
 
 \begin{keyword}
@@ -97,10 +97,11 @@ discrete distribution\sep curtailed sampling
 \section{Introdution and Motivation}
 
 Consider a prototypical Phase II single-arm clinical trial in which 12 patients
-are enrolled and treated. If two or more respond then we reject the null
-hypothesis that the treatment is not effective and the trial is deemed
-successful. If fewer than two respond then the null is not rejected and the 
-trial is terminated.
+are enrolled and treated. The binomial probability of success is $p=0.045$ for
+each patient under the null hypothesis that treatment is no effective.
+If two or more patients respond to the treatment then we reject this null
+hypothesis, and the trial is deemed successful at significance level of $0.1$. 
+If fewer than two respond then the null is not rejected.
 
 If all 12 patients are enrolled at once, as in the classic
 design, then the sample size is 12. However, as in most clinical trials, the
@@ -111,19 +112,19 @@ could be as small as two. Similarly 11
 observed treatment failures also ends the trial. This sampling mechanism, in
 which the experiment ends as soon as any of the endpoints is reached, is
 call {\em curtailed sampling}. Under curtailed sampling the range of the
-sample size is between two and 12.
+sample size for this trial is between two and 12.
 
-Assume each patient outcome can be modeled as an independent,
+Let us assume each patient outcome can be modeled as an independent,
 identically distributed Bernoulli($p$) random variable. The trial is realized
-as a sequence of these random variables that stops when either a
-specified number of successes or failures is reached. In the
-previous example suppose two successes were reached after enrolling 10
-patients (one in the third step and one at the $10^{th}$). The sample
-path is illustrated
-in Fig.~\ref{fig:kane_viz}. The vertical axis denotes the number of
+as a sequence of these random variables stopping when either a
+specified number of successes or failures has been reached. 
+
+A hypothetical sample path is illustrated in Fig.~\ref{fig:kane_viz}.
+The vertical axis denotes the number of
 successful outcomes. The horizontal axis counts the number of patients that
 have been enrolled. The horizontal and vertical boundaries represent
-endpoints for the trial.
+endpoints for the trial. In this case two successes were reached after
+enrolling 10 patients: one in the third outcome and on in the tenth.
 
 \begin{figure}[t!]
 \includegraphics[width=\textwidth]{KanePlot.pdf}
@@ -134,20 +135,19 @@ A hypothetical realization of a trial.
 \end{figure}
 
 \begin{table}[t!]
-\caption{Stopped Negative Binomial Distribution Characteristics}
+\caption{Characteristics of the Stopped Negative Binomial Distribution}
 \label{tab:snb}
 \begin{center}
 \begin{tabular}{|c|l|} \hline
-Notation & SNB($p$, $s$, $t$) \\ \hline
-Parameters & $p$ the success probability ($q = 1-p$) \\
-           & $s$ the number of successes before stopping \\
-           & $t$ the number of failures before stopping \\ \hline
+Parameters & $p$ the success probability ($0\leq p \leq 1$; $q = 1-p$) \\
+           & $s$ the number of successes before stopping ($s=1, 2, ...$)\\
+           & $t$ the number of failures before stopping ($t=1, 2, ...$)\\ \hline
 Support & min$(s,t) \leq k \leq s+t-1$  \\ \hline
-PMF & ${k-1 \choose s-1} p^s (1-p)^{k-s} + {k-1 \choose t-1} (1-p)^s p^{k-t}$\\ \hline
-CDF & $2 - \mathcal{I}_{1-p}(k+1, s) - \mathcal{I}_{p}(k+1, t)$\\ 
+$\mathbb{P}[Y=k]$ & ${k-1 \choose s-1} p^s (1-p)^{k-s} + {k-1 \choose t-1} (1-p)^s p^{k-t}$\\ \hline
+$\mathbb{P}[Y \leq k]$ & $2 - \mathcal{I}_{q}(k+1, s) - \mathcal{I}_{p}(k+1, t)$\\ 
     & where $\mathcal{I}$ is the regularized incomplete beta function.\\ \hline
-Mean & $\frac{s}{p} \mathcal{I}_p(s,t) + \frac{q^{t-1} p^{s-1}}{B(s,t)} +
-  \frac{t}{q} \mathcal{I}_q(t,s) + \frac{q^{s-1}p^{t-1}}{B(s,t)}$\\ 
+Mean & $\frac{s}{p} \mathcal{I}_p(s,t) + \frac{p^{s-1} q^{t-1}}{B(s,t)} +
+  \frac{t}{q} \mathcal{I}_q(t,s) + \frac{p^{t-1} q^{s-1}}{B(s,t)}$\\ 
   & where $B$ is the beta function \\ \hline
 MGF & $\left(\frac{p e^x}{1 - qe^x}\right)^s 
   \mathcal{I}_{1-qe^x} (s, t) + \left(\frac{qe^x}{1-pe^x}\right)^t 
@@ -167,8 +167,8 @@ including the density of the distribution along with a description of
 its relation to other distributions. Section 2 derives the distribution
 based on a defined Bernoulli process and gives some basic properties.
 Section 3 provides a connection to the Binomial tail probability.
-Section 4 derives the posterior distribution using a Beta prior.
-Section 5 provides a brief discussion on the use of the distribution
+Section 4 derives the posterior distribution using a Beta prior distribution
+for $p$. Section 5 provides a brief discussion on the use of the distribution
 in clinical trials along with future avenues for generalization.
 
 \section{Probability Mass Function}
@@ -178,8 +178,8 @@ Let $\,b_1, b_2, \ldots \,$ denote a sequence of independent, identically
 distributed, Bernoulli random variables with $\mathbb{P}[b_i=1]=p$ and
 $\mathbb{P}[b_i = 0] = 1-p$, for
 probability parameter $0\leq p \leq 1$. In the clinical trial setting
-$\,b_i = 1$ corresponds to a successful outcome.  Let $s$ and $t$ be
-positive integers.  Define the SNB random
+$\,b_i = 1$ corresponds to a successful patient outcome following treatment.  
+Let $s$ and $t$ be positive integers.  Define the SNB random
 variable $Y$ as the smallest
 integer value such that $\,\{b_1, \ldots , b_Y\}\,$ contains {\em either}
 $\,s\,$ successes {\em or} $\,t\,$ failures. That is, the SNB distribution
@@ -188,18 +188,18 @@ $\sum_i^Y b_i = s$ or $\sum_i^Y 1-b_i = t$.
 
 The distribution of $\,Y\,$ has support on integer values in the range
 \begin{equation*}               
-     \min(s,t) \leq \; Y \;\leq s+t-1  \label{range.y.eq}
+     \min(s,t) \leq \; Y \;\leq s+t-1  \label{range.y.eq}.
 \end{equation*}
-and it is distributed as
+The probability mass function is
 \begin{equation} \label{eqn:pmf}
-\mathbb{E}\  I_{\{Y=k\}} = S(k, p, s) \ I_{\{s \leq k\}} + 
+\mathbb{P} [Y=k] = S(k, p, s) \ I_{\{s \leq k\}} + 
   S(k, 1-p, t) \ I_{\{ t \leq k \}}
 \end{equation}
-where $I_{\{f\}}$ is one if $f$ is true and zero otherwise and
+where $I_{\{f\}}$ is one if $f$ is true and zero otherwise, and
 \begin{equation} \label{eqn:N}
 S(k, p, s) = {k-1 \choose s-1} p^s (1-p)^{k-s} 
 \end{equation}
-is the negative binomial probability
+is the negative binomial probability mass.
 
 To prove (\ref{eqn:pmf}), consider the
 process $\mathbf{X} = \left\{X(k) : k = 0,1,... \right\}$
