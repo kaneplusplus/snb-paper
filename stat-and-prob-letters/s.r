@@ -2,37 +2,37 @@ library(snb)
 library(ggplot2)
 
 ## kplot
-#
-#kplot = function(flips, s, t) {
-#  if (!is.list(flips)) {
-#    d = flips_to_kplot_df(flips)
-#    p = qplot(k, path, data = d, geom = "line") +
-#      scale_x_continuous(breaks = 0:(t + s), limits = c(0, t + s - 1)) +
-#      scale_y_continuous(breaks = 0:s, limits=c(0, s+0.15)) +
-#      geom_segment(x=s, y=s, xend=(t+s-1), yend=s, linetype=2) +
-#      geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, linetype=2)
-##      geom_segment(x=s, y=s, xend=(t+s-1), yend=s, color="green", linetype=1) +
-##      geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, col="red")
-#  } else {
-#    flip_set = lapply(flips, flips_to_kplot_df)
-#    for (i in 1:length(flip_set)) {
-#      flip_set[[i]]$num = as.factor(i)
-#      flip_set[[i]]$k = jitter(flip_set[[i]]$k)
-#      flip_set[[i]]$k[flip_set[[i]]$k < 0] = 0
-#    }
-#    d = Reduce(rbind, flip_set)[, -(4:5)]
-#    p = qplot(k, path, data = d, geom = "path", group = num) +
-#        scale_x_continuous(breaks=0:(t+s), limits = c(0, t+s)) +
+
+kplot = function(flips, s, t) {
+  if (!is.list(flips)) {
+    d = flips_to_kplot_df(flips)
+    p = qplot(k, path, data = d, geom = "line") +
+      scale_x_continuous(breaks = 0:(t + s), limits = c(0, t + s - 1)) +
+      scale_y_continuous(breaks = 0:s, limits=c(0, s+0.15)) +
+      geom_segment(x=s, y=s, xend=(t+s-1), yend=s, linetype=2) +
+      geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, linetype=2)
+#      geom_segment(x=s, y=s, xend=(t+s-1), yend=s, color="green", linetype=1) +
+#      geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, col="red")
+  } else {
+    flip_set = lapply(flips, flips_to_kplot_df)
+    for (i in 1:length(flip_set)) {
+      flip_set[[i]]$num = as.factor(i)
+      flip_set[[i]]$k = jitter(flip_set[[i]]$k)
+      flip_set[[i]]$k[flip_set[[i]]$k < 0] = 0
+    }
+    d = Reduce(rbind, flip_set)[, -(4:5)]
+    p = qplot(k, path, data = d, geom = "path", group = num) +
+        scale_x_continuous(breaks=0:(t+s), limits = c(0, t+s)) +
+        geom_segment(x = s, y = s, xend = (t + s - 1), yend = s,
+                     linetype=2) +
+        geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, linetype=2)
 #        geom_segment(x = s, y = s, xend = (t + s - 1), yend = s,
-#                     linetype=2) +
-#        geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, linetype=2)
-##        geom_segment(x = s, y = s, xend = (t + s - 1), yend = s,
-##                     color = "green") +
-##        geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, col="red")
-#    p
-#  }
-#  p
-#}
+#                     color = "green") +
+#        geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, col="red")
+    p
+  }
+  p
+}
 
 flips_to_kplot_df = function (flips) {
   d = data.frame(k = 0:length(flips))
@@ -51,8 +51,8 @@ p = kplot( c(rep(0, 3), 1, rep(0, 6), 1), s=2, t=11) +
   geom_text(data=NULL, x=7, y=2.1, label="Success Boundary") +
   geom_text(data=NULL, x=11.75, y=0.45, label="Failure Boundary",
             angle=(45+90)/2-5) + 
-  geom_text(data=NULL, x=7, y=1.1, label="Sample Path") #+
-#  theme_bw() + scale_fill_grey()
+  geom_text(data=NULL, x=7, y=1.1, label="Sample Path") +
+  theme_bw() + scale_fill_grey()
 
 ggsave("KanePlot.pdf", p, width=10, height=3.5)
 
@@ -103,12 +103,12 @@ dev.off()
 
 
 # Binomial Tail Connection.
-p = 0.2
+p = 0.045
 s = 2
 t = 12
 n = s+t-1
 
-dsnb_stack_plot(p, s, t) + ylab("SNB(0.2, 2, 12)") + theme_bw() + 
+dsnb_stack_plot(p, s, t) + ylab("SNB(0.045, 2, 12)") + theme_bw() + 
   scale_fill_grey()
 ggsave("snb_density.pdf")
 
@@ -121,5 +121,5 @@ d$Outcome = factor(c(rep("t", s), rep("s", n-s+1)))
 d$Outcome = relevel(d$Outcome, "s")
 
 ggplot(d, aes(x=x, y=y, fill=Outcome))+geom_bar(stat="identity") + xlab("k")+
-  ylab("Bin(0.2, 13)") + theme_bw() + scale_fill_grey()
+  ylab("Bin(0.045, 13)") + theme_bw() + scale_fill_grey()
 ggsave("bin_density.pdf")
