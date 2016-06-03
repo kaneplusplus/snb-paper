@@ -97,12 +97,15 @@ discrete distribution\sep curtailed sampling
 
 \section{Introdution and Motivation}
 
-Consider a prototypical Phase II single-arm clinical trial in which 12 patients
+Consider a prototypical early phase, single-arm clinical trial in which 
+12 patients
 are enrolled and treated. The binomial probability of success is $p=0.045$ for
 each patient under the null hypothesis that treatment is not effective.
-If two or more patients respond to the treatment then we reject this null
-hypothesis and the trial is deemed successful at significance level of $0.1$. 
-If fewer than two respond then the null is not rejected.
+If two or more patients out of these 12 respond to the treatment then we 
+reject this null
+hypothesis and the treatment is deemed successful at significance 
+level of $0.1$.  If fewer than two respond then the null is not rejected
+and the treatment is judged as ineffective.
 
 If all 12 patients are enrolled at once, as in the classic
 design, then the sample size is 12. However, in most clinical trials the
@@ -111,7 +114,7 @@ before the next one enters the trial. In the present example, observing two
 successful patients allows us to reach one endpoint so the sample required
 could be as small as two. Similarly 11
 observed treatment failures also ends the trial. This sampling mechanism, in
-which the experiment ends as soon as a predefined endpoints is reached, is
+which the experiment ends as soon as a predefined endpoint is reached, is
 call {\em curtailed sampling}. Under curtailed sampling the range of the
 sample size for this trial is between two and 12.
 
@@ -122,15 +125,15 @@ specified number of successes or failures has been reached.
 
 A hypothetical sample path is illustrated in Fig.~\ref{fig:kane_viz}.
 The vertical axis denotes the number of
-successful outcomes. The horizontal axis counts the number of patients that
-have been enrolled. The horizontal and vertical boundaries represent
+successful outcomes. The horizontal axis counts the number of patients 
+enrolled. The horizontal and vertical boundaries represent
 endpoints for the trial. In this case two successes were reached after
 enrolling 10 patients: one in the fourth outcome and on in the eleventh.
 
 \begin{figure}[t!]
 \includegraphics[width=\textwidth]{KanePlot.pdf}
 \caption{
-A hypothetical realization of a trial.
+A hypothetical realization of the trial.
 }
 \label{fig:kane_viz}
 \end{figure}
@@ -153,6 +156,10 @@ Mean & $\frac{s}{p} \mathcal{I}_p(s,t) + \frac{p^{s-1} q^{t-1}}{B(s,t)} +
 MGF & $\left(\frac{p e^x}{1 - qe^x}\right)^s 
   \mathcal{I}_{1-qe^x} (s, t) + \left(\frac{qe^x}{1-pe^x}\right)^t 
   \mathcal{I}_{1-pe^x}(t, s) $\\ \hline
+Posterior & 
+${k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)}+
+{k-1 \choose t-1} \frac{B\left(\alpha + k-t, t+\beta\right)}{B(\alpha,\beta)}$\\
+& for Beta($\alpha$, $\beta$) prior. \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -223,7 +230,9 @@ process continues until either $X_k = s$ or $X_k = k-t$.
 
 \begin{prop}
 The distribution of the stopping time
-$\argminl_k \left[X_k \geq s \cup X_k \leq k-t \right]$
+\begin{equation*}
+Y = \argminl_k \left[X_k \geq s \cup X_k \leq k-t \right]
+\end{equation*}
 is given at (\ref{eqn:pmf}).
 \end{prop}
 \begin{proof}
@@ -251,7 +260,7 @@ unsuccessful outcome at time $k$.
 %{k-1 \choose k-s} = {k-1 \choose s-1}.
 %\end{equation*}
 
-To show that Equation \ref{eqn:pmf} sums to one, define
+To show that (\ref{eqn:pmf}) sums to one, define
 \begin{align} \label{eqn:sum_proof}
 R &= \sum_{k=s}^{s+t-1} S(k, p, s) + \sum_{k=t}^{s+t-1} S(k, 1-p, t) \\
   &= \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s (1-p)^{k-s} + \sum_{k=t}^{s+t-1} {k-1 \choose k-t} p^{k-t} (1-p)^t
@@ -265,17 +274,16 @@ R = \sum_{i=0}^{t-1} {i+s-1 \choose i} p^s (1-p)^i \; + \;
 \end{equation}
 
 Let $\mathcal{I}_p(s, t)$ be the {\em regularized incomplete beta function} 
-\citep{Olver2010} and recall this function satisfies 
-$\mathcal{I}_p(s, t) = 1-\mathcal{I}_{1-p}(t, s)$ \citep{Uppuluri1970}.
+\citep{Olver2010}. This function satisfies 
+$\mathcal{I}_p(s, t) = 1-\mathcal{I}_{1-p}(t, s)$ \citep{Uppuluri1970}. Then
 \begin{align*}
 R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
 \sum_{j=0}^{s-1}  {j+t-1 \choose j} p^j  (1-p)^t \\
    &= 1-\mathcal{I}_p(s, t) + 1 - \mathcal{I}_{1-p}(t, s) \\
    &= 1. 
 \end{align*}
-This completes the proof (\ref{eqn:pmf}) is is the distribution of the
-stopping time and a valid probability mass
-function.
+This completes the proof (\ref{eqn:pmf}) is the distribution of the
+stopping time and is a valid probability mass function.
 \end{proof}
 
 Next, we consider an interim analysis of a clinical trial after $s'$ 
@@ -294,8 +302,10 @@ success endpoint and $t-t'$ failures needed to reach the failure endpoint.
 \begin{center}
 \includegraphics[width=\textwidth]{shapes.pdf}
 \end{center}
-\caption{Different shapes of the SNB distribution with parameters ($s$, $t$, $p$), as given. Black indicates mass contributed by hitting $s$, grey indicates
-mass contributed by hitting $t$. \label{shapes.fig}}
+\caption{Different shapes of the SNB distribution with parameters 
+($p$, $s$, $t$), as given. Black indicates mass contributed by reaching
+$s$ successes before $t$ failures, grey indicates
+mass contributed by reaching $t$ failures first. \label{shapes.fig}}
 \end{figure}
 
 The SNB is a generalization of the negative 
@@ -331,15 +341,16 @@ SNB($p$, $s$, $t$) random variable is
 equal to the probability of at least $s$ successes in a Binomial distributed 
 random variable with size $s+t-1$ and success probability $p$. 
 Likewise, the probability of reaching the failure endpoint is equal
-to at most $s-1$ successes in a Binomial distribution. That is, the
-probability that the number of successes is at least $s$ in the Binomial
-model is the same that the trial succeeds (reaches $s$) in the SNB model.
+to the probability of at most $s-1$ successes in a Binomial distribution. 
+That is, the probability that the number of successes is at least $s$ in the 
+Binomial model is the same that the trial succeeds (reaches $s$) in the SNB 
+model.
 \begin{prop} \label{binomial_tail}
 Let $Y$ be distributed as SNB($p$, $s$, $t$) and let 
 $B$ be distributed Binomial with size $n=s+t-1$ and success probability
 $p$. Then
 \begin{equation}
-\mathbb{P}[B \geq s] = \mathbb{P} [Y \leq n\ |\ \text{trial succeeds}].
+\mathbb{P}[B \geq s] = \mathbb{P} [\text{trial succeeds}].
 \end{equation}
 \end{prop}
 \begin{proof}
@@ -351,7 +362,7 @@ The Binomial tail probability is
 \end{align*}
 The corresponding SNB probability is
 \begin{equation*}
-\mathbb{P} [Y \leq n\ |\ \text{trial succeeds}] 
+\mathbb{P} [\text{trial succeeds}] 
   = \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s (1-p)^{k-s}.
 \end{equation*}
 Let $i=k-s$. Using the fact that
@@ -360,17 +371,17 @@ Let $i=k-s$. Using the fact that
 \end{equation*}
 the last summation can be rewritten as
 \begin{align}
-\mathbb{P} [Y \leq n\ |\ \text{trial succeeds}] &= \sum_{i=0}^{t-1} 
+\mathbb{P} [\text{trial succeeds}] &= \sum_{i=0}^{t-1} 
   {i+s-1 \choose i} p^s (1-p)^i\\
   &= 1 - \mathcal{I}_{1-p}(t, s)
 \end{align}
 completing the proof.
 \end{proof}
 
-To illustrate this result, let us return to our initial example, shown
-in Fig.~\ref{fig:snb_bin_compare}, 
-where $s=2$, $t=12$, and $p=0.045$.  The probability masses represented in 
-black are equal in a) and b) as are the masses in grey.
+To illustrate this result, let us return to our initial example
+where $s=2$, $t=12$, and $p=0.045$.  The probability masses in
+Fig.~\ref{fig:snb_bin_compare} represented in 
+black are equal in panels a) and b) as are the masses in grey.
 The probability that $s$
 successes are reached in the SNB process is the same as the binomial 
 probability of at least two successes. Likewise, the probability that $t$ 
@@ -384,7 +395,7 @@ probability of zero or one successes.
 \subfloat[The Binomial distribution.]{\includegraphics[width=0.5\textwidth]{bin_density.pdf}}
 \caption{
 SNB(0.045, 2, 12) with mass contributed from 
-$s$ successes (black) or $t$ failures (grey) along with Bin(0.045, 13) with
+$s$ successes (black) or $t$ failures (grey) along with Bin(0.045, 12) with
 at least 2 successes (black) or fewer (grey).
 }
 \label{fig:snb_bin_compare}
@@ -414,7 +425,7 @@ and can be rewritten as:
 \mathbb{E}~e^{xY} = \sum_{k=s}^{s+t-1}{k-1 \choose k-s} (pe)^{sx} (qe^x)^{k-s} 
   + \sum_{k=t}^{s+t-1}{k-1 \choose k-t} (qe^x)^t (pe^x)^{k-t}.
 \end{equation}
-The first summation in Equation \ref{eqn:first_sum} satisfies
+The first summation in (\ref{eqn:first_sum}) satisfies
 \begin{align*}
 \sum_{k=s}^{s+t-1}{k-1 \choose k-s} (pe)^{sx} (qe^x)^{k-s} &= 
   \left(\frac{pe^x}{1 - qe^x}\right)^s \ \ \sum_{k=s}^{s+t-1} {k-1 \choose k-s} 
@@ -422,7 +433,8 @@ The first summation in Equation \ref{eqn:first_sum} satisfies
   &= \left(\frac{pe^x}{1 - qe^x}\right)^s \mathcal{I}_{qe^x}(s, t).
 \end{align*}
 Since the incomplete beta function's subscript parameter has support on zero 
-to one, we have $qe^x \leq 1$. This also shows $x \leq -\log(q)$.
+to one, we have $qe^x \leq 1$. This also shows we must restrict
+$x \leq -\log(q)$.
 A similar expression can be derived for the second summation in 
 Equation \ref{eqn:first_sum} and results in
 the constraint $x \leq -\log(p)$.
@@ -432,13 +444,14 @@ the constraint $x \leq -\log(p)$.
 
 Let us consider a Bayesian analysis with a Beta prior distribution on $p$.
 \begin{prop} \label{prop:bayesian}
-The posterior PMF of the Stopped Negative Binomial distribution with a 
+The posterior probability mass function of the Stopped Negative Binomial 
+distribution with a 
 Beta($\alpha$, $\beta$) prior is
 \begin{align} \label{eqn:posterior}
-f(k | s, t, \alpha, \beta) &= 
+\mathbb{P} [Y = k | s, t, \alpha, \beta ] &= 
   {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} 
     \ I_{\{s \leq k \leq s+k-1\}} \ + \nonumber \\
-  & {k-1 \choose k-t} 
+  & {k-1 \choose t-1} 
     \frac{B\left(\alpha + k - t, t+\beta\right)}{B(\alpha, \beta)} 
     \ I_{\{t \leq k \leq s+k-1\}}.
 \end{align}
@@ -449,12 +462,45 @@ $\min(s,t) \leq k \leq s+t-1$. When
 this is not the case appropriate terms should be removed as dictated by the indicator functions.
 \begin{align*}
 f(k | s, t, \alpha, \beta) = \frac{1}{B(\alpha, \beta)} & \int_0^1 {k-1 \choose s-1} p^{\alpha +s -1} \left(1-p\right)^{k-s+\beta-1} + \\
- & {k-1 \choose k-t} p^{k-t+\alpha-1}\left(1-p\right)^{t+b-1} dp \\
+ & {k-1 \choose t-1} p^{k-t+\alpha-1}\left(1-p\right)^{t+\beta-1} dp \\
 = \frac{1}{B(\alpha, \beta)}  {k-1 \choose s-1} & \int_0^1  p^{\alpha +s -1} \left(1-p\right)^{k-s+\beta-1} dp + \\
- & \frac{1}{B(\alpha, \beta)} {k-1 \choose k-t} \int_0^1  p^{k-t+\alpha-1}\left(1-p\right)^{t+b-1} dp.
+ & \frac{1}{B(\alpha, \beta)} {k-1 \choose t-1} \int_0^1  p^{k-t+\alpha-1}\left(1-p\right)^{t+\beta-1} dp.
 \end{align*}
-The result follows by applying the definition of the Beta function to the integral terms.
+The result in (\ref{eqn:posterior}) follows by the definition of the 
+Beta function.
 \end{proof}
+
+To better understand the posterior distribution, let us once again return to 
+our example where $s=2$, $t=12$. However, we assume $p$ is a Beta distribution
+with shape parameters $\alpha = 0.045 c$ and 
+$\beta = 0.955 c$ where $c$ will take values between one and 10. 
+This parameterization allows us to examine the relationship between 
+uncertainty in $p$ and the SNB.
+
+\begin{figure}[t!]
+\centering
+\subfloat[The expected sample size.]{\includegraphics[width=0.5\textwidth]{bayesian-sample-expectation.pdf}}
+\hfill
+\subfloat[The variance of the sample size.]{\includegraphics[width=0.5\textwidth]{bayesian-sample-variance.pdf}}
+\caption{
+The expected size and variance of the posterior SNB varying the uncertainty 
+in the prior distribution of $p$. A larger value of $c$
+corresponds to a Beta prior with smaller variance.
+}
+\label{fig:bayesian-sample-size}
+\end{figure}
+
+Fig.~\ref{fig:bayesian-sample-size} shows how the expected sample size
+and variance of the posterior SNB. As the certainty increases the 
+posterior values converge to corresponding expected values with 
+$p = 0.045$. It may be noted that convergence is relatively slow. This
+is because when $c$ is small, the prior is heavily skewed. As $c$ increases
+this effect is minimized.
+
+Slow convergence in the mean will occur when $p$ takes values close to 
+zero or one. In these cases it may be preferable to select shape paramters
+based on the median or mode of the beta distribution. These values
+will vary less in the uncertainty of the distribution.
 
 \section{Discussion}
 

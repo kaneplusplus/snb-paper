@@ -123,3 +123,54 @@ d$Outcome = relevel(d$Outcome, "s")
 ggplot(d, aes(x=x, y=y, fill=Outcome))+geom_bar(stat="identity") + xlab("k")+
   ylab("Bin(0.045, 13)") + theme_bw() + scale_fill_grey()
 ggsave("bin_density.pdf")
+
+# Sample size and variance for posterior distribution.
+s = 2
+t = 12
+p = 0.045
+x1 = cdsnb_stacked(min(s, t):(s+t-1), s, t, c(0.045, 0.955))
+stacked_plot(x1$k, x1$s, x1$t)
+dev.new()
+x2 = cdsnb_stacked(min(s, t):(s+t-1), s, t, c(0.045*5, 0.955*5))
+stacked_plot(x2$k, x2$s, x2$t)
+dev.new()
+plot(dbeta(seq(0, 1, by=0.01), 0.045*5, 0.955*5), type="l", col="green")
+lines(dbeta(seq(0, 1, by=0.01), 0.045, 0.955), type="l", col="red")
+#lines(dbeta(seq(0, 1, by=0.01), 0.045*10, 0.955*10), type="l", col="blue")
+
+ecsnb(c(0.5, 0.5), s, t)
+
+x2 = cdsnb_stacked(min(s, t):(s+t-1), s, t, c(0.1*10, 0.9*10))
+stacked_plot(x2$k, x2$s, x2$t)
+
+# Probality of success in Bayesian model.
+# Variance of success in Bayesian model.
+
+shape = c(0.045, 0.955)
+is = seq(1, 100, length.out=100)
+x = foreach (i=is, .combine=rbind) %do% {
+  cbind(i, ecsnb(shape*i, s, t), vcsnb(shape*i, s, t))
+}
+x = as.data.frame(x)
+names(x) = c("n", "e", "v")
+
+exp_size = esnb(0.045, s, t)
+ggplot(x, aes(x=n, y=e)) + geom_line() + 
+  geom_segment(y=exp_size,x=min(is),yend=exp_size, xend=max(is), color="grey") +
+  ylim(range(c(x$e, exp_size, 12))) +
+  geom_text(data=NULL, x=50, y=11.98, label="Deterministic Limit (11.96)") + 
+    theme_bw() + scale_fill_grey() + ylab("Expected Posterior") + xlab("c")
+ggsave("bayesian-sample-expectation.pdf")
+
+exp_var = vsnb(0.045, s, t)
+ggplot(x, aes(x=n, y=v)) + geom_line() + 
+  geom_segment(y=exp_var,x=min(is),yend=exp_var, xend=max(is), color="grey") +
+  ylim(range(c(x$v, exp_var))) +
+  geom_text(data=NULL, x=50, y=2.5, label="Deterministic Limit (2.43)") + 
+    theme_bw() + scale_fill_grey() + ylab("Variance of the Posterior") + xlab("c")
+ggsave("bayesian-sample-variance.pdf")
+
+# Expected CSNB size
+# Variance of CSNB size
+# a) b)
+
