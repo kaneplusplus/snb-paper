@@ -129,6 +129,8 @@ successful outcomes. The horizontal axis counts the number of patients
 enrolled. The horizontal and vertical boundaries represent
 endpoints for the trial. In this case two successes were reached after
 enrolling 10 patients: one in the fourth outcome and on in the eleventh.
+Since the success boundary is reached, we say that the trial succeeds,
+or more correctly, the treatment succeeds.
 
 \begin{figure}[t!]
 \includegraphics[width=\textwidth]{KanePlot.pdf}
@@ -165,15 +167,15 @@ ${k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)}+
 \end{table}
 
 In this work we derive the distribution of the number of enrollees needed
-for either $s$ successes or $t$ failures. We refer to this distribution
-as the Stopped Negative Binomial (SNB) and some of its characteristics are
+to observe either $s$ successes or $t$ failures. We refer to this distribution
+as the Stopped Negative Binomial (SNB). Some of its characteristics are
 summarized in Tab.~\ref{tab:snb}.
 The rest of this paper derives these results
 and explores properties of the distribution.
 %The next section introduces our notation and basic results
 %including the density of the distribution along with a description of
 %its relation to other distributions. 
-Section 2 derives the distribution
+Section 2 derives the distribution function
 based on a defined Bernoulli process and gives some basic properties.
 Section 3 shows how the distribution is related to other standard
 distributions and connects the SNB tail probability to the Binomial tail 
@@ -207,7 +209,7 @@ The probability mass function is
 \mathbb{P} [Y=k] = S(k, p, s) \ I_{\{s \leq k\}} + 
   S(k, 1-p, t) \ I_{\{ t \leq k \}}
 \end{equation}
-where $I_{\{f\}}$ is the {\emph indicator function}, taking a value 
+where $I_{\{f\}}$ is the {\emph indicator function}, taking the value 
 of one if $f$ is true and zero otherwise, and
 \begin{equation} \label{eqn:N}
 S(k, p, s) = {k-1 \choose s-1} p^s (1-p)^{k-s} 
@@ -242,13 +244,13 @@ is given at (\ref{eqn:pmf}).
 %one.
 
 The probability a given realization of $\mathbf{X}$ reaches $s$ at
-the $k$th outcome is the probability that, at time $k-1$ there are $s-1$
+the $k$th outcome is the probability that, at time $k-1$, there are $s-1$
 successful outcomes and $k-s$ unsuccessful outcomes multiplied by
-the probability of a success at time $k$. This expression is given
+the probability of the final success at time $k$. This expression is given
 in (\ref{eqn:N}). 
-Similarly, probability a given realization reaches $k-t$
+Similarly, the probability a given realization reaches $k-t$
 is the probability that, at outcome $k-1$ there are $k-t$ successful outcomes
-and $t-1$ unsuccessful outcomes multiplied by the probability of an
+and $t-1$ unsuccessful outcomes multiplied by the probability of a final
 unsuccessful outcome at time $k$.  
 
 %Next, define
@@ -261,12 +263,15 @@ unsuccessful outcome at time $k$.
 %\end{equation*}
 
 To show that (\ref{eqn:pmf}) sums to one, define
-\begin{align} \label{eqn:sum_proof}
-R &= \sum_{k=s}^{s+t-1} S(k, p, s) + \sum_{k=t}^{s+t-1} S(k, 1-p, t) \\
-  &= \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s (1-p)^{k-s} + \sum_{k=t}^{s+t-1} {k-1 \choose k-t} p^{k-t} (1-p)^t
-\end{align}
-where we substitute $i=k-s$ in the first summation and $j=k-t$ in the second.
-Then $R$ can be written as the cumulative distribution function of two
+%\begin{align} \label{eqn:sum_proof}
+%R &= \sum_{k=s}^{s+t-1} S(k, p, s) + \sum_{k=t}^{s+t-1} S(k, 1-p, t) \\
+%  &= \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s (1-p)^{k-s} + \sum_{k=t}^{s+t-1} {k-1 \choose k-t} p^{k-t} (1-p)^t
+%\end{align}
+\begin{equation*} 
+R = \sum_{k=s}^{s+t-1} S(k, p, s) + \sum_{k=t}^{s+t-1} S(k, 1-p, t).
+\end{equation*}
+If we substitute $i=k-s$ in the first summation and $j=k-t$ in the second then
+$R$ can be written as the cumulative distribution function of two
 negative binomial distributions:
 \begin{equation} \label{eqn:transformed_sum}
 R = \sum_{i=0}^{t-1} {i+s-1 \choose i} p^s (1-p)^i \; + \;
@@ -289,8 +294,8 @@ stopping time and is a valid probability mass function.
 Next, we consider an interim analysis of a clinical trial after $s'$ 
 successes and $t'$ failures have been observed for $s' < s$ and $t' < t$.
 \begin{corollary} \label{conditional_distribution}
-The number of subsequent enrollements needed 
-to reach an endpoint is SNB($p$, $s-s'$, $t-t'$).
+The number of subsequent enrollments needed 
+to reach either endpoint behaves as SNB($p$, $s-s'$, $t-t'$).
 \end{corollary}
 Having observed $s'$
 successes and $t'$ failures, there are $s-s'$ successes needed to reach the
@@ -304,7 +309,7 @@ success endpoint and $t-t'$ failures needed to reach the failure endpoint.
 \end{center}
 \caption{Different shapes of the SNB distribution with parameters 
 ($p$, $s$, $t$), as given. Black indicates mass contributed by reaching
-$s$ successes before $t$ failures, grey indicates
+$s$ successes before $t$ failures. Grey indicates
 mass contributed by reaching $t$ failures first. \label{shapes.fig}}
 \end{figure}
 
@@ -355,11 +360,14 @@ $p$. Then
 \end{prop}
 \begin{proof}
 The Binomial tail probability is
-\begin{align*}
-\mathbb{P}[B \geq s] &= \sum_{k=s}^{s+t-1} {n \choose k} p^k (1-p)^{n-k} \\
-  &= 1 - \sum_{k=0}^{s-1} {n \choose k} p^k (1-p)^{n-k} \\
-  &= 1 - \mathcal{I}_{1-p}.
-\end{align*}
+\begin{equation*}
+\mathbb{P}[B \geq s] = 1 - \mathcal{I}_{1-p}.
+\end{equation*}
+%\begin{align*}
+%\mathbb{P}[B \geq s] &= \sum_{k=s}^{s+t-1} {n \choose k} p^k (1-p)^{n-k} \\
+%  &= 1 - \sum_{k=0}^{s-1} {n \choose k} p^k (1-p)^{n-k} \\
+%  &= 1 - \mathcal{I}_{1-p}.
+%\end{align*}
 The corresponding SNB probability is
 \begin{equation*}
 \mathbb{P} [\text{trial succeeds}] 
@@ -417,18 +425,18 @@ for $q = 1-p$ when $x \leq \min \left\{\log(1/p), \log(1/q) \right\}$.
 \begin{proof}
 The MGF of the SNB is:
 \begin{equation*}
-\mathbb{E}~e^{xY} = \sum_{k=s}^{s+t-1} {k-1 \choose k-s} p^s q^{k-s} e^{kx} 
-  + \sum_{k=t}^{s+t-1} {k-1 \choose k-t} p^{k-t} q^t e^{kx}
+\mathbb{E}~e^{xY} = \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s q^{k-s} e^{kx} 
+  + \sum_{k=t}^{s+t-1} {k-1 \choose t-1} p^{k-t} q^t e^{kx}
 \end{equation*}
 and can be rewritten as:
 \begin{equation} \label{eqn:first_sum}
-\mathbb{E}~e^{xY} = \sum_{k=s}^{s+t-1}{k-1 \choose k-s} (pe)^{sx} (qe^x)^{k-s} 
-  + \sum_{k=t}^{s+t-1}{k-1 \choose k-t} (qe^x)^t (pe^x)^{k-t}.
+\mathbb{E}~e^{xY} = \sum_{k=s}^{s+t-1}{k-1 \choose s-1} (pe)^{sx} (qe^x)^{k-s} 
+  + \sum_{k=t}^{s+t-1}{k-1 \choose t-1} (qe^x)^t (pe^x)^{k-t}.
 \end{equation}
 The first summation in (\ref{eqn:first_sum}) satisfies
 \begin{align*}
-\sum_{k=s}^{s+t-1}{k-1 \choose k-s} (pe)^{sx} (qe^x)^{k-s} &= 
-  \left(\frac{pe^x}{1 - qe^x}\right)^s \ \ \sum_{k=s}^{s+t-1} {k-1 \choose k-s} 
+\sum_{k=s}^{s+t-1}{k-1 \choose s-1} (pe)^{sx} (qe^x)^{k-s} &= 
+  \left(\frac{pe^x}{1 - qe^x}\right)^s \ \ \sum_{k=s}^{s+t-1} {k-1 \choose s-1} 
     (qe^x)^{k-s} (1-qe^x)^s \\
   &= \left(\frac{pe^x}{1 - qe^x}\right)^s \mathcal{I}_{qe^x}(s, t).
 \end{align*}
@@ -440,13 +448,34 @@ Equation \ref{eqn:first_sum} and results in
 the constraint $x \leq -\log(p)$.
 \end{proof}
 
-\section{The Posterior Distribution}
+The SNB's ability to approximate the geometric, normal, and gamma 
+distributions follow from it generalizing the negative binomial. To 
+recover the MGF of the negative binomial consider the case where
+$t \rightarrow \infty$ in (\ref{eqn:mgf}). The regularized incomplete
+beta function in the first term goes to one and zero in the second term
+and we are left with the MGF of the negative binomial distribution. 
+When $s=1$ this is the same as the geometric distribution. The negative
+binomial can therefore be seen as a sum of i.i.d. geometric distributions.
+For an appropriately large number of samples the central limit theorem
+hold yielding a normal approximation.
+
+Drawing a connection to the gamma distribution is more complicated.
+However it is a well-studied problem in the literature (see 
+\cite{Ord1968,Guenther1972,Best1974} for examples). Methods for these
+approximation generally work by equating cumulants and then showing 
+that errors are not too far off. 
+
+The lower-half normal distribution can be approximated by setting $s=t$
+for appropriately large $s$ and $t$ and $p = 0.5$. In this
+case the SNB can be viewed as identical, negative binomials
+approximating a normal and truncated at the median.
+
+\section{The Compound Distribution}
 
 Let us consider a Bayesian analysis with a Beta prior distribution on $p$.
 \begin{prop} \label{prop:bayesian}
-The posterior probability mass function of the Stopped Negative Binomial 
-distribution with a 
-Beta($\alpha$, $\beta$) prior is
+The compound distribution of the Stopped Negative Binomial 
+distribution with a Beta($\alpha$, $\beta$) prior is
 \begin{align} \label{eqn:posterior}
 \mathbb{P} [Y = k | s, t, \alpha, \beta ] &= 
   {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} 
@@ -470,10 +499,10 @@ The result in (\ref{eqn:posterior}) follows by the definition of the
 Beta function.
 \end{proof}
 
-To better understand the posterior distribution, let us once again return to 
+To better understand the compound distribution, let us once again return to 
 our example where $s=2$, $t=12$. However, we assume $p$ is a Beta distribution
 with shape parameters $\alpha = 0.045 c$ and 
-$\beta = 0.955 c$ where $c$ will take values between one and 10. 
+$\beta = 0.955 c$ for any $c > 0$.
 This parameterization allows us to examine the relationship between 
 uncertainty in $p$ and the SNB.
 
@@ -483,7 +512,7 @@ uncertainty in $p$ and the SNB.
 \hfill
 \subfloat[The variance of the sample size.]{\includegraphics[width=0.5\textwidth]{bayesian-sample-variance.pdf}}
 \caption{
-The expected size and variance of the posterior SNB varying the uncertainty 
+The expected size and variance of the compound SNB varying the uncertainty 
 in the prior distribution of $p$. A larger value of $c$
 corresponds to a Beta prior with smaller variance.
 }
@@ -491,28 +520,29 @@ corresponds to a Beta prior with smaller variance.
 \end{figure}
 
 Fig.~\ref{fig:bayesian-sample-size} shows how the expected sample size
-and variance of the posterior SNB. As the certainty increases the 
-posterior values converge to corresponding expected values with 
+and variance of the compound SNB. As the certainty increases the 
+compound distribution sample values converge to corresponding expected 
+values with 
 $p = 0.045$. It may be noted that convergence is relatively slow. This
 is because when $c$ is small, the prior is heavily skewed. As $c$ increases
 this effect is minimized.
 
 Slow convergence in the mean will occur when $p$ takes values close to 
-zero or one. In these cases it may be preferable to select shape paramters
+zero or one. In these cases it may be preferable to select shape parameters
 based on the median or mode of the beta distribution. These values
 will vary less in the uncertainty of the distribution.
 
-\section{Discussion}
-
-The SNB can be used to extend clinical trial methodology
-in at least two areas. First, it can be used to construct nested criteria
-for early stopping and efficacy. Current approaches are often inspired by
-the Simon 2-stage Phase II clinical trial \cite{Simon1989} where a
-a small number of patients are enrolled for an initial stage. For patients,
-success or failure is assessed. If at least a pre-specified number of
-successes are observed then the trial enters a second stage with more
-patients. If a sufficient number of successes are not observed then the
-trial fails. 
+%\section{Discussion}
+%
+%The SNB can be used to extend clinical trial methodology
+%in at least two areas. First, it can be used to construct nested criteria
+%for early stopping and efficacy. Current approaches are often inspired by
+%the Simon 2-stage Phase II clinical trial \cite{Simon1989} where a
+%a small number of patients are enrolled for an initial stage. For patients,
+%success or failure is assessed. If at least a pre-specified number of
+%successes are observed then the trial enters a second stage with more
+%patients. If a sufficient number of successes are not observed then the
+%trial fails. 
 
 %The SNB is being used to generalize the Simon design by providing separate
 %criteria for futility and efficacy.
@@ -525,16 +555,16 @@ trial fails.
 %both early testing for futility along with the ability
 %to make statistically sound decisions sooner than traditional trials.
 
-A second avenue for methodological innovation comes directly from
-Corollary \ref{conditional_distribution} and Proposition \ref{prop:bayesian}.
-Our knowledge of the response probability $p$ comes from published reports
-yielding a prior distribution.
-While a trial is being conducted the response probabilities are 
-updated as new results are received. The number of individual successes
-and failure are used to learn the shape characteristics of the corresponding
-Beta distribution and resulting posterior
-distribution. An estimate of the probability of reaching the success (and
-failure) endpoints can be provided at each step of the trial.
+%A second avenue for methodological innovation comes directly from
+%Corollary \ref{conditional_distribution} and Proposition \ref{prop:bayesian}.
+%Our knowledge of the response probability $p$ comes from published reports
+%yielding a prior distribution.
+%While a trial is being conducted the response probabilities are 
+%updated as new results are received. The number of individual successes
+%and failure are used to learn the shape characteristics of the corresponding
+%Beta distribution and resulting posterior
+%distribution. An estimate of the probability of reaching the success (and
+%failure) endpoints can be provided at each step of the trial.
 
 %There are also several avenues for extending the SNB itself. First is the 
 %development of a stopped negative multinomial distribution allowing
