@@ -123,6 +123,14 @@ identically distributed Bernoulli($p$) random variable. The trial is realized
 as a sequence of these random variables stopping when either a
 specified number of successes or failures has been reached. 
 
+\begin{figure}[bp!]
+\includegraphics[width=\textwidth]{KanePlot.pdf}
+\caption{
+A hypothetical realization of the trial.
+}
+\label{fig:kane_viz}
+\end{figure}
+
 A hypothetical sample path is illustrated in Fig.~\ref{fig:kane_viz}.
 The vertical axis denotes the number of
 successful outcomes. The horizontal axis counts the number of patients 
@@ -132,13 +140,45 @@ enrolling 10 patients: one in the fourth outcome and on in the eleventh.
 Since the success boundary is reached, we say that the trial succeeds,
 or more correctly, the treatment succeeds.
 
-\begin{figure}[t!]
-\includegraphics[width=\textwidth]{KanePlot.pdf}
+\begin{figure}[bp!]
+\centering
+\includegraphics[width=\textwidth]{snb-first-plot.pdf}
 \caption{
-A hypothetical realization of the trial.
+The probability mass function for a trial where $p$ 
+is 0.045 and where the trial stops
+after two patients respond or 11 patients do not respond.
 }
-\label{fig:kane_viz}
+\label{fig:first-plot}
 \end{figure}
+
+More generally the distribution for number of trial enrollments is shown in 
+Fig.~\ref{fig:first-plot}. The probability mass is concentrated at the 
+$11^{\text{th}}$ and $12^{\text{th}}$ step since $p$ 
+is small and for most realizations reach 11 
+non-responders before reaching 2 responders.
+
+\begin{figure}[bp!]
+\centering
+\subfloat[Expected value]{\includegraphics[width=0.5\textwidth]{dist-mean.pdf}}
+\hfill
+\subfloat[Variance]{\includegraphics[width=0.5\textwidth]{dist-var.pdf}}
+\caption{
+The mean and variance for a trial that stops after two patients respond
+or 11 patients do not respond when $p$ varies between zero and one.
+}
+\label{fig:exp-and-var}
+\end{figure}
+
+Fig.~\ref{fig:exp-and-var} shows the expected value and variance for the
+number of trial enrollments varying $p$ between zero an 1. When $p$ is
+small the probability of an individual response is small, the treatment
+is more likely to fail, and the number of enrollees is large. When $p$
+is large the treatment is more likely to succeed and the number of 
+enrolees is small. Since $p=1$ and $p=0$ represent the deterministic
+the corresponding variance is zero. The variance is right-skewed because
+the support of the distribution corresponding to successful treatment
+is larger than that of failure.
+
 
 \begin{table}[t!]
 \caption{Characteristics of the Stopped Negative Binomial Distribution}
@@ -166,11 +206,12 @@ ${k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)}+
 \end{center}
 \end{table}
 
-In this work we derive the distribution of the number of enrollees needed
+In the rest of this work we derive the distribution of the number of 
+enrollees needed
 to observe either $s$ successes or $t$ failures. We refer to this distribution
 as the Stopped Negative Binomial (SNB). Some of its characteristics are
 summarized in Tab.~\ref{tab:snb}.
-The rest of this paper derives these results
+This paper derives these results
 and explores properties of the distribution.
 %The next section introduces our notation and basic results
 %including the density of the distribution along with a description of
@@ -505,7 +546,7 @@ $\beta = 0.955 c$ for any $c > 0$.
 This parameterization allows us to examine the relationship between 
 uncertainty in $p$ and the SNB.
 
-\begin{figure}[t!]
+\begin{figure}[bp!]
 \centering
 \subfloat[The compound distribution's expected sample size.]{\includegraphics[width=0.5\textwidth]{bayesian-sample-expectation.pdf}}
 \hfill

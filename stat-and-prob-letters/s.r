@@ -183,7 +183,7 @@ ggsave("bayesian-sample-variance.pdf")
 # a) b)
 
 dsnb_plot(p, s, t) + ylab("Probability")
-ggsave("snb-first-plot.pdf")
+ggsave("snb-first-plot.pdf", width=10, height=4)
 
 ps = seq(0, 1, by=0.01)
 moments = foreach(p=ps, .combine=rbind) %do% {
@@ -194,9 +194,9 @@ m = as.data.frame(cbind(ps, moments))
 names(m) = c("p", "exp", "var")
 rownames(m) = NULL
 
-ggplot(m, aes(x=p, y=exp)) + geom_line() + ylab("Distribution Mean")
-ggsave("dist-mean.pdf")
+p = ggplot(m, aes(x=p, y=exp)) + geom_line() + ylab("Distribution Mean")
+ggsave("dist-mean.pdf", p)
 
-ggplot(m, aes(x=p, y=var)) + geom_line() + ylab("Distribution Variance")
-ggsave("dist-var.pdf")
+p = ggplot(m, aes(x=p, y=var)) + geom_line() + ylab("Distribution Variance")
+ggsave("dist-var.pdf", p)
 
