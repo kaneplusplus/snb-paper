@@ -158,10 +158,10 @@ Mean & $\frac{s}{p} \mathcal{I}_p(s,t) + \frac{p^{s-1} q^{t-1}}{B(s,t)} +
 MGF & $\left(\frac{p e^x}{1 - qe^x}\right)^s 
   \mathcal{I}_{1-qe^x} (s, t) + \left(\frac{qe^x}{1-pe^x}\right)^t 
   \mathcal{I}_{1-pe^x}(t, s) $\\ \hline
-Posterior & 
+Compound Distribution & 
 ${k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)}+
 {k-1 \choose t-1} \frac{B\left(\alpha + k-t, t+\beta\right)}{B(\alpha,\beta)}$\\
-& for Beta($\alpha$, $\beta$) prior. \\ \hline
+& for Beta($\alpha$, $\beta$). \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -181,9 +181,8 @@ Section 3 shows how the distribution is related to other standard
 distributions and connects the SNB tail probability to the Binomial tail 
 probability.
 Section 4 derives the moment generating function.
-Section 5 derives the posterior distribution using a Beta prior distribution
-for $p$. Section 6 provides a brief discussion on the use of the distribution
-in clinical trials along with future avenues for generalization.
+Section 5 derives the compound distribution using a Beta distribution
+for $p$. 
 
 \section{Probability Mass Function}
 \label{notation.section}
@@ -348,14 +347,14 @@ random variable with size $s+t-1$ and success probability $p$.
 Likewise, the probability of reaching the failure endpoint is equal
 to the probability of at most $s-1$ successes in a Binomial distribution. 
 That is, the probability that the number of successes is at least $s$ in the 
-Binomial model is the same that the trial succeeds (reaches $s$) in the SNB 
+Binomial model is the same that the treatment succeeds (reaches $s$) in the SNB 
 model.
 \begin{prop} \label{binomial_tail}
 Let $Y$ be distributed as SNB($p$, $s$, $t$) and let 
 $B$ be distributed Binomial with size $n=s+t-1$ and success probability
 $p$. Then
 \begin{equation}
-\mathbb{P}[B \geq s] = \mathbb{P} [\text{trial succeeds}].
+\mathbb{P}[B \geq s] = \mathbb{P} [\text{treatment succeeds}].
 \end{equation}
 \end{prop}
 \begin{proof}
@@ -370,7 +369,7 @@ The Binomial tail probability is
 %\end{align*}
 The corresponding SNB probability is
 \begin{equation*}
-\mathbb{P} [\text{trial succeeds}] 
+\mathbb{P} [\text{treatment succeeds}] 
   = \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s (1-p)^{k-s}.
 \end{equation*}
 Let $i=k-s$. Using the fact that
@@ -379,7 +378,7 @@ Let $i=k-s$. Using the fact that
 \end{equation*}
 the last summation can be rewritten as
 \begin{align}
-\mathbb{P} [\text{trial succeeds}] &= \sum_{i=0}^{t-1} 
+\mathbb{P} [\text{treatment succeeds}] &= \sum_{i=0}^{t-1} 
   {i+s-1 \choose i} p^s (1-p)^i\\
   &= 1 - \mathcal{I}_{1-p}(t, s)
 \end{align}
@@ -470,12 +469,12 @@ for appropriately large $s$ and $t$ and $p = 0.5$. In this
 case the SNB can be viewed as identical, negative binomials
 approximating a normal and truncated at the median.
 
-\section{The Compound Distribution}
+\section{The Compound Probability Distribution}
 
-Let us consider a Bayesian analysis with a Beta prior distribution on $p$.
+Let us consider a Bayesian analysis with a Beta distribution on $p$.
 \begin{prop} \label{prop:bayesian}
 The compound distribution of the Stopped Negative Binomial 
-distribution with a Beta($\alpha$, $\beta$) prior is
+distribution when $p$ is distributed Beta($\alpha$, $\beta$) is
 \begin{align} \label{eqn:posterior}
 \mathbb{P} [Y = k | s, t, \alpha, \beta ] &= 
   {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} 
@@ -508,13 +507,14 @@ uncertainty in $p$ and the SNB.
 
 \begin{figure}[t!]
 \centering
-\subfloat[The expected sample size.]{\includegraphics[width=0.5\textwidth]{bayesian-sample-expectation.pdf}}
+\subfloat[The compound distribution's expected sample size.]{\includegraphics[width=0.5\textwidth]{bayesian-sample-expectation.pdf}}
 \hfill
-\subfloat[The variance of the sample size.]{\includegraphics[width=0.5\textwidth]{bayesian-sample-variance.pdf}}
+\subfloat[The compound distribution's variance.]{\includegraphics[width=0.5\textwidth]{bayesian-sample-variance.pdf}}
 \caption{
-The expected size and variance of the compound SNB varying the uncertainty 
-in the prior distribution of $p$. A larger value of $c$
-corresponds to a Beta prior with smaller variance.
+The expected size and variance of the compound SNB with $s=2$, $t=12$
+with $\mathbb{E}\ p = 0.045$ varying the uncertainty 
+in the distribution of $p$. A larger value of $c$
+corresponds to a Beta with smaller variance.
 }
 \label{fig:bayesian-sample-size}
 \end{figure}
@@ -523,9 +523,10 @@ Fig.~\ref{fig:bayesian-sample-size} shows how the expected sample size
 and variance of the compound SNB. As the certainty increases the 
 compound distribution sample values converge to corresponding expected 
 values with 
-$p = 0.045$. It may be noted that convergence is relatively slow. This
-is because when $c$ is small, the prior is heavily skewed. As $c$ increases
-this effect is minimized.
+$p = 0.045$. It may be noted that the compound distribution's mean
+approaches the deterministic limit slowly. This
+is because when $c$ is small, the distribution of $p$ is heavily skewed. 
+As $c$ increases this effect is minimized.
 
 Slow convergence in the mean will occur when $p$ takes values close to 
 zero or one. In these cases it may be preferable to select shape parameters
