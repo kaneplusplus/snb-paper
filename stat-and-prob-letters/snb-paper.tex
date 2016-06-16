@@ -66,17 +66,16 @@ to thank Rick Landin at Ignyta Inc. for his suggestions.}
 %\fntext[myfootnote]{Since 1880.}
 
 %% or include affiliations in footnotes:
-\author[mymainaddress]{Michelle DeVeaux}
+\author{Michelle DeVeaux}
 \ead{michelle.deveaux@yale.edu}
 
-\author[mymainaddress]{Michael J. Kane\corref{mycorrespondingauthor}}
-\cortext[mycorrespondingauthor]{Corresponding author}
+\author{Michael J. Kane$^*$\footnote{* Corresponding author}}
 \ead{michael.kane@yale.edu}
 
-\author[mymainaddress]{Daniel Zelterman}
+\author{Daniel Zelterman}
 \ead{daniel.zelterman@yale.edu}
 
-\address[mymainaddress]{Department of Biostatistics\\ School of Epidemiology and Public Health\\ Yale University, New Haven, CT}
+\address{Department of Biostatistics\\ School of Epidemiology and Public Health\\ Yale University, New Haven, CT}
 
 \begin{abstract}
 We introduce a discrete distribution suggested by curtailed
@@ -95,7 +94,7 @@ discrete distribution\sep curtailed sampling
 
 \linenumbers
 
-\section{Introdution and Motivation}
+\section{Introduction and Motivation}
 
 Consider a prototypical early phase, single-arm clinical trial in which 
 12 patients
@@ -115,7 +114,7 @@ successful patients allows us to reach one endpoint so the sample required
 could be as small as two. Similarly 11
 observed treatment failures also ends the trial. This sampling mechanism, in
 which the experiment ends as soon as a predefined endpoint is reached, is
-call {\em curtailed sampling}. Under curtailed sampling the range of the
+called {\em curtailed sampling}. Under curtailed sampling the range of the
 sample size for this trial is between two and 12.
 
 Let us assume each patient outcome can be modeled as an independent,
@@ -289,7 +288,7 @@ successful outcomes and $k-s$ unsuccessful outcomes multiplied by
 the probability of the final success at time $k$. This expression is given
 in (\ref{eqn:N}). 
 Similarly, the probability a given realization reaches $k-t$
-is the probability that, at outcome $k-1$ there are $k-t$ successful outcomes
+is the probability that, at outcome $k-1$, there are $k-t$ successful outcomes
 and $t-1$ unsuccessful outcomes multiplied by the probability of a final
 unsuccessful outcome at time $k$.  
 
@@ -327,7 +326,7 @@ R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
    &= 1-\mathcal{I}_p(s, t) + 1 - \mathcal{I}_{1-p}(t, s) \\
    &= 1. 
 \end{align*}
-This completes the proof (\ref{eqn:pmf}) is the distribution of the
+This completes the proof that (\ref{eqn:pmf}) is the distribution of the
 stopping time and is a valid probability mass function.
 \end{proof}
 
@@ -375,7 +374,7 @@ discrete distributions also appear in~\cite{Zhang2000}
 and \cite{Zelterman2005}.
 The maximum negative binomial is the smallest number of outcomes necessary to 
 observe at least $s$ successes {\em and} $s$ failures. The SNB is the 
-number of outcomes to observe {\em either} $s$ successes or $t$ failures.
+number of outcomes to observe {\em either} $s$ successes {\em or} $t$ failures.
 
 %\section{Connection Between the SNB and the Binomial Tail Probability}
 
@@ -427,7 +426,7 @@ completing the proof.
 \end{proof}
 
 To illustrate this result, let us return to our initial example
-where $s=2$, $t=12$, and $p=0.045$.  The probability masses in
+where $s=2$, $t=11$, and $p=0.045$.  The probability masses in
 Fig.~\ref{fig:snb_bin_compare} represented in 
 black are equal in panels a) and b) as are the masses in grey.
 The probability that $s$
@@ -442,7 +441,7 @@ probability of zero or one successes.
 \hfill
 \subfloat[The Binomial distribution.]{\includegraphics[width=0.5\textwidth]{bin_density.pdf}}
 \caption{
-SNB(0.045, 2, 12) with mass contributed from 
+SNB(0.045, 2, 11) with mass contributed from 
 $s$ successes (black) or $t$ failures (grey) along with Bin(0.045, 12) with
 at least 2 successes (black) or fewer (grey).
 }
@@ -488,22 +487,27 @@ Equation \ref{eqn:first_sum} and results in
 the constraint $x \leq -\log(p)$.
 \end{proof}
 
-The SNB's ability to approximate the geometric, normal, and gamma 
+The SNB's ability to approximate the geometric, normal, gamma, and poisson
 distributions follow from it generalizing the negative binomial. To 
 recover the MGF of the negative binomial consider the case where
 $t \rightarrow \infty$ in (\ref{eqn:mgf}). The regularized incomplete
-beta function in the first term goes to one and zero in the second term
-and we are left with the MGF of the negative binomial distribution. 
-When $s=1$ this is the same as the geometric distribution. The negative
+beta function in the first term goes to one and zero in the second term.
+We are left with the MGF of the negative binomial distribution. 
+
+When $s=1$ this is the geometric distribution. The negative
 binomial can therefore be seen as a sum of i.i.d. geometric distributions.
 For an appropriately large number of samples the central limit theorem
-hold yielding a normal approximation.
+yields a normal approximation.
 
-Drawing a connection to the gamma distribution is more complicated.
-However it is a well-studied problem in the literature (see 
-\cite{Ord1968,Guenther1972,Best1974} for examples). Methods for these
-approximation generally work by equating cumulants and then showing 
-that errors are not too far off. 
+Drawing connections to the gamma and poisson distributions are more complicated.
+However a connection to the gamma distribution well-studied problem in the 
+literature (see \cite{Ord1968,Guenther1972,Best1974} for examples). 
+A connection to the poisson appears in \cite{Anscombe1950} where
+it is shown that if the mean of a poisson is proportional
+to a $\chi^2_{2k}$ distribution then the negative binomial is obtained. 
+All of these results work by equating cumulants and then showing 
+that differences between betwen the cumulant generating
+functions converge to zero.
 
 The lower-half normal distribution can be approximated by setting $s=t$
 for appropriately large $s$ and $t$ and $p = 0.5$. In this
@@ -540,19 +544,19 @@ Beta function.
 \end{proof}
 
 To better understand the compound distribution, let us once again return to 
-our example where $s=2$, $t=12$. However, we assume $p$ is a Beta distribution
+our example where $s=2$, $t=11$. However, we assume $p$ is a Beta distribution
 with shape parameters $\alpha = 0.045 c$ and 
 $\beta = 0.955 c$ for any $c > 0$.
 This parameterization allows us to examine the relationship between 
 uncertainty in $p$ and the SNB.
 
-\begin{figure}[bp!]
+\begin{figure}[h!]
 \centering
 \subfloat[The compound distribution's expected sample size.]{\includegraphics[width=0.5\textwidth]{bayesian-sample-expectation.pdf}}
 \hfill
 \subfloat[The compound distribution's variance.]{\includegraphics[width=0.5\textwidth]{bayesian-sample-variance.pdf}}
 \caption{
-The expected size and variance of the compound SNB with $s=2$, $t=12$
+The expected size and variance of the compound SNB with $s=2$, $t=11$
 with $\mathbb{E}\ p = 0.045$ varying the uncertainty 
 in the distribution of $p$. A larger value of $c$
 corresponds to a Beta with smaller variance.
