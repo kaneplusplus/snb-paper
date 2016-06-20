@@ -139,34 +139,36 @@ enrolling 10 patients: one in the fourth outcome and on in the eleventh.
 Since the success boundary is reached, we say that the trial succeeds,
 or more correctly, the treatment succeeds.
 
-\begin{figure}[bp!]
-\centering
-\includegraphics[width=\textwidth]{snb-first-plot.pdf}
-\caption{
-The probability mass function for a trial where $p$ 
-is 0.045 and where the trial stops
-after two patients respond or 11 patients do not respond.
-}
-\label{fig:first-plot}
-\end{figure}
-
-More generally the distribution for number of trial enrollments is shown in 
-Fig.~\ref{fig:first-plot}. The probability mass is concentrated at the 
-$11^{\text{th}}$ and $12^{\text{th}}$ step since $p$ 
-is small and for most realizations reach 11 
-non-responders before reaching 2 responders.
+%\begin{figure}[bp!]
+%\centering
+%\includegraphics[width=\textwidth]{snb-first-plot.pdf}
+%\caption{
+%The probability mass function for a trial where $p$ 
+%is 0.045 and where the trial stops
+%after two patients respond or 11 patients do not respond.
+%}
+%\label{fig:first-plot}
+%\end{figure}
 
 \begin{figure}[bp!]
 \centering
-\subfloat[Expected value]{\includegraphics[width=0.5\textwidth]{dist-mean.pdf}}
+\subfloat[enrollment distribution]{\includegraphics[width=0.5\textwidth]{snb-first-plot.pdf}}
 \hfill
-\subfloat[Variance]{\includegraphics[width=0.5\textwidth]{dist-var.pdf}}
+\subfloat[effect of varying $p$]{\includegraphics[width=0.5\textwidth]{mean-and-variance.pdf}}
 \caption{
-The mean and variance for a trial that stops after two patients respond
-or 11 patients do not respond when $p$ varies between zero and one.
+The distribution of a trial that stops after seven patients respond
+or 11 patients do not. (a) shows the distribution when
+$p = 0.2$. (b) shows the result of varying $p$ between 
+zero and one.
 }
 \label{fig:exp-and-var}
 \end{figure}
+
+More generally the distribution for number of trial enrollments is shown in 
+Fig.~\ref{fig:first-plot} (a). The probability mass is concentrated at the 
+$11^{\text{th}}$ and $12^{\text{th}}$ step since $p$ 
+is small and for most realizations reach 11 
+non-responders before reaching 2 responders.
 
 Fig.~\ref{fig:exp-and-var} shows the expected value and variance for the
 number of trial enrollments varying $p$ between zero an 1. When $p$ is
@@ -437,9 +439,9 @@ probability of zero or one successes.
 
 \begin{figure}[t!]
 \centering
-\subfloat[The SNB distribution.]{\includegraphics[width=0.5\textwidth]{snb_density.pdf}}
+\subfloat[SNB distribution]{\includegraphics[width=0.5\textwidth]{snb_density.pdf}}
 \hfill
-\subfloat[The Binomial distribution.]{\includegraphics[width=0.5\textwidth]{bin_density.pdf}}
+\subfloat[Binomial distribution.]{\includegraphics[width=0.5\textwidth]{bin_density.pdf}}
 \caption{
 SNB(0.045, 2, 11) with mass contributed from 
 $s$ successes (black) or $t$ failures (grey) along with Bin(0.045, 12) with
@@ -552,9 +554,9 @@ uncertainty in $p$ and the SNB.
 
 \begin{figure}[h!]
 \centering
-\subfloat[The compound distribution's expected sample size.]{\includegraphics[width=0.5\textwidth]{bayesian-sample-expectation.pdf}}
+\subfloat[mean]{\includegraphics[width=0.5\textwidth]{bayesian-sample-expectation.pdf}}
 \hfill
-\subfloat[The compound distribution's variance.]{\includegraphics[width=0.5\textwidth]{bayesian-sample-variance.pdf}}
+\subfloat[variance]{\includegraphics[width=0.5\textwidth]{bayesian-sample-variance.pdf}}
 \caption{
 The expected size and variance of the compound SNB with $s=2$, $t=11$
 with $\mathbb{E}\ p = 0.045$ varying the uncertainty 

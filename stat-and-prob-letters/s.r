@@ -45,18 +45,19 @@ library(ggplot2)
 #  d
 #}
 
+outcomes = c(rep(0, 2), 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1)
 
-p = kplot( c(rep(0, 3), 1, rep(0, 6), 1), s=2, t=11, bw=TRUE) +
+p = kplot( outcomes, s=7, t=11, bw=TRUE) +
   xlab("Number of Patients Enrolled") + 
   ylab("Number of Responders to Treatment") +
-  geom_text(data=NULL, x=7, y=2.1, label="Success Boundary") +
-  geom_text(data=NULL, x=11.75, y=0.45, label="Failure Boundary",
-            angle=(45+90)/2-5) + 
-  geom_text(data=NULL, x=7, y=1.1, label="Sample Path") +
+  geom_text(data=NULL, x=11.5, y=6.5, label="Success Boundary") +
+  geom_text(data=NULL, x=14.5, y=2.75, label="Failure Boundary",
+            angle=(45+90)/2-25) + 
+  geom_text(data=NULL, x=6, y=2.5, label="Sample Path") +
   theme_bw() + scale_fill_grey()
+p
 
 ggsave("KanePlot.pdf", p, width=10, height=3.5)
-
 
 # SNB distribution shapes.
 
@@ -74,10 +75,11 @@ approx_plots_start = list(
     labs(x="", y="", title="gamma approximation (0.06, 3, 175)") + theme_bw()+
     scale_fill_grey(),
   dsnb_stack_plot(0.5, 25, 25) + scale_x_discrete(breaks=seq(25, 50, by=5))+
-    labs(x="", y="", title="lower half normal (0.5, 25, 25)") + 
+    labs(x="", y="", title="lower half normal / riff-shuffle  (0.5, 25, 25)") + 
     theme_bw() + scale_fill_grey(),
-  dsnb_stack_plot(0.98, 175, 2) + scale_x_discrete(breaks=seq(2, 180, by=20))+
-    labs(x="", y="", title="local mode at top of range (0.98, 175, 2)") + 
+  dsnb_stack_plot(p=0.45, 25, 25) + 
+    scale_x_discrete(breaks=seq(25, 49, by=3))+
+    labs(x="", y="", title="riff-shuffle (0.45, 25, 25)") + 
     theme_bw() + scale_fill_grey())
 
 library(foreach)
@@ -104,14 +106,14 @@ dev.off()
 
 
 # Binomial Tail Connection.
-p = 0.045
-s = 2
+p = 0.2
+s = 7
 t = 11
 n = s+t-1
 
 plot.new()
-dsnb_stack_plot(p, s, t) + title("SNB(0.045, 2, 11)") + theme_bw() + 
-  scale_fill_grey() + ylab("Probability") + ylim(0, 0.6) 
+dsnb_stack_plot(p, s, t) + title("SNB(0.2, 7, 11)") + theme_bw() + 
+  scale_fill_grey() + ylab("Probability") + ylim(0, 0.25) 
 ggsave("snb_density.pdf")
 
 s1 = dsnb_stacked(min(s,t):n, p, s, t)
@@ -124,14 +126,14 @@ d$Outcome = relevel(d$Outcome, "s")
 
 ggplot(d, aes(x=factor(x), y=y, fill=Outcome)) +
   geom_bar(stat="identity") + xlab("k")+
-  title("Bin(0.045, 12)") + theme_bw() + scale_fill_grey() +
-  ylab("") + ylim(0, 0.6) 
+  title("Bin(0.2, 17)") + theme_bw() + scale_fill_grey() +
+  ylab("") + ylim(0, 0.25) 
 ggsave("bin_density.pdf")
 
 # Sample size and variance for posterior distribution.
-s = 2
+s = 7
 t = 11
-p = 0.045
+p = 0.2
 x1 = cdsnb_stacked(min(s, t):(s+t-1), c(0.045, 0.955), s, t)
 stacked_plot(x1$k, x1$s, x1$t)
 dev.new()
@@ -150,7 +152,7 @@ stacked_plot(x2$k, x2$s, x2$t)
 # Probality of success in Bayesian model.
 # Variance of success in Bayesian model.
 
-shape = c(0.045, 0.955)
+shape = c(0.2, 0.8)
 is = seq(1, 100, length.out=100)
 x = foreach (i=is, .combine=rbind) %do% {
   cbind(i, ecsnb(shape*i, s, t), vcsnb(shape*i, s, t))
@@ -158,32 +160,34 @@ x = foreach (i=is, .combine=rbind) %do% {
 x = as.data.frame(x)
 names(x) = c("n", "e", "v")
 
-exp_size = esnb(0.045, s, t)
+exp_size = esnb(0.2, s, t)
 ggplot(x, aes(x=n, y=e)) + geom_line() + 
   geom_segment(y=exp_size,x=min(is),yend=exp_size, xend=max(is), color="grey") +
-  ylim(range(c(x$e, exp_size, 11))) +
-  geom_text(data=NULL, x=50, y=11.02, label=paste0("Deterministic Limit (", 
+  ylim(range(c(x$e, exp_size, 13.7))) +
+  geom_text(data=NULL, x=50, y=13.7, label=paste0("Deterministic Limit (", 
     sprintf("%0.2f", exp_size), ")")) + 
   theme_bw() + scale_fill_grey() + ylab("Compound Distribution Mean") + 
-  xlab("c")
+  xlab("c") + theme(text = element_text(size=15))
 
 ggsave("bayesian-sample-expectation.pdf")
 
-exp_var = vsnb(0.045, s, t)
+exp_var = vsnb(0.2, s, t)
 ggplot(x, aes(x=n, y=v)) + geom_line() + 
   geom_segment(y=exp_var,x=min(is),yend=exp_var, xend=max(is), color="grey") +
   ylim(range(c(x$v, exp_var))) +
-  geom_text(data=NULL, x=50, y=1.82, 
+  geom_text(data=NULL, x=50, y=2.70, 
     label=paste0("Deterministic Limit (", sprintf("%0.2f", exp_var), ")")) + 
-    theme_bw() + scale_fill_grey() + ylab("Compound Distribution Variance") + xlab("c")
+    theme_bw() + scale_fill_grey() + ylab("Compound Distribution Variance") + 
+    xlab("c") + theme(text = element_text(size=15))
+
 ggsave("bayesian-sample-variance.pdf")
 
 # Expected CSNB size
 # Variance of CSNB size
 # a) b)
 
-dsnb_plot(p, s, t) + ylab("Probability")
-ggsave("snb-first-plot.pdf", width=10, height=4)
+dsnb_plot(p, s, t) + ylab("Probability") + theme(text = element_text(size=15))
+ggsave("snb-first-plot.pdf")
 
 ps = seq(0, 1, by=0.01)
 moments = foreach(p=ps, .combine=rbind) %do% {
@@ -194,9 +198,20 @@ m = as.data.frame(cbind(ps, moments))
 names(m) = c("p", "exp", "var")
 rownames(m) = NULL
 
-p = ggplot(m, aes(x=p, y=exp)) + geom_line() + ylab("Distribution Mean")
+p = ggplot(m, aes(x=p, y=exp)) + geom_line() + ylab("Distribution Mean") +
+  theme(text = element_text(size=15))
 ggsave("dist-mean.pdf", p)
 
-p = ggplot(m, aes(x=p, y=var)) + geom_line() + ylab("Distribution Variance")
+p = ggplot(m, aes(x=p, y=var)) + geom_line() + ylab("Distribution Variance") +
+  theme(text = element_text(size=15))
 ggsave("dist-var.pdf", p)
+
+y = gather(m, p, value)
+names(y) = c("p", "type", "value")
+y$type[y$type=='exp'] = "Mean"
+y$type[y$type=='var'] = "Variance"
+p = ggplot(y, aes(x=p, y=value)) + geom_line() + 
+  facet_grid(type ~ ., scales="free") + ylab("") +
+  theme(text = element_text(size=15))
+ggsave("mean-and-variance.pdf")
 
