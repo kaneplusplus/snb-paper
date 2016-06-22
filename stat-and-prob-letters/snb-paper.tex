@@ -97,30 +97,30 @@ discrete distribution\sep curtailed sampling
 \section{Introduction and Motivation}
 
 Consider a prototypical early phase, single-arm clinical trial in which 
-12 patients
-are enrolled and treated. The binomial probability of success is $p=0.045$ for
-each patient under the null hypothesis that treatment is not effective.
-If two or more patients out of these 12 respond to the treatment then we 
-reject this null
-hypothesis and the treatment is deemed successful at significance 
-level of $0.1$.  If fewer than two respond then the null is not rejected
-and the treatment is judged as ineffective.
+17 patients
+are enrolled and treated. The binomial probability a patient 
+responds to treatment is $p=0.2$ 
+under the null hypothesis that the treatment is not effective.
+If seven or more patients out of these 17 respond to the treatment then we 
+reject the hypothesis and the treatment is deemed successful at 
+significance level of $0.1$.  If fewer than seven respond then the null is not 
+rejected and the treatment is deemed ineffective.
 
-If all 12 patients are enrolled at once, as in the classic
-design, then the sample size is 12. However, in most clinical trials the
-patients are enrolled sequentially, often with one patient's outcome realized
-before the next one enters the trial. In the present example, observing two
-successful patients allows us to reach one endpoint so the sample required
-could be as small as two. Similarly 11
+If all 17 patients are enrolled at once, as in the classic
+design, then the sample size is 17. However, in most clinical trials the
+patients are enrolled sequentially with one patient's outcome realized
+before the next one enters the trial. In the present example, observing seven
+successful patients is one endpoint and the number of enrollees required
+could be as small as seven. Similarly 11
 observed treatment failures also ends the trial. This sampling mechanism, in
-which the experiment ends as soon as a predefined endpoint is reached, is
+which the experiment ends as soon as any predefined endpoint is reached, is
 called {\em curtailed sampling}. Under curtailed sampling the range of the
-sample size for this trial is between two and 12.
+sample size for this trial is between seven and 17.
 
 Let us assume each patient outcome can be modeled as an independent,
 identically distributed Bernoulli($p$) random variable. The trial is realized
-as a sequence of these random variables stopping when either a
-specified number of successes or failures has been reached. 
+as a sequence of Bernoulli samples that stops when either a
+specified number of responders or non-responders have been reached. 
 
 \begin{figure}[bp!]
 \includegraphics[width=\textwidth]{KanePlot.pdf}
@@ -134,10 +134,9 @@ A hypothetical sample path is illustrated in Fig.~\ref{fig:kane_viz}.
 The vertical axis denotes the number of
 successful outcomes. The horizontal axis counts the number of patients 
 enrolled. The horizontal and vertical boundaries represent
-endpoints for the trial. In this case two successes were reached after
-enrolling 10 patients: one in the fourth outcome and on in the eleventh.
-Since the success boundary is reached, we say that the trial succeeds,
-or more correctly, the treatment succeeds.
+endpoints for the trial. In this case a seventh response was reached on
+the $15^{\text{th}}$ enrollment.
+Since the success boundary is reached, we say the treatment succeeds.
 
 %\begin{figure}[bp!]
 %\centering
@@ -156,30 +155,31 @@ or more correctly, the treatment succeeds.
 \hfill
 \subfloat[effect of varying $p$]{\includegraphics[width=0.5\textwidth]{mean-and-variance.pdf}}
 \caption{
-The distribution of a trial that stops after seven patients respond
+The distribution of a trial that stops after seven patients respond to treatment
 or 11 patients do not. (a) shows the distribution when
-$p = 0.2$. (b) shows the result of varying $p$ between 
-zero and one.
+$p = 0.2$. (b) shows the mean and variance of the distribution varying $p$ 
+between zero and one.
 }
 \label{fig:exp-and-var}
 \end{figure}
 
-More generally the distribution for number of trial enrollments is shown in 
-Fig.~\ref{fig:first-plot} (a). The probability mass is concentrated at the 
-$11^{\text{th}}$ and $12^{\text{th}}$ step since $p$ 
-is small and for most realizations reach 11 
-non-responders before reaching 2 responders.
-
-Fig.~\ref{fig:exp-and-var} shows the expected value and variance for the
-number of trial enrollments varying $p$ between zero an 1. When $p$ is
+More generally the distribution of the number of trial enrollments is shown in 
+Fig.~\ref{fig:exp-and-var} (a). There is relatively little probability mass
+for values of seven through 10 since $p$ is small and the treatment succeeding
+quickly is unlikely.
+%The probability mass is concentrated at the 
+%$11^{\text{th}}$ and $12^{\text{th}}$ step since $p$ 
+%is small and for most realizations reach 11 
+%non-responders before reaching 2 responders.
+Fig.~\ref{fig:exp-and-var} (b) shows the expected value and variance for the
+number of trial enrollments varying $p$ between zero and one. When $p$ is
 small the probability of an individual response is small, the treatment
-is more likely to fail, and the number of enrollees is large. When $p$
-is large the treatment is more likely to succeed and the number of 
-enrolees is small. Since $p=1$ and $p=0$ represent the deterministic
-the corresponding variance is zero. The variance is right-skewed because
-the support of the distribution corresponding to successful treatment
-is larger than that of failure.
-
+is more likely to fail shortly after the $11^{\text{th}}$ enrollment.
+When $p$ is large the treatment is more likely to succeed and the number of 
+enrollees approaches seven from above. 
+Since $p=1$ and $p=0$ represent the deterministic
+case the corresponding variance is zero. The ``bump'' around $p=0.25$ results 
+from inequality in the endpoints.
 
 \begin{table}[t!]
 \caption{Characteristics of the Stopped Negative Binomial Distribution}
@@ -220,11 +220,10 @@ and explores properties of the distribution.
 Section 2 derives the distribution function
 based on a defined Bernoulli process and gives some basic properties.
 Section 3 shows how the distribution is related to other standard
-distributions and connects the SNB tail probability to the Binomial tail 
+distributions and connects the SNB tail probability to the binomial tail 
 probability.
 Section 4 derives the moment generating function.
-Section 5 derives the compound distribution using a Beta distribution
-for $p$. 
+Section 5 derives the compound distribution when $p$ has a beta distribution.
 
 \section{Probability Mass Function}
 \label{notation.section}
@@ -233,12 +232,12 @@ Let $\,b_1, b_2, \ldots \,$ denote a sequence of independent, identically
 distributed, Bernoulli random variables with $\mathbb{P}[b_i=1]=p$ and
 $\mathbb{P}[b_i = 0] = 1-p$, for
 probability parameter $0\leq p \leq 1$. In the clinical trial setting
-$\,b_i = 1$ corresponds to a successful patient outcome following treatment.  
+$\,b_i = 1$ corresponds to a patient responding to treatment.  
 Let $s$ and $t$ be positive integers.  Define the SNB random
 variable $Y$ as the smallest
 integer value such that $\,\{b_1, \ldots , b_Y\}\,$ contains {\em either}
-$\,s\,$ successes {\em or} $\,t\,$ failures. That is, the SNB distribution
-of $Y$ is the smallest integer such that either
+$\,s\,$ responders {\em or} $\,t\,$ non-responders. That is, the SNB 
+distribution of $Y$ is the smallest integer such that either
 $\sum_i^Y b_i = s$ or $\sum_i^Y 1-b_i = t$.
 
 The distribution of $\,Y\,$ has support on integer values in the range
@@ -250,7 +249,7 @@ The probability mass function is
 \mathbb{P} [Y=k] = S(k, p, s) \ I_{\{s \leq k\}} + 
   S(k, 1-p, t) \ I_{\{ t \leq k \}}
 \end{equation}
-where $I_{\{f\}}$ is the {\emph indicator function}, taking the value 
+where $I_{\{f\}}$ is the {\em indicator function}, taking the value 
 of one if $f$ is true and zero otherwise, and
 \begin{equation} \label{eqn:N}
 S(k, p, s) = {k-1 \choose s-1} p^s (1-p)^{k-s} 
@@ -265,9 +264,9 @@ X_{k+1} = X_k + b_{k+1} \ I_{\{ k-t < X_k < s\}}.
 \end{equation*}
 At each step a patient's outcome is measured. In Fig.~\ref{fig:kane_viz} 
 we consider a graphical illustration of the plot $X_k$ against
-$k$. If the outcome of the $k$th patient is a success then the process 
+$k$. If the outcome of the $k$th patient responds to treatment then the process 
 advances diagonally in the positive horizontal and vertical direction. 
-If the $k$th patient fails
+If the $k$th patient does not respond
 then the sample path advances in the positive horizontal direction only. The
 process continues until either $X_k = s$ or $X_k = k-t$.
 
@@ -287,7 +286,7 @@ is given at (\ref{eqn:pmf}).
 The probability a given realization of $\mathbf{X}$ reaches $s$ at
 the $k$th outcome is the probability that, at time $k-1$, there are $s-1$
 successful outcomes and $k-s$ unsuccessful outcomes multiplied by
-the probability of the final success at time $k$. This expression is given
+the probability of a final success at time $k$. This expression is given
 in (\ref{eqn:N}). 
 Similarly, the probability a given realization reaches $k-t$
 is the probability that, at outcome $k-1$, there are $k-t$ successful outcomes
@@ -333,16 +332,17 @@ stopping time and is a valid probability mass function.
 \end{proof}
 
 Next, we consider an interim analysis of a clinical trial after $s'$ 
-successes and $t'$ failures have been observed for $s' < s$ and $t' < t$.
+patients respond to treatment 
+and $t'$ do not for $s' < s$ and $t' < t$.
 \begin{corollary} \label{conditional_distribution}
 The number of subsequent enrollments needed 
 to reach either endpoint behaves as SNB($p$, $s-s'$, $t-t'$).
 \end{corollary}
-Having observed $s'$
-successes and $t'$ failures, there are $s-s'$ successes needed to reach the
-success endpoint and $t-t'$ failures needed to reach the failure endpoint.
+Having observed $s'$ responders and $t'$ non-responders, there are $s-s'$ 
+more responders needed to reach the success endpoint and $t-t'$ more 
+non-responders needed to reach the failure endpoint.
 
-\section{Connections and Approximations by Other Distributions}
+\section{Connections and Approximations to Other Distributions}
 
 \begin{figure}[p!]
 \begin{center}
@@ -350,16 +350,16 @@ success endpoint and $t-t'$ failures needed to reach the failure endpoint.
 \end{center}
 \caption{Different shapes of the SNB distribution with parameters 
 ($p$, $s$, $t$), as given. Black indicates mass contributed by reaching
-$s$ successes before $t$ failures. Grey indicates
-mass contributed by reaching $t$ failures first. \label{shapes.fig}}
+$s$ responders before $t$ non-responders. Grey indicates
+mass contributed by reaching $t$ non-responders first. \label{shapes.fig}}
 \end{figure}
 
 The SNB is a generalization of the negative 
-binomial distribution. If $t$ is large then $Y-s$ has a 
+binomial distribution. When $t$ is large $Y-s$ has a 
 negative binomial distribution with
 \begin{equation*}                                    %   (1)   
-\mathbb{P}[Y=s+j]        \label{nb1.eq}          
-  = {{s+j-1}\choose{s-1}} p^s (1-p)^j
+\mathbb{P}[Y=s+j\ |\ t \text{ is large\ }]        \label{nb1.eq}          
+  \rightarrow = {{s+j-1}\choose{s-1}} p^s (1-p)^j
 \end{equation*}
 for $\,j=0, 1,\ldots\,$. A similar statement can be made when $s$ is large
 and $t$ is small. As a result, with proper parameter choice, the SNB
@@ -367,40 +367,43 @@ can mimic other probability distributions in a manner similar to
 those described in \cite{Peizer1968} and \cite{Best1974}. Examples are
 shown in in Fig.~\ref{shapes.fig}. 
 
-The SNB also generalizes both the minimum (riff-shuffle) and maximum negative
+The SNB is the 
+number of enrollment outcomes to observe {\em either} $s$ responders {\em or} 
+$t$ non-responders.
+The SNB generalizes both the minimum (riff-shuffle) and maximum negative
 binomial distributions up to a translation of the support.
-For the special case of $\,s=t,$ the distribution of $\,Y\,$ is the
+For the special case of $\,s=t,$ the distribution of $\,Y\,$ is exactly the
 riff-shuffle, or minimum negative binomial distribution~\citep{Uppuluri1970}.
-Similar derivations of the closely-related maximum negative binomial 
-discrete distributions also appear in~\cite{Zhang2000}
-and \cite{Zelterman2005}.
-The maximum negative binomial is the smallest number of outcomes necessary to 
-observe at least $s$ successes {\em and} $s$ failures. The SNB is the 
-number of outcomes to observe {\em either} $s$ successes {\em or} $t$ failures.
+The maximum negative binomial \cite{Zhang2000,Zelterman2005} is the smallest 
+number of outcomes necessary to 
+observe at least $s$ responders {\em and} $s$ non-responders and is equivalent
+to a translated version of the riff-shuffle. 
 
 %\section{Connection Between the SNB and the Binomial Tail Probability}
 
-There is a close connection between the tail probabilities of the SNB and the 
-binomial distributions.
-The probability of reaching the success endpoint in an 
-SNB($p$, $s$, $t$) random variable is 
-equal to the probability of at least $s$ successes in a Binomial distributed 
-random variable with size $s+t-1$ and success probability $p$. 
-Likewise, the probability of reaching the failure endpoint is equal
-to the probability of at most $s-1$ successes in a Binomial distribution. 
-That is, the probability that the number of successes is at least $s$ in the 
-Binomial model is the same that the treatment succeeds (reaches $s$) in the SNB 
+%There is a close connection between the tail probabilities of the SNB and the 
+%binomial distributions.
+%The probability of reaching the success endpoint in an 
+%SNB($p$, $s$, $t$) random variable is 
+%equal to the probability of at least $s$ successes in a binomial distributed 
+%random variable with size $s+t-1$ and success probability $p$. 
+%Likewise, the probability of reaching the failure endpoint is equal
+%to the probability of at most $s-1$ successes in a binomial distribution. 
+There is an equivalence between the probability of reaching an endpoint 
+in the SNB model and the tail probability of the binomial distribution.
+That is, the probability that the number of responders is at least $s$ in the 
+binomial model is the same that the treatment succeeds (reaches $s$) in the SNB 
 model.
 \begin{prop} \label{binomial_tail}
 Let $Y$ be distributed as SNB($p$, $s$, $t$) and let 
-$B$ be distributed Binomial with size $n=s+t-1$ and success probability
+$B$ be distributed binomial with size $n=s+t-1$ and response probability
 $p$. Then
 \begin{equation}
 \mathbb{P}[B \geq s] = \mathbb{P} [\text{treatment succeeds}].
 \end{equation}
 \end{prop}
 \begin{proof}
-The Binomial tail probability is
+The binomial tail probability is
 \begin{equation*}
 \mathbb{P}[B \geq s] = 1 - \mathcal{I}_{1-p}.
 \end{equation*}
@@ -428,24 +431,24 @@ completing the proof.
 \end{proof}
 
 To illustrate this result, let us return to our initial example
-where $s=2$, $t=11$, and $p=0.045$.  The probability masses in
+where $s=7$, $t=11$, and $p=0.2$.  The probability masses in
 Fig.~\ref{fig:snb_bin_compare} represented in 
-black are equal in panels a) and b) as are the masses in grey.
+black are equal in panels (a) and (b) as are the masses in grey.
 The probability that $s$
-successes are reached in the SNB process is the same as the binomial 
-probability of at least two successes. Likewise, the probability that $t$ 
-failures are reached in the SNB process is the same as the binomial
-probability of zero or one successes.
+responders are reached in the SNB process is the same as the binomial 
+probability of at least seven responders. Likewise, the probability that $t$ 
+non-responders are reached in the SNB process is the same as the binomial
+probability of zero through six responders.
 
 \begin{figure}[t!]
 \centering
 \subfloat[SNB distribution]{\includegraphics[width=0.5\textwidth]{snb_density.pdf}}
 \hfill
-\subfloat[Binomial distribution.]{\includegraphics[width=0.5\textwidth]{bin_density.pdf}}
+\subfloat[binomial distribution]{\includegraphics[width=0.5\textwidth]{bin_density.pdf}}
 \caption{
-SNB(0.045, 2, 11) with mass contributed from 
-$s$ successes (black) or $t$ failures (grey) along with Bin(0.045, 12) with
-at least 2 successes (black) or fewer (grey).
+SNB(0.2, 7, 11) with mass contributed from 
+$s$ responders (black) or $t$ non-responders (grey) along with 
+Binomial(0.2, 17) with at least 2 responders (black) or fewer (grey).
 }
 \label{fig:snb_bin_compare}
 \end{figure}
@@ -490,13 +493,14 @@ the constraint $x \leq -\log(p)$.
 \end{proof}
 
 The SNB's ability to approximate the geometric, normal, gamma, and poisson
-distributions follow from it generalizing the negative binomial. To 
-recover the MGF of the negative binomial consider the case where
+distributions follow from it generalizing the negative binomial distribution. 
+To recover the MGF of the negative binomial consider the case where
 $t \rightarrow \infty$ in (\ref{eqn:mgf}). The regularized incomplete
 beta function in the first term goes to one and zero in the second term.
 We are left with the MGF of the negative binomial distribution. 
 
-When $s=1$ this is the geometric distribution. The negative
+When $s=1$ (and $t$ is still large) the SNB's MGF is the same as that of the
+geometric distribution. The negative
 binomial can therefore be seen as a sum of i.i.d. geometric distributions.
 For an appropriately large number of samples the central limit theorem
 yields a normal approximation.
@@ -507,7 +511,7 @@ literature (see \cite{Ord1968,Guenther1972,Best1974} for examples).
 A connection to the poisson appears in \cite{Anscombe1950} where
 it is shown that if the mean of a poisson is proportional
 to a $\chi^2_{2k}$ distribution then the negative binomial is obtained. 
-All of these results work by equating cumulants and then showing 
+Both of these approximations work by equating cumulants and then showing 
 that differences between betwen the cumulant generating
 functions converge to zero.
 
@@ -518,9 +522,9 @@ approximating a normal and truncated at the median.
 
 \section{The Compound Probability Distribution}
 
-Let us consider a Bayesian analysis with a Beta distribution on $p$.
+Let us consider the SNB distribution where $p$ has a beta distribution.
 \begin{prop} \label{prop:bayesian}
-The compound distribution of the Stopped Negative Binomial 
+The compound distribution of the SNB
 distribution when $p$ is distributed Beta($\alpha$, $\beta$) is
 \begin{align} \label{eqn:posterior}
 \mathbb{P} [Y = k | s, t, \alpha, \beta ] &= 
@@ -542,13 +546,13 @@ f(k | s, t, \alpha, \beta) = \frac{1}{B(\alpha, \beta)} & \int_0^1 {k-1 \choose 
  & \frac{1}{B(\alpha, \beta)} {k-1 \choose t-1} \int_0^1  p^{k-t+\alpha-1}\left(1-p\right)^{t+\beta-1} dp.
 \end{align*}
 The result in (\ref{eqn:posterior}) follows by the definition of the 
-Beta function.
+beta function.
 \end{proof}
 
 To better understand the compound distribution, let us once again return to 
-our example where $s=2$, $t=11$. However, we assume $p$ is a Beta distribution
-with shape parameters $\alpha = 0.045 c$ and 
-$\beta = 0.955 c$ for any $c > 0$.
+our example where $s=7$, $t=11$. However, we assume $p$ is a beta distribution
+with shape parameters $\alpha = 0.2 c$ and 
+$\beta = 0.8 c$ for any $c > 0$.
 This parameterization allows us to examine the relationship between 
 uncertainty in $p$ and the SNB.
 
@@ -558,27 +562,29 @@ uncertainty in $p$ and the SNB.
 \hfill
 \subfloat[variance]{\includegraphics[width=0.5\textwidth]{bayesian-sample-variance.pdf}}
 \caption{
-The expected size and variance of the compound SNB with $s=2$, $t=11$
-with $\mathbb{E}\ p = 0.045$ varying the uncertainty 
+The mean and variance of the compound SNB with $s=7$, $t=11$
+with $\mathbb{E}\ p = 0.2$ varying the uncertainty 
 in the distribution of $p$. A larger value of $c$
-corresponds to a Beta with smaller variance.
+corresponds to a beta with smaller variance.
 }
 \label{fig:bayesian-sample-size}
 \end{figure}
 
-Fig.~\ref{fig:bayesian-sample-size} shows how the expected sample size
-and variance of the compound SNB. As the certainty increases the 
-compound distribution sample values converge to corresponding expected 
-values with 
-$p = 0.045$. It may be noted that the compound distribution's mean
-approaches the deterministic limit slowly. This
-is because when $c$ is small, the distribution of $p$ is heavily skewed. 
-As $c$ increases this effect is minimized.
-
-Slow convergence in the mean will occur when $p$ takes values close to 
-zero or one. In these cases it may be preferable to select shape parameters
-based on the median or mode of the beta distribution. These values
-will vary less in the uncertainty of the distribution.
+Fig.~\ref{fig:bayesian-sample-size} shows how the mean
+and variance of the compound distribution is related to the SNB's 
+mean and variance. As $c$ increases the 
+compound distribution sample statistics converge to corresponding 
+statistics for the SNB with $p = 0.2$. 
+%It may be noted that the compound 
+%distribution's mean
+%approaches the deterministic limit slowly. This
+%is because when $c$ is small, the distribution of $p$ is heavily skewed. 
+%As $c$ increases this effect is minimized.
+When the distribution of $p$ is centered close to zero or one the mean 
+estimate approach the deterministic limit relatively slowly in the uncertainty
+parameter $c$.  Because of this, we note that for estimation it may be 
+preferable to select shape parameters based on the median or mode of the 
+beta distribution since they are less sensitive to distributional uncertainty.
 
 %\section{Discussion}
 %
@@ -610,7 +616,7 @@ will vary less in the uncertainty of the distribution.
 %While a trial is being conducted the response probabilities are 
 %updated as new results are received. The number of individual successes
 %and failure are used to learn the shape characteristics of the corresponding
-%Beta distribution and resulting posterior
+%beta distribution and resulting posterior
 %distribution. An estimate of the probability of reaching the success (and
 %failure) endpoints can be provided at each step of the trial.
 

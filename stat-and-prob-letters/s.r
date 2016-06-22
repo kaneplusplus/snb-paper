@@ -1,5 +1,6 @@
 library(snb)
 library(ggplot2)
+library(tidyr)
 
 ## kplot
 
@@ -66,11 +67,11 @@ approx_plots_start = list(
     labs(x="", y="", title="bimodal (0.2, 15, 75)") + theme_bw() +
     scale_fill_grey(),
   dsnb_stack_plot(0.35, 50, 50) + scale_x_discrete(breaks=seq(50, 105, by=10))+
-    labs(x="", y="", title="approximate normal (0.35, 50, 50)") + theme_bw() +
+    labs(x="", y="", title="normal approximation (0.35, 50, 50)") + theme_bw() +
     scale_fill_grey(),
   dsnb_stack_plot(0.06, 10, 10) + scale_x_discrete(breaks=seq(10, 20, by=2))+
-    labs(x="", y="", title="geometric (0.06, 10, 10)") + theme_bw() +
-    scale_fill_grey(),
+    labs(x="", y="", title="geometric approximation (0.06, 10, 10)") + 
+    theme_bw() + scale_fill_grey(),
   dsnb_stack_plot(0.06, 3, 175) + scale_x_discrete(breaks=seq(3, 180, by=30))+
     labs(x="", y="", title="gamma approximation (0.06, 3, 175)") + theme_bw()+
     scale_fill_grey(),
@@ -113,7 +114,8 @@ n = s+t-1
 
 plot.new()
 dsnb_stack_plot(p, s, t) + title("SNB(0.2, 7, 11)") + theme_bw() + 
-  scale_fill_grey() + ylab("Probability") + ylim(0, 0.25) 
+  scale_fill_grey() + ylab("Probability") + ylim(0, 0.25) +
+  theme(text = element_text(size=15))
 ggsave("snb_density.pdf")
 
 s1 = dsnb_stacked(min(s,t):n, p, s, t)
@@ -127,7 +129,7 @@ d$Outcome = relevel(d$Outcome, "s")
 ggplot(d, aes(x=factor(x), y=y, fill=Outcome)) +
   geom_bar(stat="identity") + xlab("k")+
   title("Bin(0.2, 17)") + theme_bw() + scale_fill_grey() +
-  ylab("") + ylim(0, 0.25) 
+  ylab("") + ylim(0, 0.25) + theme(text = element_text(size=15))
 ggsave("bin_density.pdf")
 
 # Sample size and variance for posterior distribution.
