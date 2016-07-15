@@ -102,7 +102,7 @@ are enrolled and treated. The binomial probability a patient
 responds to treatment is $p=0.2$ 
 under the null hypothesis that the treatment is not effective.
 If seven or more patients out of these 17 respond to the treatment then we 
-reject the hypothesis and the treatment is deemed successful at 
+reject this hypothesis and the treatment is deemed successful at 
 significance level of $0.1$.  If fewer than seven respond then the null is not 
 rejected and the treatment is deemed ineffective.
 
@@ -119,8 +119,8 @@ sample size for this trial is between seven and 17.
 
 Let us assume each patient outcome can be modeled as an independent,
 identically distributed Bernoulli($p$) random variable. The trial is realized
-as a sequence of Bernoulli samples that stops when either a
-specified number of responders or non-responders have been reached. 
+as a sequence of Bernoulli samples stopping when either a
+specified number of responders or non-responders has been reached. 
 
 \begin{figure}[bp!]
 \includegraphics[width=\textwidth]{KanePlot.pdf}
@@ -153,33 +153,40 @@ Since the success boundary is reached, we say the treatment succeeds.
 \centering
 \subfloat[enrollment distribution]{\includegraphics[width=0.5\textwidth]{snb-first-plot.pdf}}
 \hfill
-\subfloat[effect of varying $p$]{\includegraphics[width=0.5\textwidth]{mean-and-variance.pdf}}
+\subfloat[mean and variance varying $p$]{\includegraphics[width=0.5\textwidth]{mean-and-variance.pdf}}
 \caption{
 The distribution of a trial that stops after seven patients respond to treatment
-or 11 patients do not. (a) shows the distribution when
-$p = 0.2$. (b) shows the mean and variance of the distribution varying $p$ 
-between zero and one.
+or 11 patients do not. Panel (a) shows the distribution when
+$p = 0.2$. The mean and variance of the distribution varying $p$ 
+between zero and one are shown in Panel (b).
 }
 \label{fig:exp-and-var}
 \end{figure}
 
 More generally the distribution of the number of trial enrollments is shown in 
 Fig.~\ref{fig:exp-and-var} (a). There is relatively little probability mass
-for values of seven through 10 since $p$ is small and the treatment succeeding
-quickly is unlikely.
+for values of seven through 10 since $p$ is small and it is unlikely 
+the treatment will succeed quickly.
 %The probability mass is concentrated at the 
 %$11^{\text{th}}$ and $12^{\text{th}}$ step since $p$ 
 %is small and for most realizations reach 11 
 %non-responders before reaching 2 responders.
 Fig.~\ref{fig:exp-and-var} (b) shows the expected value and variance for the
 number of trial enrollments varying $p$ between zero and one. When $p$ is
-small the probability of an individual response is small, the treatment
+small the probability of an individual response is small and the treatment
 is more likely to fail shortly after the $11^{\text{th}}$ enrollment.
 When $p$ is large the treatment is more likely to succeed and the number of 
 enrollees approaches seven from above. 
+
 Since $p=1$ and $p=0$ represent the deterministic
-case the corresponding variance is zero. The ``bump'' around $p=0.25$ results 
-from inequality in the endpoints.
+case the corresponding variances are zero. The variance is
+determined by the size of the support of the two endpoints and $p$, which 
+weights the contribution of an endpoint based on how likely it is reached.
+When $p$ is small it is more likely the trial will reach the failure endpoint
+which has a support size of seven. As $p$ increases it becomes more likely the
+trial reaches the success endpoint with a support size of 11.
+The ``bump'' around $p=0.25$ results from inequality in the size of the
+support of the two endpoints.
 
 \begin{table}[t!]
 \caption{Characteristics of the Stopped Negative Binomial Distribution}
@@ -190,7 +197,7 @@ Parameters & $p$ the success probability ($0\leq p \leq 1$; $q = 1-p$) \\
            & $s$ the number of successes before stopping ($s=1, 2, ...$)\\
            & $t$ the number of failures before stopping ($t=1, 2, ...$)\\ \hline
 Support & min$(s,t) \leq k \leq s+t-1$  \\ \hline
-$\mathbb{P}[Y=k]$ & ${k-1 \choose s-1} p^s (1-p)^{k-s} + {k-1 \choose t-1} (1-p)^s p^{k-t}$\\ \hline
+$\mathbb{P}[Y=k]$ & ${k-1 \choose s-1} p^s (1-p)^{k-s} I_{\{s \leq k \leq s+t-1\}\}}+ {k-1 \choose t-1} (1-p)^s p^{k-t} I_{\{t \leq k \leq s+t-1\}}$\\ \hline
 $\mathbb{P}[Y \leq k]$ & $2 - \mathcal{I}_{q}(k+1, s) - \mathcal{I}_{p}(k+1, t)$\\ 
     & where $\mathcal{I}$ is the regularized incomplete beta function.\\ \hline
 Mean & $\frac{s}{p} \mathcal{I}_p(s,t) + \frac{p^{s-1} q^{t-1}}{B(s,t)} +
@@ -199,10 +206,10 @@ Mean & $\frac{s}{p} \mathcal{I}_p(s,t) + \frac{p^{s-1} q^{t-1}}{B(s,t)} +
 MGF & $\left(\frac{p e^x}{1 - qe^x}\right)^s 
   \mathcal{I}_{1-qe^x} (s, t) + \left(\frac{qe^x}{1-pe^x}\right)^t 
   \mathcal{I}_{1-pe^x}(t, s) $\\ \hline
-Compound Distribution & 
+Predictive Distribution & 
 ${k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)}+
 {k-1 \choose t-1} \frac{B\left(\alpha + k-t, t+\beta\right)}{B(\alpha,\beta)}$\\
-& for Beta($\alpha$, $\beta$). \\ \hline
+& for $p$ distributed as Beta($\alpha$, $\beta$). \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -223,7 +230,7 @@ Section 3 shows how the distribution is related to other standard
 distributions and connects the SNB tail probability to the binomial tail 
 probability.
 Section 4 derives the moment generating function.
-Section 5 derives the compound distribution when $p$ has a beta distribution.
+Section 5 derives the predictive distribution when $p$ has a beta distribution.
 
 \section{Probability Mass Function}
 \label{notation.section}
@@ -246,8 +253,8 @@ The distribution of $\,Y\,$ has support on integer values in the range
 \end{equation*}
 The probability mass function is
 \begin{equation} \label{eqn:pmf}
-\mathbb{P} [Y=k] = S(k, p, s) \ I_{\{s \leq k\}} + 
-  S(k, 1-p, t) \ I_{\{ t \leq k \}}
+\mathbb{P} [Y=k] = S(k, p, s) \ I_{\{s \leq k \leq s+t-1\}} + 
+  S(k, 1-p, t) \ I_{\{ t \leq k \leq s+t-1 \}}
 \end{equation}
 where $I_{\{f\}}$ is the {\em indicator function}, taking the value 
 of one if $f$ is true and zero otherwise, and
@@ -359,7 +366,7 @@ binomial distribution. When $t$ is large $Y-s$ has a
 negative binomial distribution with
 \begin{equation*}                                    %   (1)   
 \mathbb{P}[Y=s+j\ |\ t \text{ is large\ }]        \label{nb1.eq}          
-  \rightarrow = {{s+j-1}\choose{s-1}} p^s (1-p)^j
+  = {{s+j-1}\choose{s-1}} p^s (1-p)^j
 \end{equation*}
 for $\,j=0, 1,\ldots\,$. A similar statement can be made when $s$ is large
 and $t$ is small. As a result, with proper parameter choice, the SNB
@@ -372,7 +379,7 @@ number of enrollment outcomes to observe {\em either} $s$ responders {\em or}
 $t$ non-responders.
 The SNB generalizes both the minimum (riff-shuffle) and maximum negative
 binomial distributions up to a translation of the support.
-For the special case of $\,s=t,$ the distribution of $\,Y\,$ is exactly the
+For the special case of $\,s=t,$ the distribution of $\,Y\,$ is the
 riff-shuffle, or minimum negative binomial distribution~\citep{Uppuluri1970}.
 The maximum negative binomial \cite{Zhang2000,Zelterman2005} is the smallest 
 number of outcomes necessary to 
@@ -392,14 +399,16 @@ to a translated version of the riff-shuffle.
 There is an equivalence between the probability of reaching an endpoint 
 in the SNB model and the tail probability of the binomial distribution.
 That is, the probability that the number of responders is at least $s$ in the 
-binomial model is the same that the treatment succeeds (reaches $s$) in the SNB 
+binomial model is the same as the probability the treatment succeeds 
+(reaches $s$) in the SNB 
 model.
 \begin{prop} \label{binomial_tail}
-Let $Y$ be distributed as SNB($p$, $s$, $t$) and let 
+Let $Y$ be distributed as SNB($p$, $s$, $t$) and recall that $X_Y$ corresponds
+to the number of responders in a trial. Let 
 $B$ be distributed binomial with size $n=s+t-1$ and response probability
 $p$. Then
 \begin{equation}
-\mathbb{P}[B \geq s] = \mathbb{P} [\text{treatment succeeds}].
+\mathbb{P}[B \geq s] = \mathbb{P} [X_Y = s].
 \end{equation}
 \end{prop}
 \begin{proof}
@@ -412,19 +421,18 @@ The binomial tail probability is
 %  &= 1 - \sum_{k=0}^{s-1} {n \choose k} p^k (1-p)^{n-k} \\
 %  &= 1 - \mathcal{I}_{1-p}.
 %\end{align*}
-The corresponding SNB probability is
+The corresponding success probability is
 \begin{equation*}
-\mathbb{P} [\text{treatment succeeds}] 
+\mathbb{P} [X_Y = s] 
   = \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s (1-p)^{k-s}.
 \end{equation*}
-Let $i=k-s$. Using the fact that
+Let $i=k-s$. Since
 \begin{equation*}
-{i+s-1 \choose s-1} = {i+s-1 \choose i}
+{i+s-1 \choose s-1} = {i+s-1 \choose i},
 \end{equation*}
 the last summation can be rewritten as
 \begin{align}
-\mathbb{P} [\text{treatment succeeds}] &= \sum_{i=0}^{t-1} 
-  {i+s-1 \choose i} p^s (1-p)^i\\
+\mathbb{P} [X_Y = s] &= \sum_{i=0}^{t-1} {i+s-1 \choose i} p^s (1-p)^i\\
   &= 1 - \mathcal{I}_{1-p}(t, s)
 \end{align}
 completing the proof.
@@ -447,7 +455,7 @@ probability of zero through six responders.
 \subfloat[binomial distribution]{\includegraphics[width=0.5\textwidth]{bin_density.pdf}}
 \caption{
 SNB(0.2, 7, 11) with mass contributed from 
-$s$ responders (black) or $t$ non-responders (grey) along with 
+7 responders (black) or 11 non-responders (grey) along with 
 Binomial(0.2, 17) with at least 2 responders (black) or fewer (grey).
 }
 \label{fig:snb_bin_compare}
@@ -464,7 +472,7 @@ Then the moment generating function (MGF) of $Y$ is
   \mathcal{I}_{1-qe^x} (s, t) + \left(\frac{qe^x}{1-pe^x}\right)^t 
   \mathcal{I}_{1-pe^x}(t, s)
 \end{equation}
-for $q = 1-p$ when $x \leq \min \left\{\log(1/p), \log(1/q) \right\}$.
+for $q = 1-p$ defined for $x \leq \min \left\{\log(1/p), \log(1/q) \right\}$.
 \end{prop}
 \begin{proof}
 The MGF of the SNB is:
@@ -474,7 +482,7 @@ The MGF of the SNB is:
 \end{equation*}
 and can be rewritten as:
 \begin{equation} \label{eqn:first_sum}
-\mathbb{E}~e^{xY} = \sum_{k=s}^{s+t-1}{k-1 \choose s-1} (pe)^{sx} (qe^x)^{k-s} 
+\mathbb{E}~e^{xY} = \sum_{k=s}^{s+t-1}{k-1 \choose s-1} (pe^x)^{s} (qe^x)^{k-s} 
   + \sum_{k=t}^{s+t-1}{k-1 \choose t-1} (qe^x)^t (pe^x)^{k-t}.
 \end{equation}
 The first summation in (\ref{eqn:first_sum}) satisfies
@@ -482,13 +490,13 @@ The first summation in (\ref{eqn:first_sum}) satisfies
 \sum_{k=s}^{s+t-1}{k-1 \choose s-1} (pe)^{sx} (qe^x)^{k-s} &= 
   \left(\frac{pe^x}{1 - qe^x}\right)^s \ \ \sum_{k=s}^{s+t-1} {k-1 \choose s-1} 
     (qe^x)^{k-s} (1-qe^x)^s \\
-  &= \left(\frac{pe^x}{1 - qe^x}\right)^s \mathcal{I}_{qe^x}(s, t).
+  &= \left(\frac{pe^x}{1 - qe^x}\right)^s \mathcal{I}_{1-qe^x}(s, t).
 \end{align*}
 Since the incomplete beta function's subscript parameter has support on zero 
 to one, we have $qe^x \leq 1$. This also shows we must restrict
 $x \leq -\log(q)$.
 A similar expression can be derived for the second summation in 
-Equation \ref{eqn:first_sum} and results in
+(\ref{eqn:first_sum}) and results in
 the constraint $x \leq -\log(p)$.
 \end{proof}
 
@@ -520,11 +528,11 @@ for appropriately large $s$ and $t$ and $p = 0.5$. In this
 case the SNB can be viewed as identical, negative binomials
 approximating a normal and truncated at the median.
 
-\section{The Compound Probability Distribution}
+\section{The Predictive Probability Distribution}
 
 Let us consider the SNB distribution where $p$ has a beta distribution.
 \begin{prop} \label{prop:bayesian}
-The compound distribution of the SNB
+The predictive distribution of the SNB
 distribution when $p$ is distributed Beta($\alpha$, $\beta$) is
 \begin{align} \label{eqn:posterior}
 \mathbb{P} [Y = k | s, t, \alpha, \beta ] &= 
@@ -549,7 +557,7 @@ The result in (\ref{eqn:posterior}) follows by the definition of the
 beta function.
 \end{proof}
 
-To better understand the compound distribution, let us once again return to 
+To better understand the predictive distribution, let us once again return to 
 our example where $s=7$, $t=11$. However, we assume $p$ is a beta distribution
 with shape parameters $\alpha = 0.2 c$ and 
 $\beta = 0.8 c$ for any $c > 0$.
@@ -562,7 +570,7 @@ uncertainty in $p$ and the SNB.
 \hfill
 \subfloat[variance]{\includegraphics[width=0.5\textwidth]{bayesian-sample-variance.pdf}}
 \caption{
-The mean and variance of the compound SNB with $s=7$, $t=11$
+The mean and variance of the predictive SNB with $s=7$, $t=11$
 with $\mathbb{E}\ p = 0.2$ varying the uncertainty 
 in the distribution of $p$. A larger value of $c$
 corresponds to a beta with smaller variance.
@@ -571,9 +579,9 @@ corresponds to a beta with smaller variance.
 \end{figure}
 
 Fig.~\ref{fig:bayesian-sample-size} shows how the mean
-and variance of the compound distribution is related to the SNB's 
+and variance of the predictive distribution is related to the SNB's 
 mean and variance. As $c$ increases the 
-compound distribution sample statistics converge to corresponding 
+predictive distribution sample statistics converge to corresponding 
 statistics for the SNB with $p = 0.2$. 
 %It may be noted that the compound 
 %distribution's mean
