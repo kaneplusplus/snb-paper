@@ -108,14 +108,14 @@ rejected and the treatment is deemed ineffective.
 
 If all 17 patients are enrolled at once, as in the classic
 design, then the sample size is 17. However, in most clinical trials the
-patients are enrolled sequentially with one patient's outcome realized
-before the next one enters the trial. In the present example, observing seven
+patients are enrolled sequentially over time.
+In the present example, observing seven
 successful patients is one endpoint and the number of enrollees required
 could be as small as seven. Similarly 11
 observed treatment failures also ends the trial. This sampling mechanism, in
 which the experiment ends as soon as any predefined endpoint is reached, is
 called {\em curtailed sampling}. Under curtailed sampling the range of the
-sample size for this trial is between seven and 17.
+sample size for this trial is seven to 17.
 
 Let us assume each patient outcome can be modeled as an independent,
 identically distributed Bernoulli($p$) random variable. The trial is realized
@@ -158,7 +158,7 @@ Since the success boundary is reached, we say the treatment succeeds.
 The distribution of a trial that stops after seven patients respond to treatment
 or 11 patients do not. Panel (a) shows the distribution when
 $p = 0.2$. The mean and variance of the distribution varying $p$ 
-between zero and one are shown in Panel (b).
+between zero and one are shown in panel (b).
 }
 \label{fig:exp-and-var}
 \end{figure}
@@ -230,7 +230,8 @@ Section 3 shows how the distribution is related to other standard
 distributions and connects the SNB tail probability to the binomial tail 
 probability.
 Section 4 derives the moment generating function.
-Section 5 derives the predictive distribution when $p$ has a beta distribution.
+Section 5 derives the predictive and posterior distributions when $p$ has a 
+beta distribution.
 
 \section{Probability Mass Function}
 \label{notation.section}
@@ -472,7 +473,7 @@ Then the moment generating function (MGF) of $Y$ is
   \mathcal{I}_{1-qe^x} (s, t) + \left(\frac{qe^x}{1-pe^x}\right)^t 
   \mathcal{I}_{1-pe^x}(t, s)
 \end{equation}
-for $q = 1-p$ defined for $x \leq \min \left\{\log(1/p), \log(1/q) \right\}$.
+for $q = 1-p$ defined for $x < \min \left\{\log(1/p), \log(1/q) \right\}$.
 \end{prop}
 \begin{proof}
 The MGF of the SNB is:
@@ -493,19 +494,45 @@ The first summation in (\ref{eqn:first_sum}) satisfies
   &= \left(\frac{pe^x}{1 - qe^x}\right)^s \mathcal{I}_{1-qe^x}(s, t).
 \end{align*}
 Since the incomplete beta function's subscript parameter has support on zero 
-to one, we have $qe^x \leq 1$. This also shows we must restrict
-$x \leq -\log(q)$.
+to one, we have $0 \leq qe^x < 1$. This also shows we must restrict
+$0 \leq x < -\log(q)$.
 A similar expression can be derived for the second summation in 
 (\ref{eqn:first_sum}) and results in
-the constraint $x \leq -\log(p)$.
+the constraint $0 \leq x < -\log(p)$.
 \end{proof}
 
 The SNB's ability to approximate the geometric, normal, gamma, and poisson
 distributions follow from it generalizing the negative binomial distribution. 
-To recover the MGF of the negative binomial consider the case where
-$t \rightarrow \infty$ in (\ref{eqn:mgf}). The regularized incomplete
-beta function in the first term goes to one and zero in the second term.
-We are left with the MGF of the negative binomial distribution. 
+\begin{prop}
+The MGF of the SNB converges to that of the negative binomial when either
+$s$ or $t$ gets large. That is
+\begin{equation*}
+\mathbb{E} e^{xY} \rightarrow \left( \frac{pe^x}{1-qe^x} \right)^s
+\end{equation*}
+as $t \rightarrow \infty$. The analogous result holds when 
+$s \rightarrow \infty$.
+\end{prop}
+\begin{proof}
+The second regularized incomplete beta term in (\ref{eqn:mgf}) can be written
+in terms of a cumulative binomial distribution
+\begin{equation*}
+\mathcal{I}_{1-pe^x}(t, s) = \mathbb{P}\left[ B \leq s-1 \right]
+\end{equation*}
+where $B$ is distributed as
+Binomial($t-k$, $pe^x$). By Hoeffding's inequality \cite{Hoeffding1963}
+it follows that
+\begin{equation} \label{eqn:hoeffding}
+\mathbb{P}\left[ B \leq s-1 \right] \leq 
+  \exp \left(-2\frac{((t-k)pe^x - s-1)^2}{t-k} \right).
+\end{equation}
+As $t$ gets large $\mathcal{I}_{1-pe^x}(t, s)$ goes to zero
+Likewise, $\mathcal{I}_{1-qe^x}(s, t)$ goes
+to one. The proof follows by realizing 
+\begin{equation*}
+0 < \frac{qe^x}{1-pe^x} < 1
+\end{equation*}
+over the support of $x$.
+\end{proof}
 
 When $s=1$ (and $t$ is still large) the SNB's MGF is the same as that of the
 geometric distribution. The negative
@@ -528,10 +555,26 @@ for appropriately large $s$ and $t$ and $p = 0.5$. In this
 case the SNB can be viewed as identical, negative binomials
 approximating a normal and truncated at the median.
 
-\section{The Predictive Probability Distribution}
+\section{The Posterior and Predictive Probability Distribution}
 
-Let us consider the SNB distribution where $p$ has a beta distribution.
-\begin{prop} \label{prop:bayesian}
+Let us consider the joint SNB distribution when $p$ has a beta distribution.
+\begin{prop} \label{prop:posterior}
+When $p$ is distributed Beta($\alpha$, $\beta$), the 
+posterior density under the SNB model is
+\begin{align*}
+f(p | s, t, \alpha, \beta) &= 
+  \frac{ {k-1 \choose s-1} }{B(\alpha, \beta)} p^{\alpha +s -1} 
+    (1-p)^{k+\beta-s-1} + \\
+  & \frac{ {k-1 \choose t-1} }{B(\alpha, \beta)} p^{k+\alpha -t -1} 
+    (1-p)^{\beta+t-1}.
+\end{align*}
+\end{prop}
+\begin{proof}
+This result can be found directly by multiplying the probability mass function
+in (\ref{eqn:pmf}) by the density of the Beta distribution.
+\end{proof}
+
+\begin{corollary} \label{prop:bayesian}
 The predictive distribution of the SNB
 distribution when $p$ is distributed Beta($\alpha$, $\beta$) is
 \begin{align} \label{eqn:posterior}
@@ -542,27 +585,31 @@ distribution when $p$ is distributed Beta($\alpha$, $\beta$) is
     \frac{B\left(\alpha + k - t, t+\beta\right)}{B(\alpha, \beta)} 
     \ I_{\{t \leq k \leq s+k-1\}}.
 \end{align}
-\end{prop}
+\end{corollary}
 \begin{proof}
-For notational simplicity, assume that $k$ is in the range
-$\min(s,t) \leq k \leq s+t-1$. When 
-this is not the case appropriate terms should be removed as dictated by the indicator functions.
-\begin{align*}
-f(k | s, t, \alpha, \beta) = \frac{1}{B(\alpha, \beta)} & \int_0^1 {k-1 \choose s-1} p^{\alpha +s -1} \left(1-p\right)^{k-s+\beta-1} + \\
- & {k-1 \choose t-1} p^{k-t+\alpha-1}\left(1-p\right)^{t+\beta-1} dp \\
-= \frac{1}{B(\alpha, \beta)}  {k-1 \choose s-1} & \int_0^1  p^{\alpha +s -1} \left(1-p\right)^{k-s+\beta-1} dp + \\
- & \frac{1}{B(\alpha, \beta)} {k-1 \choose t-1} \int_0^1  p^{k-t+\alpha-1}\left(1-p\right)^{t+\beta-1} dp.
-\end{align*}
-The result in (\ref{eqn:posterior}) follows by the definition of the 
-beta function.
+This result can be found by integrating $p$ over the interval zero to one and
+applying the definition of the beta function.
 \end{proof}
+%\begin{proof}
+%For notational simplicity, assume that $k$ is in the range
+%$\min(s,t) \leq k \leq s+t-1$. When 
+%this is not the case appropriate terms should be removed as dictated by the indicator functions.
+%\begin{align*}
+%f(k | s, t, \alpha, \beta) = \frac{1}{B(\alpha, \beta)} & \int_0^1 {k-1 \choose s-1} p^{\alpha +s -1} \left(1-p\right)^{k-s+\beta-1} + \\
+% & {k-1 \choose t-1} p^{k-t+\alpha-1}\left(1-p\right)^{t+\beta-1} dp \\
+%= \frac{1}{B(\alpha, \beta)}  {k-1 \choose s-1} & \int_0^1  p^{\alpha +s -1} \left(1-p\right)^{k-s+\beta-1} dp + \\
+% & \frac{1}{B(\alpha, \beta)} {k-1 \choose t-1} \int_0^1  p^{k-t+\alpha-1}\left(1-p\right)^{t+\beta-1} dp.
+%\end{align*}
+%The result in (\ref{eqn:posterior}) follows by the definition of the 
+%beta function.
+%\end{proof}
 
 To better understand the predictive distribution, let us once again return to 
-our example where $s=7$, $t=11$. However, we assume $p$ is a beta distribution
-with shape parameters $\alpha = 0.2 c$ and 
-$\beta = 0.8 c$ for any $c > 0$.
-This parameterization allows us to examine the relationship between 
-uncertainty in $p$ and the SNB.
+our example where $s=7$, $t=11$. However, we assume $p$ has a beta distribution
+with shape parameters $\alpha = 0.2 c$ and $\beta = 0.8 c$ for any $c > 0$.
+This parameterization has mean 0.2 for all $c > 0$ and variance 
+$0.16 / (c+1)$.
+
 
 \begin{figure}[h!]
 \centering
@@ -573,27 +620,26 @@ uncertainty in $p$ and the SNB.
 The mean and variance of the predictive SNB with $s=7$, $t=11$
 with $\mathbb{E}\ p = 0.2$ varying the uncertainty 
 in the distribution of $p$. A larger value of $c$
-corresponds to a beta with smaller variance.
+corresponds to a beta variance.
 }
 \label{fig:bayesian-sample-size}
 \end{figure}
 
-Fig.~\ref{fig:bayesian-sample-size} shows how the mean
-and variance of the predictive distribution is related to the SNB's 
-mean and variance. As $c$ increases the 
+As $c$ increases the 
 predictive distribution sample statistics converge to corresponding 
 statistics for the SNB with $p = 0.2$. 
-%It may be noted that the compound 
-%distribution's mean
-%approaches the deterministic limit slowly. This
-%is because when $c$ is small, the distribution of $p$ is heavily skewed. 
-%As $c$ increases this effect is minimized.
-When the distribution of $p$ is centered close to zero or one the mean 
-estimate approach the deterministic limit relatively slowly in the uncertainty
-parameter $c$.  Because of this, we note that for estimation it may be 
+For estimation it may be 
 preferable to select shape parameters based on the median or mode of the 
 beta distribution since they are less sensitive to distributional uncertainty.
 
+%%It may be noted that the compound 
+%%distribution's mean
+%%approaches the deterministic limit slowly. This
+%%is because when $c$ is small, the distribution of $p$ is heavily skewed. 
+%%As $c$ increases this effect is minimized.
+%When the distribution of $p$ is centered close to zero or one the mean 
+%estimate approach the deterministic limit relatively slowly in the uncertainty
+%parameter $c$.  
 %\section{Discussion}
 %
 %The SNB can be used to extend clinical trial methodology
