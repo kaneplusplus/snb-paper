@@ -70,7 +70,7 @@ approx_plots_start = list(
     labs(x="", y="", title="normal approximation (0.35, 50, 50)") + theme_bw() +
     scale_fill_grey(),
   dsnb_stack_plot(0.06, 10, 10) + scale_x_discrete(breaks=seq(10, 20, by=2))+
-    labs(x="", y="", title="poisson approximation (0.06, 10, 10)") + 
+    labs(x="", y="", title="Poisson approximation (0.06, 10, 10)") + 
     theme_bw() + scale_fill_grey(),
   dsnb_stack_plot(0.06, 3, 175) + scale_x_discrete(breaks=seq(3, 180, by=30))+
     labs(x="", y="", title="gamma approximation (0.06, 3, 175)") + theme_bw()+
@@ -226,4 +226,19 @@ p = ggplot(y, aes(x=p, y=value)) + geom_line() +
   facet_grid(type ~ ., scales="free") + ylab("") +
   theme(text = element_text(size=15))
 ggsave("mean-and-variance.pdf")
+
+# Assume the Haldane prior.
+pp = function(x, k, s, t) {
+  denom = choose(k-1, s-1) * beta(s, k-s) + choose(k-1, t-1) * beta(k-t, t)
+  ret = foreach(p = x, .combine=rbind) %do% {
+    c(choose(k-1, s-1) * p^(s-1) * (1-p)^(k-s-1), 
+      choose(k-1, t-1) * p^(k-t-1) * (1-p)^(t-1))
+  }
+  ret = cbind(ret, x)
+  colnames(ret) = c("s", "t", "p")
+  rownames(ret) = NULL
+  ret
+}
+
+x= pp(seq(0, 1, by=0.01), 15, s, t)
 

@@ -22,14 +22,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%
 %% To change the style, put a % in front of the second line of the current style and
 %% remove the % from the second line of the style you would like to use.
-%%%%%%%%%%%%%%%%%%%%%%%
-
-%% Numbered
-%\bibliographystyle{model1-num-names}
-
-%% Numbered without titles
-%\bibliographystyle{model1a-num-names}
-
+%%%%%%%%%%%%%%%%%%%%%%% %% Numbered %\bibliographystyle{model1-num-names} %% Numbered without titles %\bibliographystyle{model1a-num-names} 
 %% Harvard
 %\bibliographystyle{model2-names.bst}\biboptions{authoryear}
 
@@ -98,12 +91,13 @@ discrete distribution\sep curtailed sampling
 
 Consider a prototypical early phase, single-arm clinical trial in which 
 17 patients
-are enrolled and treated. The binomial probability a patient 
-responds to treatment is $p=0.2$ 
+are enrolled and treated. The binomial probability of a patient 
+responding to treatment is $p=0.2$ 
 under the null hypothesis that the treatment is not effective.
 If seven or more patients out of these 17 respond to the treatment then we 
 reject this hypothesis and the treatment is deemed successful at 
-significance level of $0.1$.  If fewer than seven respond then the null is not 
+significance level of $0.1$.  If fewer than seven respond then the null 
+hypothesis is not 
 rejected and the treatment is deemed ineffective.
 
 If all 17 patients are enrolled at once, as in the classic
@@ -115,7 +109,7 @@ could be as small as seven. Similarly 11
 observed treatment failures also ends the trial. This sampling mechanism, in
 which the experiment ends as soon as any predefined endpoint is reached, is
 called {\em curtailed sampling}. Under curtailed sampling the range of the
-sample size for this trial is seven to 17.
+sample size for this trial is seven through 17.
 
 Let us assume each patient outcome can be modeled as an independent,
 identically distributed Bernoulli($p$) random variable. The trial is realized
@@ -165,62 +159,56 @@ between zero and one are shown in panel (b).
 
 More generally the distribution of the number of trial enrollments is shown in 
 Fig.~\ref{fig:exp-and-var} (a). There is relatively little probability mass
-for values of seven through 10 since $p$ is small and it is unlikely 
-the treatment will succeed quickly.
+for values of sample size equal to seven through 10 since $p$ is small and it 
+is unlikely the treatment will succeed quickly.
 %The probability mass is concentrated at the 
 %$11^{\text{th}}$ and $12^{\text{th}}$ step since $p$ 
 %is small and for most realizations reach 11 
 %non-responders before reaching 2 responders.
 Fig.~\ref{fig:exp-and-var} (b) shows the expected value and variance for the
 number of trial enrollments varying $p$ between zero and one. When $p$ is
-small the probability of an individual response is small and the treatment
+small then the treatment
 is more likely to fail shortly after the $11^{\text{th}}$ enrollment.
-When $p$ is large the treatment is more likely to succeed and the number of 
-enrollees approaches seven from above. 
+When $p$ is large then the treatment is more likely to succeed and the 
+number of enrollees approaches seven from above. 
 
-Since $p=1$ and $p=0$ represent the deterministic
-case the corresponding variances are zero. The variance is
-determined by the size of the support of the two endpoints and $p$, which 
-weights the contribution of an endpoint based on how likely it is reached.
-When $p$ is small it is more likely the trial will reach the failure endpoint
-which has a support size of seven. As $p$ increases it becomes more likely the
-trial reaches the success endpoint with a support size of 11.
-The ``bump'' around $p=0.25$ results from inequality in the size of the
-support of the two endpoints.
+When $p=0$ or $1$ the processes are deterministic and variance is zero.
+Value of $p$ between zero and one change the mixing proportions of 
+the two endpoints. The saddle around $p=0.25$ results from inequality 
+in the size of the support of the two endpoints.
 
-\begin{table}[t!]
-\caption{Characteristics of the Stopped Negative Binomial Distribution}
-\label{tab:snb}
-\begin{center}
-\begin{tabular}{|c|l|} \hline
-Parameters & $p$ the success probability ($0\leq p \leq 1$; $q = 1-p$) \\
-           & $s$ the number of successes before stopping ($s=1, 2, ...$)\\
-           & $t$ the number of failures before stopping ($t=1, 2, ...$)\\ \hline
-Support & min$(s,t) \leq k \leq s+t-1$  \\ \hline
-$\mathbb{P}[Y=k]$ & ${k-1 \choose s-1} p^s (1-p)^{k-s} I_{\{s \leq k \leq s+t-1\}\}}+ {k-1 \choose t-1} (1-p)^s p^{k-t} I_{\{t \leq k \leq s+t-1\}}$\\ \hline
-$\mathbb{P}[Y \leq k]$ & $2 - \mathcal{I}_{q}(k+1, s) - \mathcal{I}_{p}(k+1, t)$\\ 
-    & where $\mathcal{I}$ is the regularized incomplete beta function.\\ \hline
-Mean & $\frac{s}{p} \mathcal{I}_p(s,t) + \frac{p^{s-1} q^{t-1}}{B(s,t)} +
-  \frac{t}{q} \mathcal{I}_q(t,s) + \frac{p^{t-1} q^{s-1}}{B(s,t)}$\\ 
-  & where $B$ is the beta function \\ \hline
-MGF & $\left(\frac{p e^x}{1 - qe^x}\right)^s 
-  \mathcal{I}_{1-qe^x} (s, t) + \left(\frac{qe^x}{1-pe^x}\right)^t 
-  \mathcal{I}_{1-pe^x}(t, s) $\\ \hline
-Predictive Distribution & 
-${k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)}+
-{k-1 \choose t-1} \frac{B\left(\alpha + k-t, t+\beta\right)}{B(\alpha,\beta)}$\\
-& for $p$ distributed as Beta($\alpha$, $\beta$). \\ \hline
-\end{tabular}
-\end{center}
-\end{table}
+%\begin{table}[t!]
+%\caption{Characteristics of the Stopped Negative Binomial Distribution}
+%\label{tab:snb}
+%\begin{center}
+%\begin{tabular}{|c|l|} \hline
+%Parameters & $p$ the success probability ($0\leq p \leq 1$; $q = 1-p$) \\
+%           & $s$ the number of successes before stopping ($s=1, 2, ...$)\\
+%           & $t$ the number of failures before stopping ($t=1, 2, ...$)\\ \hline
+%Support & min$(s,t) \leq k \leq s+t-1$  \\ \hline
+%$\mathbb{P}[Y=k]$ & ${k-1 \choose s-1} p^s (1-p)^{k-s} I_{\{s \leq k \leq s+t-1\}\}}+ {k-1 \choose t-1} (1-p)^s p^{k-t} I_{\{t \leq k \leq s+t-1\}}$\\ \hline
+%$\mathbb{P}[Y \leq k]$ & $2 - \mathcal{I}_{q}(k+1, s) - \mathcal{I}_{p}(k+1, t)$\\ 
+%    & where $\mathcal{I}$ is the regularized incomplete beta function.\\ \hline
+%Mean & $\frac{s}{p} \mathcal{I}_p(s,t) + \frac{p^{s-1} q^{t-1}}{B(s,t)} +
+%  \frac{t}{q} \mathcal{I}_q(t,s) + \frac{p^{t-1} q^{s-1}}{B(s,t)}$\\ 
+%  & where $B$ is the beta function \\ \hline
+%MGF & $\left(\frac{p e^x}{1 - qe^x}\right)^s 
+%  \mathcal{I}_{1-qe^x} (s, t) + \left(\frac{qe^x}{1-pe^x}\right)^t 
+%  \mathcal{I}_{1-pe^x}(t, s) $\\ \hline
+%Predictive Distribution & 
+%${k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)}+
+%{k-1 \choose t-1} \frac{B\left(\alpha + k-t, t+\beta\right)}{B(\alpha,\beta)}$\\
+%& for $p$ distributed as Beta($\alpha$, $\beta$). \\ \hline
+%\end{tabular}
+%\end{center}
+%\end{table}
 
 In the rest of this work we derive the distribution of the number of 
 enrollees needed
 to observe either $s$ successes or $t$ failures. We refer to this distribution
-as the Stopped Negative Binomial (SNB). Some of its characteristics are
-summarized in Tab.~\ref{tab:snb}.
-This paper derives these results
-and explores properties of the distribution.
+as the Stopped Negative Binomial (SNB). 
+%Some of its characteristics are summarized in Tab.~\ref{tab:snb}.
+This paper derives this distribution and explores its properties.
 %The next section introduces our notation and basic results
 %including the density of the distribution along with a description of
 %its relation to other distributions. 
@@ -231,7 +219,7 @@ distributions and connects the SNB tail probability to the binomial tail
 probability.
 Section 4 derives the moment generating function.
 Section 5 derives the predictive and posterior distributions when $p$ has a 
-beta distribution.
+beta prior distribution.
 
 \section{Probability Mass Function}
 \label{notation.section}
@@ -276,7 +264,8 @@ $k$. If the outcome of the $k$th patient responds to treatment then the process
 advances diagonally in the positive horizontal and vertical direction. 
 If the $k$th patient does not respond
 then the sample path advances in the positive horizontal direction only. The
-process continues until either $X_k = s$ or $X_k = k-t$.
+process continues until either $X_k = s$ or $X_k = k-t$ corresponding to the
+success and failure boundaries in Fig. \ref{fig:kane_viz}, respectively.
 
 \begin{prop}
 The distribution of the stopping time
@@ -328,7 +317,7 @@ R = \sum_{i=0}^{t-1} {i+s-1 \choose i} p^s (1-p)^i \; + \;
 
 Let $\mathcal{I}_p(s, t)$ be the {\em regularized incomplete beta function} 
 \citep{Olver2010}. This function satisfies 
-$\mathcal{I}_p(s, t) = 1-\mathcal{I}_{1-p}(t, s)$ \citep{Uppuluri1970}. Then
+$\mathcal{I}_p(s, t) = 1-\mathcal{I}_{1-p}(t, s)$ \citep{Uppuluri1967}. Then
 \begin{align*}
 R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
 \sum_{j=0}^{s-1}  {j+t-1 \choose j} p^j  (1-p)^t \\
@@ -341,10 +330,10 @@ stopping time and is a valid probability mass function.
 
 Next, we consider an interim analysis of a clinical trial after $s'$ 
 patients respond to treatment 
-and $t'$ do not for $s' < s$ and $t' < t$.
+and $t'$ fail to respond for $s' < s$ and $t' < t$.
 \begin{corollary} \label{conditional_distribution}
 The number of subsequent enrollments needed 
-to reach either endpoint behaves as SNB($p$, $s-s'$, $t-t'$).
+to reach either $s$ or $t$ endpoints behaves as SNB($p$, $s-s'$, $t-t'$).
 \end{corollary}
 Having observed $s'$ responders and $t'$ non-responders, there are $s-s'$ 
 more responders needed to reach the success endpoint and $t-t'$ more 
@@ -363,25 +352,22 @@ mass contributed by reaching $t$ non-responders first. \label{shapes.fig}}
 \end{figure}
 
 The SNB is a generalization of the negative 
-binomial distribution. When $t$ is large $Y-s$ has a 
+binomial distribution. When $t$ is large then $Y-s$ has a 
 negative binomial distribution with
 \begin{equation*}                                    %   (1)   
 \mathbb{P}[Y=s+j\ |\ t \text{ is large\ }]        \label{nb1.eq}          
   = {{s+j-1}\choose{s-1}} p^s (1-p)^j
 \end{equation*}
 for $\,j=0, 1,\ldots\,$. A similar statement can be made when $s$ is large
-and $t$ is small. As a result, with proper parameter choice, the SNB
+and $t$ is moderate. As a result, with proper parameter choice, the SNB
 can mimic other probability distributions in a manner similar to 
 those described in \cite{Peizer1968} and \cite{Best1974}. Examples are
 shown in in Fig.~\ref{shapes.fig}. 
 
-The SNB is the 
-number of enrollment outcomes to observe {\em either} $s$ responders {\em or} 
-$t$ non-responders.
 The SNB generalizes both the minimum (riff-shuffle) and maximum negative
 binomial distributions up to a translation of the support.
 For the special case of $\,s=t,$ the distribution of $\,Y\,$ is the
-riff-shuffle, or minimum negative binomial distribution~\citep{Uppuluri1970}.
+riff-shuffle, or minimum negative binomial distribution~\citep{Uppuluri1967}.
 The maximum negative binomial \cite{Zhang2000,Zelterman2005} is the smallest 
 number of outcomes necessary to 
 observe at least $s$ responders {\em and} $s$ non-responders and is equivalent
@@ -404,8 +390,8 @@ binomial model is the same as the probability the treatment succeeds
 (reaches $s$) in the SNB 
 model.
 \begin{prop} \label{binomial_tail}
-Let $Y$ be distributed as SNB($p$, $s$, $t$) and recall that $X_Y$ corresponds
-to the number of responders in a trial. Let 
+Let $Y$ be distributed as SNB($p$, $s$, $t$) and let $X_Y$ correspond
+to the number of responders at the end of the trial. Let 
 $B$ be distributed binomial with size $n=s+t-1$ and response probability
 $p$. Then
 \begin{equation}
@@ -415,27 +401,28 @@ $p$. Then
 \begin{proof}
 The binomial tail probability is
 \begin{equation*}
-\mathbb{P}[B \geq s] = 1 - \mathcal{I}_{1-p}.
+\mathbb{P}[B \geq s] = 1 - \mathcal{I}_{1-p}(s, t)
 \end{equation*}
 %\begin{align*}
 %\mathbb{P}[B \geq s] &= \sum_{k=s}^{s+t-1} {n \choose k} p^k (1-p)^{n-k} \\
 %  &= 1 - \sum_{k=0}^{s-1} {n \choose k} p^k (1-p)^{n-k} \\
 %  &= 1 - \mathcal{I}_{1-p}.
 %\end{align*}
-The corresponding success probability is
-\begin{equation*}
+where $\mathcal{I}_{1-p}(s, t)$ is the {\em regularized incomplete beta} 
+function. The corresponding success probability is
+\begin{equation} \label{eqn:success}
 \mathbb{P} [X_Y = s] 
   = \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s (1-p)^{k-s}.
-\end{equation*}
+\end{equation}
 Let $i=k-s$. Since
 \begin{equation*}
 {i+s-1 \choose s-1} = {i+s-1 \choose i},
 \end{equation*}
-the last summation can be rewritten as
-\begin{align}
+the summation in (\ref{eqn:success}) can be rewritten as
+\begin{align*}
 \mathbb{P} [X_Y = s] &= \sum_{i=0}^{t-1} {i+s-1 \choose i} p^s (1-p)^i\\
   &= 1 - \mathcal{I}_{1-p}(t, s)
-\end{align}
+\end{align*}
 completing the proof.
 \end{proof}
 
@@ -473,7 +460,8 @@ Then the moment generating function (MGF) of $Y$ is
   \mathcal{I}_{1-qe^x} (s, t) + \left(\frac{qe^x}{1-pe^x}\right)^t 
   \mathcal{I}_{1-pe^x}(t, s)
 \end{equation}
-for $q = 1-p$ defined for $x < \min \left\{\log(1/p), \log(1/q) \right\}$.
+for $q = 1-p$ and is defined for 
+$x < \min \left\{\log(1/p), \log(1/q) \right\}$.
 \end{prop}
 \begin{proof}
 The MGF of the SNB is:
@@ -493,15 +481,16 @@ The first summation in (\ref{eqn:first_sum}) satisfies
     (qe^x)^{k-s} (1-qe^x)^s \\
   &= \left(\frac{pe^x}{1 - qe^x}\right)^s \mathcal{I}_{1-qe^x}(s, t).
 \end{align*}
-Since the incomplete beta function's subscript parameter has support on zero 
-to one, we have $0 \leq qe^x < 1$. This also shows we must restrict
-$0 \leq x < -\log(q)$.
+Since the regularized incomplete beta function's subscript parameter 
+has support on zero 
+to one, we have $0 \leq qe^x < 1$. This implies
+$x < -\log(q)$.
 A similar expression can be derived for the second summation in 
 (\ref{eqn:first_sum}) and results in
-the constraint $0 \leq x < -\log(p)$.
+the constraint $x < -\log(p)$.
 \end{proof}
 
-The SNB's ability to approximate the geometric, normal, gamma, and poisson
+The SNB's ability to approximate the geometric, normal, gamma, and Poisson
 distributions follow from it generalizing the negative binomial distribution. 
 \begin{prop}
 The MGF of the SNB converges to that of the negative binomial when either
@@ -534,18 +523,20 @@ to one. The proof follows by realizing
 over the support of $x$.
 \end{proof}
 
-When $s=1$ (and $t$ is still large) the SNB's MGF is the same as that of the
+When $s=1$ (and $t$ is still large) the SNB's MGF is approximately 
+the same as that of the
 geometric distribution. The negative
 binomial can therefore be seen as a sum of i.i.d. geometric distributions.
-For an appropriately large number of samples the central limit theorem
+For an appropriately large number of samples, the central limit theorem
 yields a normal approximation.
 
-Drawing connections to the gamma and poisson distributions are more complicated.
+Drawing connections to the gamma and Poisson distributions are more complicated.
 However a connection to the gamma distribution well-studied problem in the 
 literature (see \cite{Ord1968,Guenther1972,Best1974} for examples). 
-A connection to the poisson appears in \cite{Anscombe1950} where
-it is shown that if the mean of a poisson is proportional
-to a $\chi^2_{2k}$ distribution then the negative binomial is obtained. 
+A connection to the Poisson appears in \cite{Anscombe1950} where
+it is shown that if the mean of a Poisson is proportional
+to a chi-square distribution with $2k$ degrees of freedom
+then the negative binomial is obtained. 
 Both of these approximations work by equating cumulants and then showing 
 that differences between betwen the cumulant generating
 functions converge to zero.
@@ -557,39 +548,37 @@ approximating a normal and truncated at the median.
 
 \section{The Posterior and Predictive Probability Distribution}
 
-Let us consider the joint SNB distribution when $p$ has a beta distribution.
-\begin{prop} \label{prop:posterior}
-When $p$ is distributed Beta($\alpha$, $\beta$), the 
-posterior density under the SNB model is
-\begin{align*}
-f(p | s, t, \alpha, \beta) &= 
-  \frac{ {k-1 \choose s-1} }{B(\alpha, \beta)} p^{\alpha +s -1} 
-    (1-p)^{k+\beta-s-1} + \\
+Let us consider the posterior distribution of $p$ with an SNB likelihood 
+and Beta($\alpha$, $\beta$) prior distribution.
+The prior times the likelihood is given by the function
+\begin{align} \label{eqn:ptl}
+f_p(x | \alpha, \beta ) f_{Y|p}(x | k, s, t) &= 
+  \frac{ {k-1 \choose s-1} }{B(\alpha, \beta)} x^{\alpha +s -1} 
+    (1-x)^{k+\beta-s-1} + \\
   & \frac{ {k-1 \choose t-1} }{B(\alpha, \beta)} p^{k+\alpha -t -1} 
-    (1-p)^{\beta+t-1}.
-\end{align*}
-\end{prop}
-\begin{proof}
+    (1-x)^{\beta+t-1} \nonumber
+\end{align}
+where $0 \leq x \leq 1$, $s \leq k \leq s+k-1$, and $t \leq k \leq s+k-1$.
 This result can be found directly by multiplying the probability mass function
 in (\ref{eqn:pmf}) by the density of the Beta distribution.
-\end{proof}
 
-\begin{corollary} \label{prop:bayesian}
-The predictive distribution of the SNB
-distribution when $p$ is distributed Beta($\alpha$, $\beta$) is
-\begin{align} \label{eqn:posterior}
-\mathbb{P} [Y = k | s, t, \alpha, \beta ] &= 
+The predictive distribution of the SNB can be found by integrating
+$x$ over the interval zero to one and applying the definition of the 
+beta function.
+\begin{align} \label{eqn:predictive}
+\int_0^1 f_p(x | \alpha, \beta )  f_{Y|p}(x | k, s, t) & dx = 
   {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} 
-    \ I_{\{s \leq k \leq s+k-1\}} \ + \nonumber \\
+    + \nonumber \\
   & {k-1 \choose t-1} 
-    \frac{B\left(\alpha + k - t, t+\beta\right)}{B(\alpha, \beta)} 
-    \ I_{\{t \leq k \leq s+k-1\}}.
+    \frac{B\left(\alpha + k - t, t+\beta\right)}{B(\alpha, \beta)}.
 \end{align}
-\end{corollary}
-\begin{proof}
-This result can be found by integrating $p$ over the interval zero to one and
-applying the definition of the beta function.
-\end{proof}
+
+The ratio of (\ref{eqn:ptl}) divided by (\ref{eqn:predictive}) gives the 
+posterior distribution of $p$. It is a mixture of beta distributions. The
+mixing parameter depend on the endpoints ($s$ and $t$), the number of enrollees needed to reach an endpoint ($k$), and the prior parameters ($\alpha$ and
+$\beta$).
+
+
 %\begin{proof}
 %For notational simplicity, assume that $k$ is in the range
 %$\min(s,t) \leq k \leq s+t-1$. When 
