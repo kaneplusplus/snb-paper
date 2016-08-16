@@ -1,6 +1,7 @@
 library(snb)
 library(ggplot2)
 library(tidyr)
+library(latex2exp)
 
 ## kplot
 
@@ -118,13 +119,13 @@ names(d)[2:3] = c("success", "failure")
 d = gather(d, x)
 names(d)[2] = "Outcome"
 d$Outcome = factor(d$Outcome)
-d$Outcome = relevel(d$Outcome, "success")
+d$Outcome = relevel(d$Outcome, "failure")
 ggplot(data = d, aes(x = factor(x), y = value, fill = Outcome)) + 
     geom_bar(position = "stack", stat = "identity") + xlab("k") + 
     title("SNB(0.2, 7, 11)") + 
     ylab("Probability") + ylim(0, 0.25) +
     theme(text = element_text(size=15)) + 
-    theme_bw() + scale_fill_grey()
+    theme_bw() + scale_fill_grey(start=0.8, end=0.2)
 
 ggsave("snb_density.pdf")
 
@@ -134,11 +135,11 @@ b1 = dbinom(0:n, n, p)
 
 d = data.frame(list(x=0:n, y=b1))
 d$Outcome = factor(c(rep("failure", s), rep("success", n-s+1)))
-d$Outcome = relevel(d$Outcome, "success")
+d$Outcome = relevel(d$Outcome, "failure")
 
 ggplot(d, aes(x=factor(x), y=y, fill=Outcome)) +
   geom_bar(stat="identity") + xlab("k")+
-  title("Bin(0.2, 17)") + theme_bw() + scale_fill_grey() +
+  title("Bin(0.2, 17)") + theme_bw() + scale_fill_grey(start=0.8, end=0.2) +
   ylab("") + ylim(0, 0.25) + theme(text = element_text(size=15))
 ggsave("bin_density.pdf")
 
@@ -198,7 +199,8 @@ ggsave("bayesian-sample-variance.pdf")
 # Variance of CSNB size
 # a) b)
 
-dsnb_plot(p, s, t) + ylab("Probability") + theme(text = element_text(size=15))
+dsnb_plot(p, s, t) + ylab("Probability") + theme(text = element_text(size=15)) +
+  theme_bw()
 ggsave("snb-first-plot.pdf")
 
 ps = seq(0, 1, by=0.01)
@@ -224,21 +226,29 @@ y$type[y$type=='exp'] = "Mean"
 y$type[y$type=='var'] = "Variance"
 p = ggplot(y, aes(x=p, y=value)) + geom_line() + 
   facet_grid(type ~ ., scales="free") + ylab("") +
-  theme(text = element_text(size=15))
+  theme(text = element_text(size=15)) + theme_bw()
 ggsave("mean-and-variance.pdf")
 
-# Assume the Haldane prior.
+# Assume the Jeffreys prior.
 pp = function(x, k, s, t) {
   denom = choose(k-1, s-1) * beta(s, k-s) + choose(k-1, t-1) * beta(k-t, t)
   ret = foreach(p = x, .combine=rbind) %do% {
-    c(choose(k-1, s-1) * p^(s-1) * (1-p)^(k-s-1), 
-      choose(k-1, t-1) * p^(k-t-1) * (1-p)^(t-1))
+    c(choose(k-1, s-1) * p^(s-1+.5) * (1-p)^(k-s-1+.5), 
+      choose(k-1, t-1) * p^(k-t-1+.5) * (1-p)^(t-1+.5))
   }
   ret = cbind(ret, x)
-  colnames(ret) = c("s", "t", "p")
+  colnames(ret) = c("success", "failure", "p")
   rownames(ret) = NULL
-  ret
+  as.data.frame(ret)
 }
 
-x= pp(seq(0, 1, by=0.01), 15, s, t)
-
+x = pp(seq(0, 1, by=0.01), 15, s, t)
+x = gather(x, p)
+names(x) = c("p", "Outcome", "value")
+x$Outcome = relevel(factor(x$Outcome), "failure")
+#p = ggplot(x, aes(x=p, y=value, fill=Outcome)) + geom_area(position="stack") +
+p = ggplot(x, aes(x=p, y=value, fill=Outcome)) + 
+  geom_area(alpha=0.8, position="identity") +
+  theme_bw() + scale_fill_grey(start=0.8, end=0.2) + xlab(expression(x)) +
+  ylab(TeX("f_{P|Y}(x | k, s, t)")) 
+ggsave("beta-mixture.pdf", p, width=8, height=5)

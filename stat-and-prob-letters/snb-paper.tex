@@ -96,7 +96,7 @@ responding to treatment is $p=0.2$
 under the null hypothesis that the treatment is not effective.
 If seven or more patients out of these 17 respond to the treatment then we 
 reject this hypothesis and the treatment is deemed successful at 
-significance level of $0.1$.  If fewer than seven respond then the null 
+a significance level of $0.1$.  If fewer than seven respond then the null 
 hypothesis is not 
 rejected and the treatment is deemed ineffective.
 
@@ -108,7 +108,7 @@ successful patients is one endpoint and the number of enrollees required
 could be as small as seven. Similarly 11
 observed treatment failures also ends the trial. This sampling mechanism, in
 which the experiment ends as soon as any predefined endpoint is reached, is
-called {\em curtailed sampling}. Under curtailed sampling the range of the
+called {\em curtailed sampling}. Under curtailed sampling, the range of the
 sample size for this trial is seven through 17.
 
 Let us assume each patient outcome can be modeled as an independent,
@@ -128,7 +128,7 @@ A hypothetical sample path is illustrated in Fig.~\ref{fig:kane_viz}.
 The vertical axis denotes the number of
 successful outcomes. The horizontal axis counts the number of patients 
 enrolled. The horizontal and vertical boundaries represent
-endpoints for the trial. In this case a seventh response was reached on
+endpoints for the trial. In this case, a seventh response was reached on
 the $15^{\text{th}}$ enrollment.
 Since the success boundary is reached, we say the treatment succeeds.
 
@@ -173,7 +173,7 @@ When $p$ is large then the treatment is more likely to succeed and the
 number of enrollees approaches seven from above. 
 
 When $p=0$ or $1$ the processes are deterministic and variance is zero.
-Value of $p$ between zero and one change the mixing proportions of 
+Values between zero and one change the mixing proportions of 
 the two endpoints. The saddle around $p=0.25$ results from inequality 
 in the size of the support of the two endpoints.
 
@@ -203,7 +203,7 @@ in the size of the support of the two endpoints.
 %\end{center}
 %\end{table}
 
-In the rest of this work we derive the distribution of the number of 
+In the rest of this work, we derive the distribution of the number of 
 enrollees needed
 to observe either $s$ successes or $t$ failures. We refer to this distribution
 as the Stopped Negative Binomial (SNB). 
@@ -367,9 +367,10 @@ shown in in Fig.~\ref{shapes.fig}.
 The SNB generalizes both the minimum (riff-shuffle) and maximum negative
 binomial distributions up to a translation of the support.
 For the special case of $\,s=t,$ the distribution of $\,Y\,$ is the
-riff-shuffle, or minimum negative binomial distribution~\citep{Uppuluri1967}.
-The maximum negative binomial \cite{Zhang2000,Zelterman2005} is the smallest 
-number of outcomes necessary to 
+riff-shuffle, or minimum negative binomial 
+distribution~\citep{Uppuluri1967,Johnson2005}.
+The maximum negative binomial \cite{Zhang2000,Zelterman2005,Johnson2005} is 
+the smallest number of outcomes necessary to 
 observe at least $s$ responders {\em and} $s$ non-responders and is equivalent
 to a translated version of the riff-shuffle. 
 
@@ -508,11 +509,11 @@ in terms of a cumulative binomial distribution
 \mathcal{I}_{1-pe^x}(t, s) = \mathbb{P}\left[ B \leq s-1 \right]
 \end{equation*}
 where $B$ is distributed as
-Binomial($t-k$, $pe^x$). By Hoeffding's inequality \cite{Hoeffding1963}
+Binomial($t-k$, $pe^x$). By Chebychev's inequality %\cite{Hoeffding1963}
 it follows that
 \begin{equation} \label{eqn:hoeffding}
 \mathbb{P}\left[ B \leq s-1 \right] \leq 
-  \exp \left(-2\frac{((t-k)pe^x - s-1)^2}{t-k} \right).
+  \frac{ (t-k) pe^x (1-pe^x) }{ \left(s - (t-k)pe^x\right)^2 }
 \end{equation}
 As $t$ gets large $\mathcal{I}_{1-pe^x}(t, s)$ goes to zero
 Likewise, $\mathcal{I}_{1-qe^x}(s, t)$ goes
@@ -538,46 +539,90 @@ it is shown that if the mean of a Poisson is proportional
 to a chi-square distribution with $2k$ degrees of freedom
 then the negative binomial is obtained. 
 Both of these approximations work by equating cumulants and then showing 
-that differences between betwen the cumulant generating
+that differences between the cumulant generating
 functions converge to zero.
 
 The lower-half normal distribution can be approximated by setting $s=t$
 for appropriately large $s$ and $t$ and $p = 0.5$. In this
-case the SNB can be viewed as identical, negative binomials
+case, the SNB can be viewed as identical, negative binomials
 approximating a normal and truncated at the median.
 
 \section{The Posterior and Predictive Probability Distribution}
 
-Let us consider the posterior distribution of $p$ with an SNB likelihood 
-and Beta($\alpha$, $\beta$) prior distribution.
+Let us consider the case where the rate parameter is distributed 
+as Beta($\alpha$, $\beta$) and denoted $P$.
 The prior times the likelihood is given by the function
 \begin{align} \label{eqn:ptl}
-f_p(x | \alpha, \beta ) f_{Y|p}(x | k, s, t) &= 
-  \frac{ {k-1 \choose s-1} }{B(\alpha, \beta)} x^{\alpha +s -1} 
-    (1-x)^{k+\beta-s-1} + \\
+f_P(p, \alpha, \beta ) f_{Y|P}(p, k, s, t) &= 
+  \frac{ {k-1 \choose s-1} }{B(\alpha, \beta)} p^{\alpha +s -1} 
+    (1-p)^{k+\beta-s-1} + \\
   & \frac{ {k-1 \choose t-1} }{B(\alpha, \beta)} p^{k+\alpha -t -1} 
-    (1-x)^{\beta+t-1} \nonumber
+    (1-p)^{\beta+t-1} \nonumber
 \end{align}
-where $0 \leq x \leq 1$, $s \leq k \leq s+k-1$, and $t \leq k \leq s+k-1$.
+where $0 \leq p \leq 1$, $s \leq k \leq s+k-1$, and $t \leq k \leq s+k-1$.
 This result can be found directly by multiplying the probability mass function
 in (\ref{eqn:pmf}) by the density of the Beta distribution.
 
 The predictive distribution of the SNB can be found by integrating
-$x$ over the interval zero to one and applying the definition of the 
+$p$ over the interval zero to one and applying the definition of the 
 beta function.
 \begin{align} \label{eqn:predictive}
-\int_0^1 f_p(x | \alpha, \beta )  f_{Y|p}(x | k, s, t) & dx = 
-  {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} 
-    + \nonumber \\
-  & {k-1 \choose t-1} 
+f_{Y}(k, s, &t, \alpha, \beta) = 
+  \int_0^1 f_P(p | \alpha, \beta )  f_{Y|P}(p, k, s, t) dp \nonumber \\ 
+ & = {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} 
+    + {k-1 \choose t-1} 
     \frac{B\left(\alpha + k - t, t+\beta\right)}{B(\alpha, \beta)}.
 \end{align}
+If both $\alpha$ and $\beta$ are non-negative integers then the predictive
+distribution is a mixture of hypergeometric distributions. 
+\begin{align*} \label{eqn:hypergeo}
+f_{Y}(k, s, t, \alpha, \beta) = 
+  \frac{ {k - 1 \choose s - 1 } 
+         {\alpha + \beta \choose \alpha} }{
+         {\alpha + \beta + k - 1 \choose \alpha + s}}
+  \frac{\alpha}{\alpha + \beta}
+  \frac{ \beta }{ k-s+\beta } +
+  \frac{ {k - 1 \choose t - 1} 
+         {\alpha + \beta \choose \beta} 
+         }{
+         {\alpha + \beta + k -1 \choose t + \beta}
+       }
+  \frac{ \beta }{ \alpha + \beta}
+  \frac{ \alpha }{ k-t + \alpha}
+\end{align*}
+The ratio of combinations in the first term can be interpreted as the
+probability of $s-1$ responders from $k-1$ patients in $\alpha + s$ draws
+from a population size of $\alpha + \beta + k - 1$. This value is multiplied
+by $\alpha / (\alpha + \beta)$, the expected response rate of the prior. 
+The final term in the product weigths the prior based on the number
+of non-responders ($k-s$). Terms in the second summand are interpreted similarly
+for non-responders.
 
 The ratio of (\ref{eqn:ptl}) divided by (\ref{eqn:predictive}) gives the 
-posterior distribution of $p$. It is a mixture of beta distributions. The
+posterior distribution of $P$. It is a mixture of beta distributions. The
 mixing parameter depend on the endpoints ($s$ and $t$), the number of enrollees needed to reach an endpoint ($k$), and the prior parameters ($\alpha$ and
 $\beta$).
 
+\begin{figure}[t!]
+\centering
+\includegraphics[width=\textwidth]{beta-mixture.pdf}
+\caption{
+The posterior distribution of the response probability with 
+the Jeffreys prior ($\alpha=\beta=1/2$) for the trial where
+$s=7$, $t=11$, $k=15$.
+}
+\label{fig:beta_mixture}
+\end{figure}
+
+The posterior result above is for the case where the parameters are known
+and the endpoint is not. That is, we do not which boundary was reached.
+Fig.~\ref{fig:beta_mixture} shows this distribution based on the 
+parameters in the hypothetical trial assuming the
+Jeffreys prior \citep{Jeffreys1946}.  If we include the fact that the
+trajectory reaches the endpoint then the second terms in (\ref{eqn:ptl}) and
+(\ref{eqn:predictive}) are both zero and the posterior distribution is
+Beta(7.5, 8.5). This is proportional to the area labeled ``success'' in 
+Fig.~\ref{fig:beta_mixture}.
 
 %\begin{proof}
 %For notational simplicity, assume that $k$ is in the range
@@ -593,33 +638,33 @@ $\beta$).
 %beta function.
 %\end{proof}
 
-To better understand the predictive distribution, let us once again return to 
-our example where $s=7$, $t=11$. However, we assume $p$ has a beta distribution
-with shape parameters $\alpha = 0.2 c$ and $\beta = 0.8 c$ for any $c > 0$.
-This parameterization has mean 0.2 for all $c > 0$ and variance 
-$0.16 / (c+1)$.
+%To better understand the predictive distribution, let us once again return to 
+%our example where $s=7$, $t=11$. However, we assume $p$ has a beta distribution
+%with shape parameters $\alpha = 0.2 c$ and $\beta = 0.8 c$ for any $c > 0$.
+%This parameterization has mean 0.2 for all $c > 0$ and variance 
+%$0.16 / (c+1)$.
+%
+%
+%\begin{figure}[h!]
+%\centering
+%\subfloat[mean]{\includegraphics[width=0.5\textwidth]{bayesian-sample-expectation.pdf}}
+%\hfill
+%\subfloat[variance]{\includegraphics[width=0.5\textwidth]{bayesian-sample-variance.pdf}}
+%\caption{
+%The mean and variance of the predictive SNB with $s=7$, $t=11$
+%with $\mathbb{E}\ p = 0.2$ varying the uncertainty 
+%in the distribution of $p$. A larger value of $c$
+%corresponds to a beta variance.
+%}
+%\label{fig:bayesian-sample-size}
+%\end{figure}
 
-
-\begin{figure}[h!]
-\centering
-\subfloat[mean]{\includegraphics[width=0.5\textwidth]{bayesian-sample-expectation.pdf}}
-\hfill
-\subfloat[variance]{\includegraphics[width=0.5\textwidth]{bayesian-sample-variance.pdf}}
-\caption{
-The mean and variance of the predictive SNB with $s=7$, $t=11$
-with $\mathbb{E}\ p = 0.2$ varying the uncertainty 
-in the distribution of $p$. A larger value of $c$
-corresponds to a beta variance.
-}
-\label{fig:bayesian-sample-size}
-\end{figure}
-
-As $c$ increases the 
-predictive distribution sample statistics converge to corresponding 
-statistics for the SNB with $p = 0.2$. 
-For estimation it may be 
-preferable to select shape parameters based on the median or mode of the 
-beta distribution since they are less sensitive to distributional uncertainty.
+%As $c$ increases the 
+%predictive distribution sample statistics converge to corresponding 
+%statistics for the SNB with $p = 0.2$. 
+%For estimation it may be 
+%preferable to select shape parameters based on the median or mode of the 
+%beta distribution since they are less sensitive to distributional uncertainty.
 
 %%It may be noted that the compound 
 %%distribution's mean
