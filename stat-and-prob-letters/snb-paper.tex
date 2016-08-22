@@ -13,7 +13,7 @@
 \newtheorem{prop}{Proposition}
 \newtheorem{corollary}{Corollary}
 
-\modulolinenumbers[5]
+%\modulolinenumbers[5]
 
 \journal{Statistics and Probability Letters}
 
@@ -85,7 +85,7 @@ discrete distribution\sep curtailed sampling
 
 \end{frontmatter}
 
-\linenumbers
+%\linenumbers
 
 \section{Introduction and Motivation}
 
@@ -104,7 +104,7 @@ If all 17 patients are enrolled at once, as in the classic
 design, then the sample size is 17. However, in most clinical trials the
 patients are enrolled sequentially over time.
 In the present example, observing seven
-successful patients is one endpoint and the number of enrollees required
+successful patients ends the trial and so the number of enrollees required
 could be as small as seven. Similarly 11
 observed treatment failures also ends the trial. This sampling mechanism, in
 which the experiment ends as soon as any predefined endpoint is reached, is
@@ -117,7 +117,8 @@ as a sequence of Bernoulli samples stopping when either a
 specified number of responders or non-responders has been reached. 
 
 \begin{figure}[bp!]
-\includegraphics[width=\textwidth]{KanePlot.pdf}
+\centering
+\includegraphics[width=0.9\textwidth]{KanePlot.pdf}
 \caption{
 A hypothetical realization of the trial.
 }
@@ -145,11 +146,12 @@ Since the success boundary is reached, we say the treatment succeeds.
 
 \begin{figure}[bp!]
 \centering
-\subfloat[enrollment distribution]{\includegraphics[width=0.5\textwidth]{snb-first-plot.pdf}}
+\subfloat[enrollment distribution]{\includegraphics[width=0.45\textwidth]{snb-first-plot.pdf}}
 \hfill
-\subfloat[mean and variance varying $p$]{\includegraphics[width=0.5\textwidth]{mean-and-variance.pdf}}
+\subfloat[mean and variance varying $p$]{\includegraphics[width=0.45\textwidth]{mean-and-variance.pdf}}
 \caption{
-The distribution of a trial that stops after seven patients respond to treatment
+The distribution of the sample size in a trial that stops after seven 
+patients respond to treatment
 or 11 patients do not. Panel (a) shows the distribution when
 $p = 0.2$. The mean and variance of the distribution varying $p$ 
 between zero and one are shown in panel (b).
@@ -308,15 +310,18 @@ To show that (\ref{eqn:pmf}) sums to one, define
 R = \sum_{k=s}^{s+t-1} S(k, p, s) + \sum_{k=t}^{s+t-1} S(k, 1-p, t).
 \end{equation*}
 If we substitute $i=k-s$ in the first summation and $j=k-t$ in the second then
-$R$ can be written as the cumulative distribution function of two
+$R$ can be written as the cumulative distribution function (CDF) of two
 negative binomial distributions:
 \begin{equation} \label{eqn:transformed_sum}
 R = \sum_{i=0}^{t-1} {i+s-1 \choose i} p^s (1-p)^i \; + \;
 \sum_{j=0}^{s-1} {j+t-1 \choose j} p^j (1-p)^t.
 \end{equation}
 
-Let $\mathcal{I}_p(s, t)$ be the {\em regularized incomplete beta function} 
-\citep{Olver2010}. This function satisfies 
+The CDF of the negative binomial is commonly expressed in terms of the
+{\em regularized incomplete beta function} \citep{Olver2010}. Using standard
+notation, the first summation in (\ref{eqn:transformed_sum})
+is written as $\mathcal{I}_{1-p}(t, s)$.
+This function satisfies 
 $\mathcal{I}_p(s, t) = 1-\mathcal{I}_{1-p}(t, s)$ \citep{Uppuluri1967}. Then
 \begin{align*}
 R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
@@ -343,7 +348,7 @@ non-responders needed to reach the failure endpoint.
 
 \begin{figure}[p!]
 \begin{center}
-\includegraphics[width=\textwidth]{shapes.pdf}
+\includegraphics[width=0.8\textwidth]{shapes.pdf}
 \end{center}
 \caption{Different shapes of the SNB distribution with parameters 
 ($p$, $s$, $t$), as given. Black indicates mass contributed by reaching
@@ -369,7 +374,7 @@ binomial distributions up to a translation of the support.
 For the special case of $\,s=t,$ the distribution of $\,Y\,$ is the
 riff-shuffle, or minimum negative binomial 
 distribution~\citep{Uppuluri1967,Johnson2005}.
-The maximum negative binomial \cite{Zhang2000,Zelterman2005,Johnson2005} is 
+The maximum negative binomial \cite{Johnson2005,Zhang2000,Zelterman2005} is 
 the smallest number of outcomes necessary to 
 observe at least $s$ responders {\em and} $s$ non-responders and is equivalent
 to a translated version of the riff-shuffle. 
@@ -533,7 +538,7 @@ yields a normal approximation.
 
 Drawing connections to the gamma and Poisson distributions are more complicated.
 However a connection to the gamma distribution well-studied problem in the 
-literature (see \cite{Ord1968,Guenther1972,Best1974} for examples). 
+literature (see \cite{Best1974,Ord1968,Guenther1972} for examples). 
 A connection to the Poisson appears in \cite{Anscombe1950} where
 it is shown that if the mean of a Poisson is proportional
 to a chi-square distribution with $2k$ degrees of freedom
