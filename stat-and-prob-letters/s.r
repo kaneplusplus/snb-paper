@@ -77,11 +77,11 @@ approx_plots_start = list(
     labs(x="", y="", title="gamma approximation (0.06, 3, 175)") + theme_bw()+
     scale_fill_grey(),
   dsnb_stack_plot(0.5, 25, 25) + scale_x_discrete(breaks=seq(25, 50, by=5))+
-    labs(x="", y="", title="lower half normal / riff-shuffle  (0.5, 25, 25)") + 
+    labs(x="", y="", title="lower half normal (0.5, 25, 25)") + 
     theme_bw() + scale_fill_grey(),
   dsnb_stack_plot(p=0.45, 25, 25) + 
     scale_x_discrete(breaks=seq(25, 49, by=3))+
-    labs(x="", y="", title="riff-shuffle (0.45, 25, 25)") + 
+    labs(x="", y="", title="upper truncated normal (0.45, 25, 25)") + 
     theme_bw() + scale_fill_grey())
 
 library(foreach)
@@ -252,3 +252,121 @@ p = ggplot(x, aes(x=p, y=value, fill=Outcome)) +
   theme_bw() + scale_fill_grey(start=0.8, end=0.2) + xlab(expression(x)) +
   ylab(TeX("f_{P|Y}(x | k, s, t)")) 
 ggsave("beta-mixture.pdf", p, width=8, height=5)
+
+
+library(grid)
+library(latex2exp)
+
+theta = pi / 3
+uo = cos(theta)
+ua = sin(theta)
+do = ua
+da = uo
+
+sx = 1/(tan(theta) +1)
+sy = -sx + 1
+
+p1 = ggplot() +
+  geom_segment(mapping=aes(x=0, y=0, xend=1, yend=0)) + 
+  geom_segment(mapping=aes(x=0, y=0, xend=0, yend=1)) +
+  geom_segment(mapping=aes(x=0, y=0, xend=sx, yend=sy),
+    arrow=arrow(length=unit(.1, "inches"))) +
+  geom_curve(mapping=aes(x=sx/2.5, y=sy/2.5, xend=0, yend=1/3),
+    curvature=0.3) +
+  geom_curve(mapping=aes(x=1/4.5, y=0, xend=sx/3.5, yend=sy/3.5),
+    curvature=0.35) +
+  annotate("text", x=0.15, y=0.5, 
+    label=TeX("$\\pi/2 - \\Theta$", output="character"), parse=TRUE) +
+  annotate("text", x=0.25, y=.125, label=TeX("$\\Theta$", 
+           output="character"), parse=TRUE) + xlab("") +ylab("") +
+  scale_x_continuous(breaks = seq(0, 1, by=0.5), limits=seq(0, 1)) +
+  scale_y_continuous(breaks=seq(-1, 1, by=0.5), limits=c(-1, 1) ) +
+  theme_bw()
+ggsave("proc.pdf", p1, width=3, height=6)
+  
+p2 = ggplot() + 
+  geom_segment(mapping=aes(x=0, y=0, xend=ua, yend=uo)) + 
+  geom_segment(mapping=aes(x=0, y=0, xend=da, yend=-do)) +
+  geom_curve(mapping=aes(x=1/4, y=0, xend=ua/4, yend=uo/4), curvature=0.2) +
+  geom_curve(mapping=aes(x=da/6, y=-do/6, xend=1/6, yend=0), curvature=0.4) +
+  geom_segment(mapping=aes(x=0, y=0, xend=sqrt(sx^2+sy^2), yend=0),
+    arrow=arrow(length=unit(.1, "inches"))) +
+  annotate("text", x=0.45, y=0.1, 
+    label=TeX("$\\pi/2 - \\Theta$", output="character"), parse=TRUE) +
+  annotate("text", x=0.2, y=-0.10, 
+    label=TeX("$\\Theta$", output="character"), parse=TRUE)  +
+  theme_bw() +xlab("") + ylab("") + 
+  scale_x_continuous(breaks = seq(0, 1, by=0.5), limits=seq(0, 1)) +
+  scale_y_continuous(breaks=seq(-1, 1, by=0.5), limits=c(-1, 1) ) 
+
+ggsave("proc-rot.pdf", p2, width=3, height=6)
+
+p = zplot(outcomes, 7, 11, bw=TRUE) + ylab("Response") + 
+  xlab("Non-Response") + theme_bw() + 
+  geom_text(data=NULL, x=11/2, y=7.2, label="Success Boundary") +
+  geom_text(data=NULL, x=11.5-.2, y=7/2, label="Failure Boundary", angle=-90) 
+
+ggsave("zplot.pdf", p, width=11, height=7)
+
+s=7
+t=11
+n=s+t-1
+psnb(7:n, 0.2, s, t)
+
+lbeq = function(t, a, b) {
+  abs(a)/(t^(3/2)) * dnorm( (a+b*t) / sqrt(t) )
+}
+
+# from the coord on the zplot to the reparameterized space for the
+# success barrier.
+ucoord = function(m, theta) {
+  y = m[,2]
+  x = m[,1]
+  yu = (-x*sin(theta) + s*cos(theta)) * cos(theta)
+  xu = (x*cos(theta)  + s*sin(theta)) + sin(theta)
+  cbind(xu, yu)
+}
+
+# Same thing, but for the failure barrier.
+lcoord = function(m, theta) {
+  y = m[,2]
+  x = m[,1]
+  yl = (y*cos(theta) - t*sin(theta))*sin(theta)
+  xl = (y*sin(theta) + t*cos(theta))*cos(theta)
+  cbind(xl, yl)
+}
+
+cum_approx = function(q, prob, s, t) {
+  theta = atan(prob)
+  yu0 = s*cos(theta)^2
+  xu0 = s*sin(theta)^2
+  yu1 = (-(t-1) * sin(theta) + s*cos(theta))*cos(theta)
+  xu1 = ( (t-1) * cos(theta) + s*sin(theta))*sin(theta)
+  bu = -(tan(theta)^2)
+  au = s/(cos(theta)^2)
+  u_denom = sum(lbeq(seq(xu0, xu1, length.out=1000), au, bu)*(xu1-xu0)/1000)
+  u_num = 0
+  # Can you even get to success bro?
+  if (q >= s) {
+    xvec = seq(0, min(q-s+1, t-1), length.out=1000)
+    yvec = rep(s, length(xvec))
+    uc = ucoord(theta)
+    u_num = sum(lbeq(uc[,1], au, bu) * (max(uc[,1]) - min(uc[,1]))/1000)
+  }
+  
+  yl0 = -t*sin(theta)*sin(theta)
+  xl0 = t*cos(theta)*cos(theta)
+  yl1 = ( (s-1)*cos(theta) - t*sin(theta) )*sin(theta)
+  xl1 = ( (s-1)*sin(theta) + t*cos(theta) )*cos(theta)
+  bl = 1/(tan(theta)^2)
+  al = -t/(sin(theta)^2)
+  l_denom = sum(lbeq(seq(xl0, xl1, length.out=1000), al, bl)*(xl1-xl0)/1000)
+  l_num = 0
+  if (q >= t) {
+    xvec = seq(0, min(q-s+1, s-1), length.out=1000)
+    yvec = rep(t, length(xvec))
+    lc = lcoord(theta)
+    lnum = sum(lbeq(lc[,1], al, bl) * (max(lc[,1]) - min(lc[,1]))/1000)
+  }
+  (u_num + l_num) /  (u_denom + l_denom)
+} 

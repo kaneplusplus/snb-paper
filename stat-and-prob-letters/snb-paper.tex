@@ -1,11 +1,16 @@
 
-\documentclass[review]{elsarticle}
+%\documentclass[review]{elsarticle}
+\documentclass[12pt]{article}
 
 \usepackage{lineno}
 
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{setspace}
+\doublespacing
 %\usepackage{url}
 \usepackage{subfig}
 \DeclareMathOperator*{\argmin}{argmin}
@@ -15,7 +20,7 @@
 
 %\modulolinenumbers[5]
 
-\journal{Statistics and Probability Letters}
+%\journal{Statistics and Probability Letters}
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %% Elsevier bibliography styles
@@ -39,19 +44,21 @@
 %\usepackage{numcompress}\bibliographystyle{model6-num-names}
 
 %% `Elsevier LaTeX' style
-\bibliographystyle{elsarticle-num}
+%\bibliographystyle{elsarticle-num}
+\bibliographystyle{plain}
 %%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
-\begin{frontmatter}
+%\begin{frontmatter}
 
-\title{A Stopped Negative Binomial Distribution}
-\tnotetext[mytitlenote]{This research was supported by grants R01CA131301, 
-R01CA157749, R01CA148996, R01CA168733, and PC50CA196530 awarded by the 
-National Cancer Institute along with support from the Yale Comprehensive Cancer 
-Center and the Yale Center for Outcomes Research. We would also like 
-to thank Rick Landin at Ignyta Inc. for his suggestions.}
+\title{Clinical Trial Design Using A Stopped Negative Binomial Distribution}
+\maketitle
+%\tnotetext[mytitlenote]{This research was supported by grants R01CA131301, 
+%R01CA157749, R01CA148996, R01CA168733, and PC50CA196530 awarded by the 
+%National Cancer Institute along with support from the Yale Comprehensive Cancer 
+%Center and the Yale Center for Outcomes Research. We would also like 
+%to thank Rick Landin at Ignyta Inc. for his suggestions.}
 
 %% Group authors per affiliation:
 %\author{Elsevier\fnref{myfootnote}}
@@ -59,16 +66,16 @@ to thank Rick Landin at Ignyta Inc. for his suggestions.}
 %\fntext[myfootnote]{Since 1880.}
 
 %% or include affiliations in footnotes:
-\author{Michelle DeVeaux}
-\ead{michelle.deveaux@yale.edu}
+%\author{Michelle DeVeaux}
+%\ead{michelle.deveaux@yale.edu}
 
-\author{Michael J. Kane$^*$\footnote{* Corresponding author}}
-\ead{michael.kane@yale.edu}
+%\author{Michael J. Kane$^*$\footnote{* Corresponding author}}
+%\ead{michael.kane@yale.edu}
 
-\author{Daniel Zelterman}
-\ead{daniel.zelterman@yale.edu}
+%\author{Daniel Zelterman}
+%\ead{daniel.zelterman@yale.edu}
 
-\address{Department of Biostatistics\\ School of Epidemiology and Public Health\\ Yale University, New Haven, CT}
+%\address{Department of Biostatistics\\ School of Epidemiology and Public Health\\ Yale University, New Haven, CT}
 
 \begin{abstract}
 We introduce a discrete distribution suggested by curtailed
@@ -79,11 +86,11 @@ or $t$ failures. This report provides a closed-form expression for the
 mass function and illustrates limiting approximations.
 \end{abstract}
 
-\begin{keyword}
-discrete distribution\sep curtailed sampling
-\end{keyword}
+%\begin{keyword}
+%discrete distribution\sep curtailed sampling
+%\end{keyword}
 
-\end{frontmatter}
+%\end{frontmatter}
 
 %\linenumbers
 
@@ -91,14 +98,16 @@ discrete distribution\sep curtailed sampling
 
 Consider a prototypical early phase, single-arm clinical trial in which 
 17 patients
-are enrolled and treated. The binomial probability of a patient 
+are enrolled and treated. Suppose the Bernoulli probability of a patient 
 responding to treatment is $p=0.2$ 
 under the null hypothesis that the treatment is not effective.
 If seven or more patients out of these 17 respond to the treatment then we 
 reject this hypothesis and the treatment is deemed successful at 
 a significance level of $0.1$.  If fewer than seven respond then the null 
 hypothesis is not 
-rejected and the treatment is deemed ineffective.
+rejected and the treatment is deemed ineffective. The trial is 
+realized as a sequence of Bernoulli($p$) samples stopping when either
+the specified number of responders or non-responders is reached.
 
 If all 17 patients are enrolled at once, as in the classic
 design, then the sample size is 17. However, in most clinical trials the
@@ -111,14 +120,9 @@ which the experiment ends as soon as any predefined endpoint is reached, is
 called {\em curtailed sampling}. Under curtailed sampling, the range of the
 sample size for this trial is seven through 17.
 
-Let us assume each patient outcome can be modeled as an independent,
-identically distributed Bernoulli($p$) random variable. The trial is realized
-as a sequence of Bernoulli samples stopping when either a
-specified number of responders or non-responders has been reached. 
-
 \begin{figure}[bp!]
 \centering
-\includegraphics[width=0.9\textwidth]{KanePlot.pdf}
+\includegraphics[width=\textwidth]{KanePlot.pdf}
 \caption{
 A hypothetical realization of the trial.
 }
@@ -128,7 +132,7 @@ A hypothetical realization of the trial.
 A hypothetical sample path is illustrated in Fig.~\ref{fig:kane_viz}.
 The vertical axis denotes the number of
 successful outcomes. The horizontal axis counts the number of patients 
-enrolled. The horizontal and vertical boundaries represent
+enrolled. The horizontal and tilted vertical boundaries represent
 endpoints for the trial. In this case, a seventh response was reached on
 the $15^{\text{th}}$ enrollment.
 Since the success boundary is reached, we say the treatment succeeds.
@@ -146,28 +150,49 @@ Since the success boundary is reached, we say the treatment succeeds.
 
 \begin{figure}[bp!]
 \centering
-\subfloat[enrollment distribution]{\includegraphics[width=0.45\textwidth]{snb-first-plot.pdf}}
-\hfill
-\subfloat[mean and variance varying $p$]{\includegraphics[width=0.45\textwidth]{mean-and-variance.pdf}}
+\includegraphics[width=\textwidth]{snb-first-plot.pdf}
 \caption{
-The distribution of the sample size in a trial that stops after seven 
-patients respond to treatment
-or 11 patients do not. Panel (a) shows the distribution when
-$p = 0.2$. The mean and variance of the distribution varying $p$ 
-between zero and one are shown in panel (b).
+The distribution of the sample size in a trial that stops after seven patients
+respond to treatment or 11 do not when $p=0.2$.
 }
-\label{fig:exp-and-var}
+\label{fig:kane_viz}
 \end{figure}
 
-More generally the distribution of the number of trial enrollments is shown in 
-Fig.~\ref{fig:exp-and-var} (a). There is relatively little probability mass
+\begin{figure}[bp!]
+\centering
+\includegraphics[width=\textwidth]{mean-and-variance.pdf}
+\caption{
+The effect of varying $p$ between zero and one when the trial stops after
+seven patients respond or 11 do not.
+}
+\label{fig:kane_viz}
+\end{figure}
+
+
+%\begin{figure}[bp!]
+%\centering
+%\subfloat[enrollment distribution]{\includegraphics[width=0.45\textwidth]{snb-first-plot.pdf}}
+%\hfill
+%\subfloat[mean and variance varying $p$]{\includegraphics[width=0.45\textwidth]{mean-and-variance.pdf}}
+%\caption{
+%The distribution of the sample size in a trial that stops after seven 
+%patients respond to treatment
+%or 11 patients do not. Panel (a) shows the distribution when
+%$p = 0.2$. The mean and variance of the distribution varying $p$ 
+%between zero and one are shown in panel (b).
+%}
+%\label{fig:exp-and-var}
+%\end{figure}
+
+The distribution of the number of trial enrollments is shown in 
+Fig.~\ref{fig:kane_viz}. There is relatively little probability mass
 for values of sample size equal to seven through 10 since $p$ is small and it 
 is unlikely the treatment will succeed quickly.
 %The probability mass is concentrated at the 
 %$11^{\text{th}}$ and $12^{\text{th}}$ step since $p$ 
 %is small and for most realizations reach 11 
 %non-responders before reaching 2 responders.
-Fig.~\ref{fig:exp-and-var} (b) shows the expected value and variance for the
+Fig.~\ref{fig:kane_viz} shows the expected value and variance for the
 number of trial enrollments varying $p$ between zero and one. When $p$ is
 small then the treatment
 is more likely to fail shortly after the $11^{\text{th}}$ enrollment.
@@ -231,6 +256,7 @@ distributed, Bernoulli random variables with $\mathbb{P}[b_i=1]=p$ and
 $\mathbb{P}[b_i = 0] = 1-p$, for
 probability parameter $0\leq p \leq 1$. In the clinical trial setting
 $\,b_i = 1$ corresponds to a patient responding to treatment.  
+
 Let $s$ and $t$ be positive integers.  Define the SNB random
 variable $Y$ as the smallest
 integer value such that $\,\{b_1, \ldots , b_Y\}\,$ contains {\em either}
@@ -252,7 +278,10 @@ of one if $f$ is true and zero otherwise, and
 \begin{equation} \label{eqn:N}
 S(k, p, s) = {k-1 \choose s-1} p^s (1-p)^{k-s} 
 \end{equation}
-is the negative binomial probability mass.
+is the negative binomial probability mass. 
+The CDF of the negative binomial is commonly expressed in terms of the
+{\em regularized incomplete beta function} \citep{Olver2010}. Using standard
+notation, (\ref{eqn:N}) is written as $\mathcal{I}_{1-p}(t, s)$.
 
 To prove (\ref{eqn:pmf}), consider the
 process $\mathbf{X} = \left\{X(k) : k = 0,1,... \right\}$
@@ -290,7 +319,12 @@ in (\ref{eqn:N}).
 Similarly, the probability a given realization reaches $k-t$
 is the probability that, at outcome $k-1$, there are $k-t$ successful outcomes
 and $t-1$ unsuccessful outcomes multiplied by the probability of a final
-unsuccessful outcome at time $k$.  
+unsuccessful outcome at time $k$. That is,
+\begin{align*}
+p {k-1 \choose s=1} p^{s-1} & (1-p)^{k-s} + (1-p) {k-1 \choose k-t} p^{k-t} (1-p)^{t-1} \\ 
+& = S(k, p, s) + S(k, 1-p, t)
+\end{align*}
+as claimed in (\ref{eqn:pmf}).
 
 %Next, define
 %\begin{equation} \label{stop_t}
@@ -301,7 +335,7 @@ unsuccessful outcome at time $k$.
 %{k-1 \choose k-s} = {k-1 \choose s-1}.
 %\end{equation*}
 
-To show that (\ref{eqn:pmf}) sums to one, define
+To show (\ref{eqn:pmf}) sums to one, define
 %\begin{align} \label{eqn:sum_proof}
 %R &= \sum_{k=s}^{s+t-1} S(k, p, s) + \sum_{k=t}^{s+t-1} S(k, 1-p, t) \\
 %  &= \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s (1-p)^{k-s} + \sum_{k=t}^{s+t-1} {k-1 \choose k-t} p^{k-t} (1-p)^t
@@ -317,11 +351,7 @@ R = \sum_{i=0}^{t-1} {i+s-1 \choose i} p^s (1-p)^i \; + \;
 \sum_{j=0}^{s-1} {j+t-1 \choose j} p^j (1-p)^t.
 \end{equation}
 
-The CDF of the negative binomial is commonly expressed in terms of the
-{\em regularized incomplete beta function} \citep{Olver2010}. Using standard
-notation, the first summation in (\ref{eqn:transformed_sum})
-is written as $\mathcal{I}_{1-p}(t, s)$.
-This function satisfies 
+The regularized incomplete beta function satisfies
 $\mathcal{I}_p(s, t) = 1-\mathcal{I}_{1-p}(t, s)$ \citep{Uppuluri1967}. Then
 \begin{align*}
 R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
@@ -329,7 +359,7 @@ R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
    &= 1-\mathcal{I}_p(s, t) + 1 - \mathcal{I}_{1-p}(t, s) \\
    &= 1. 
 \end{align*}
-This completes the proof that (\ref{eqn:pmf}) is the distribution of the
+This completes the proof (\ref{eqn:pmf}) is the distribution of the
 stopping time and is a valid probability mass function.
 \end{proof}
 
@@ -351,7 +381,7 @@ non-responders needed to reach the failure endpoint.
 \includegraphics[width=0.8\textwidth]{shapes.pdf}
 \end{center}
 \caption{Different shapes of the SNB distribution with parameters 
-($p$, $s$, $t$), as given. Black indicates mass contributed by reaching
+($p$, $s$, $t$), as given. Black areas indicate the mass contributed by reaching
 $s$ responders before $t$ non-responders. Grey indicates
 mass contributed by reaching $t$ non-responders first. \label{shapes.fig}}
 \end{figure}
@@ -376,7 +406,7 @@ riff-shuffle, or minimum negative binomial
 distribution~\citep{Uppuluri1967,Johnson2005}.
 The maximum negative binomial \cite{Johnson2005,Zhang2000,Zelterman2005} is 
 the smallest number of outcomes necessary to 
-observe at least $s$ responders {\em and} $s$ non-responders and is equivalent
+observe at least $s$ responders {\em and} $s$ non-responders. This is equivalent
 to a translated version of the riff-shuffle. 
 
 %\section{Connection Between the SNB and the Binomial Tail Probability}
@@ -389,17 +419,16 @@ to a translated version of the riff-shuffle.
 %random variable with size $s+t-1$ and success probability $p$. 
 %Likewise, the probability of reaching the failure endpoint is equal
 %to the probability of at most $s-1$ successes in a binomial distribution. 
-There is an equivalence between the probability of reaching an endpoint 
+There is also an equivalence between the probability of reaching an endpoint 
 in the SNB model and the tail probability of the binomial distribution.
-That is, the probability that the number of responders is at least $s$ in the 
-binomial model is the same as the probability the treatment succeeds 
-(reaches $s$) in the SNB 
-model.
+Specifically, the probability that the number of responders is at least 
+$s$ in the binomial model is the same as the probability the treatment succeeds 
+(reaches $s$) in the SNB model.
 \begin{prop} \label{binomial_tail}
 Let $Y$ be distributed as SNB($p$, $s$, $t$) and let $X_Y$ correspond
 to the number of responders at the end of the trial. Let 
-$B$ be distributed binomial with size $n=s+t-1$ and response probability
-$p$. Then
+$B$ be distributed binomial with index parameter $n=s+t-1$ and response 
+probability $p$. Then
 \begin{equation}
 \mathbb{P}[B \geq s] = \mathbb{P} [X_Y = s].
 \end{equation}
@@ -409,13 +438,7 @@ The binomial tail probability is
 \begin{equation*}
 \mathbb{P}[B \geq s] = 1 - \mathcal{I}_{1-p}(s, t)
 \end{equation*}
-%\begin{align*}
-%\mathbb{P}[B \geq s] &= \sum_{k=s}^{s+t-1} {n \choose k} p^k (1-p)^{n-k} \\
-%  &= 1 - \sum_{k=0}^{s-1} {n \choose k} p^k (1-p)^{n-k} \\
-%  &= 1 - \mathcal{I}_{1-p}.
-%\end{align*}
-where $\mathcal{I}_{1-p}(s, t)$ is the {\em regularized incomplete beta} 
-function. The corresponding success probability is
+The corresponding success probability is
 \begin{equation} \label{eqn:success}
 \mathbb{P} [X_Y = s] 
   = \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s (1-p)^{k-s}.
@@ -487,60 +510,59 @@ The first summation in (\ref{eqn:first_sum}) satisfies
     (qe^x)^{k-s} (1-qe^x)^s \\
   &= \left(\frac{pe^x}{1 - qe^x}\right)^s \mathcal{I}_{1-qe^x}(s, t).
 \end{align*}
-Since the regularized incomplete beta function's subscript parameter 
-has support on zero 
-to one, we have $0 \leq qe^x < 1$. This implies
-$x < -\log(q)$.
+Since the $p$ parameter in $\mathcal{I}_p$ has support on zero 
+to one, we have $0 \leq pe^x < 1$. This implies $x < -\log(p)$.
 A similar expression can be derived for the second summation in 
 (\ref{eqn:first_sum}) and results in
-the constraint $x < -\log(p)$.
+the constraint $x < -\log(1-p)$.
 \end{proof}
 
-The SNB's ability to approximate the geometric, normal, gamma, and Poisson
-distributions follow from it generalizing the negative binomial distribution. 
+Depending on the parameter values the SNB can be approximated by 
+the geometric, normal, gamma, and Poisson
+distributions.
+
 \begin{prop}
 The MGF of the SNB converges to that of the negative binomial when either
 $s$ or $t$ gets large. That is
 \begin{equation*}
-\mathbb{E} e^{xY} \rightarrow \left( \frac{pe^x}{1-qe^x} \right)^s
+lim_{t\to\infty} \ \mathbb{E} e^{xY} = \left( \frac{pe^x}{1-qe^x} \right)^s
 \end{equation*}
-as $t \rightarrow \infty$. The analogous result holds when 
-$s \rightarrow \infty$.
+as. The analogous result holds when $s \rightarrow \infty$.
 \end{prop}
 \begin{proof}
-The second regularized incomplete beta term in (\ref{eqn:mgf}) can be written
+The second incomplete beta function in (\ref{eqn:mgf}) can be written
 in terms of a cumulative binomial distribution
 \begin{equation*}
 \mathcal{I}_{1-pe^x}(t, s) = \mathbb{P}\left[ B \leq s-1 \right]
 \end{equation*}
 where $B$ is distributed as
-Binomial($t-k$, $pe^x$). By Chebychev's inequality %\cite{Hoeffding1963}
+Binomial($t-k$, $pe^x$). From Chebychev's inequality %\cite{Hoeffding1963}
 it follows that
 \begin{equation} \label{eqn:hoeffding}
 \mathbb{P}\left[ B \leq s-1 \right] \leq 
   \frac{ (t-k) pe^x (1-pe^x) }{ \left(s - (t-k)pe^x\right)^2 }
 \end{equation}
-As $t$ gets large $\mathcal{I}_{1-pe^x}(t, s)$ goes to zero
-Likewise, $\mathcal{I}_{1-qe^x}(s, t)$ goes
-to one. The proof follows by realizing 
+As $t$ gets large $\mathcal{I}_{1-pe^x}(t, s)$ tends to zero
+and $\mathcal{I}_{1-qe^x}(s, t)$ approaches 
+one. The proof follows by realizing 
 \begin{equation*}
 0 < \frac{qe^x}{1-pe^x} < 1
 \end{equation*}
 over the support of $x$.
 \end{proof}
 
-When $s=1$ (and $t$ is still large) the SNB's MGF is approximately 
+When $s=1$ and $t$ is large the SNB's MGF is approximately 
 the same as that of the
 geometric distribution. The negative
 binomial can therefore be seen as a sum of i.i.d. geometric distributions.
-For an appropriately large number of samples, the central limit theorem
+For an appropriately large number of distributions, the central limit theorem
 yields a normal approximation.
 
-Drawing connections to the gamma and Poisson distributions are more complicated.
-However a connection to the gamma distribution well-studied problem in the 
+Drawing connections to the gamma and Poisson distributions can also be shown.
+A connection to the gamma distribution well-studied problem in the 
 literature (see \cite{Best1974,Ord1968,Guenther1972} for examples). 
 A connection to the Poisson appears in \cite{Anscombe1950} where
-it is shown that if the mean of a Poisson is proportional
+it is shown that when the mean of a Poisson is proportional
 to a chi-square distribution with $2k$ degrees of freedom
 then the negative binomial is obtained. 
 Both of these approximations work by equating cumulants and then showing 
@@ -549,30 +571,30 @@ functions converge to zero.
 
 The lower-half normal distribution can be approximated by setting $s=t$
 for appropriately large $s$ and $t$ and $p = 0.5$. In this
-case, the SNB can be viewed as identical, negative binomials
+case, the SNB can be viewed as identical, negative binomial distributions
 approximating a normal and truncated at the median.
 
 \section{The Posterior and Predictive Probability Distribution}
 
-Let us consider the case where the rate parameter is distributed 
+Let us consider the Bayesian setting where the rate parameter is distributed 
 as Beta($\alpha$, $\beta$) and denoted $P$.
-The prior times the likelihood is given by the function
+The posterior distribution of $P$ is proportional to the 
+likelihood, given by the function
+%f_P(p, \alpha, \beta ) f_{Y|P}(p, k, s, t) &= 
 \begin{align} \label{eqn:ptl}
-f_P(p, \alpha, \beta ) f_{Y|P}(p, k, s, t) &= 
+f_{P|Y}(p, k, s, t, & \alpha, \beta) \propto
   \frac{ {k-1 \choose s-1} }{B(\alpha, \beta)} p^{\alpha +s -1} 
-    (1-p)^{k+\beta-s-1} + \\
-  & \frac{ {k-1 \choose t-1} }{B(\alpha, \beta)} p^{k+\alpha -t -1} 
+    (1-p)^{k+\beta-s-1} \\
+  & + \frac{ {k-1 \choose t-1} }{B(\alpha, \beta)} p^{k+\alpha -t -1} 
     (1-p)^{\beta+t-1} \nonumber
 \end{align}
 where $0 \leq p \leq 1$, $s \leq k \leq s+k-1$, and $t \leq k \leq s+k-1$.
-This result can be found directly by multiplying the probability mass function
-in (\ref{eqn:pmf}) by the density of the Beta distribution.
 
-The predictive distribution of the SNB can be found by integrating
+The predictive distribution of the SNB can be found as by integrating
 $p$ over the interval zero to one and applying the definition of the 
 beta function.
 \begin{align} \label{eqn:predictive}
-f_{Y}(k, s, &t, \alpha, \beta) = 
+f_{Y}(&k, s, t, \alpha, \beta) = 
   \int_0^1 f_P(p | \alpha, \beta )  f_{Y|P}(p, k, s, t) dp \nonumber \\ 
  & = {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} 
     + {k-1 \choose t-1} 
@@ -629,106 +651,181 @@ trajectory reaches the endpoint then the second terms in (\ref{eqn:ptl}) and
 Beta(7.5, 8.5). This is proportional to the area labeled ``success'' in 
 Fig.~\ref{fig:beta_mixture}.
 
-%\begin{proof}
-%For notational simplicity, assume that $k$ is in the range
-%$\min(s,t) \leq k \leq s+t-1$. When 
-%this is not the case appropriate terms should be removed as dictated by the indicator functions.
-%\begin{align*}
-%f(k | s, t, \alpha, \beta) = \frac{1}{B(\alpha, \beta)} & \int_0^1 {k-1 \choose s-1} p^{\alpha +s -1} \left(1-p\right)^{k-s+\beta-1} + \\
-% & {k-1 \choose t-1} p^{k-t+\alpha-1}\left(1-p\right)^{t+\beta-1} dp \\
-%= \frac{1}{B(\alpha, \beta)}  {k-1 \choose s-1} & \int_0^1  p^{\alpha +s -1} \left(1-p\right)^{k-s+\beta-1} dp + \\
-% & \frac{1}{B(\alpha, \beta)} {k-1 \choose t-1} \int_0^1  p^{k-t+\alpha-1}\left(1-p\right)^{t+\beta-1} dp.
-%\end{align*}
-%The result in (\ref{eqn:posterior}) follows by the definition of the 
-%beta function.
-%\end{proof}
+\section{Powering Trials using Confidence Sets}
 
-%To better understand the predictive distribution, let us once again return to 
-%our example where $s=7$, $t=11$. However, we assume $p$ has a beta distribution
-%with shape parameters $\alpha = 0.2 c$ and $\beta = 0.8 c$ for any $c > 0$.
-%This parameterization has mean 0.2 for all $c > 0$ and variance 
-%$0.16 / (c+1)$.
-%
-%
-%\begin{figure}[h!]
-%\centering
-%\subfloat[mean]{\includegraphics[width=0.5\textwidth]{bayesian-sample-expectation.pdf}}
-%\hfill
-%\subfloat[variance]{\includegraphics[width=0.5\textwidth]{bayesian-sample-variance.pdf}}
-%\caption{
-%The mean and variance of the predictive SNB with $s=7$, $t=11$
-%with $\mathbb{E}\ p = 0.2$ varying the uncertainty 
-%in the distribution of $p$. A larger value of $c$
-%corresponds to a beta variance.
-%}
-%\label{fig:bayesian-sample-size}
-%\end{figure}
+The previous section shows the posterior distribution $P$ at each of the 
+endpoints in the domain is defined by a Beta distribution. This fact can be 
+used to provide power calculations based on confidence sets with specified 
+minimum response rate. Let $\mathcal{P}_s(s,t)$ be the set of random variables
+associated success. Then a trial whose minimum
+response rate is $p_{min}$ at a significance level of at least $\alpha_C$ is 
+one where each distribution is at least $p_{min}$ with probability 
+$1-\alpha_C$.  That is,
+\begin{equation} \label{pwr_signif}
+  \mathbb{P} \left[X > p_{min} \right] > (1 - \alpha_C) 
+  \ \ \forall X \in \mathcal{P}_s(s,t)
+\end{equation}
+Letting $\mathcal{Q}_t(s,t)$ be the set of random variables associated with
+failure, a trial whose power is at least $1-\beta_C$ has
+\begin{equation*} \label{pwr}
+  \mathbb{P} \left[X < p_{min} \right] < \beta_C
+  \ \ \forall X \in \mathcal{Q}_t(s,t).
+\end{equation*}
 
-%As $c$ increases the 
-%predictive distribution sample statistics converge to corresponding 
-%statistics for the SNB with $p = 0.2$. 
-%For estimation it may be 
-%preferable to select shape parameters based on the median or mode of the 
-%beta distribution since they are less sensitive to distributional uncertainty.
+\begin{prop} \label{alpha_c}
+Let $P_k$ be the posterior distribution of reaching the success endpoint
+at the $k$th enrollment with density
+\begin{equation*}
+f_k(p) = \frac{ {k-1 \choose s-1} }{B(\alpha, \beta)} p^{\alpha +s -1} 
+    (1-p)^{k+\beta-s-1}.
+\end{equation*}
+If $0 \leq \alpha_C \leq 1 - 1/k$ then 
+\begin{equation}
+\mathbb{P} \left[P_k \geq \alpha_C \right]  \leq
+  \mathbb{P} \left[P_{k-1} \geq \alpha_C \right].
+\end{equation}
+\end{prop}
+\begin{proof}
+Consider the ratio of the posterior distributions
+\begin{align*}
+\frac{f_k(p)}{f_{k+1}(p)} &= 
+  \frac{\frac{ {k-1 \choose s-1} }{B(\alpha, \beta)} p^{\alpha +s -1} 
+    (1-p)^{k+\beta-s-1}}
+    {\frac{ {k \choose s-1} }{B(\alpha, \beta)} p^{\alpha +s -1} 
+    (1-p)^{k+\beta-s}} \\
+  &= \frac{ p^{\alpha +s -1} (1-p)^{k+\beta-s-1} }
+    {k p^{\alpha +s -1} (1-p)^{k+\beta-s}} \\
+  &= \frac{1}{k(1-p)}.
+\end{align*}
+This implies that the density $f_{k+1}(p)$ is greater than $f_k(p)$ for
+all values of $0 \leq p \leq 1 - 1/k$. This implies the
+integral of $f_{k+1}(p)$ must also be greater than $f_k(p)$ over a similar
+interval. The result follows by realizing that this relationship is reversed
+over the complement of the interval.
+\end{proof}
 
-%%It may be noted that the compound 
-%%distribution's mean
-%%approaches the deterministic limit slowly. This
-%%is because when $c$ is small, the distribution of $p$ is heavily skewed. 
-%%As $c$ increases this effect is minimized.
-%When the distribution of $p$ is centered close to zero or one the mean 
-%estimate approach the deterministic limit relatively slowly in the uncertainty
-%parameter $c$.  
-%\section{Discussion}
-%
-%The SNB can be used to extend clinical trial methodology
-%in at least two areas. First, it can be used to construct nested criteria
-%for early stopping and efficacy. Current approaches are often inspired by
-%the Simon 2-stage Phase II clinical trial \cite{Simon1989} where a
-%a small number of patients are enrolled for an initial stage. For patients,
-%success or failure is assessed. If at least a pre-specified number of
-%successes are observed then the trial enters a second stage with more
-%patients. If a sufficient number of successes are not observed then the
-%trial fails. 
+The maximum significance of a trial is 
+$\mathbb{P} \left[P_{s+t-1} \leq \alpha_C \right]$ Proposition \ref{alpha_c}
+guarantees the significance for all other success endpoints will be smaller.
+A similar calculation can be performed for power to show that the minimum
+power is $\mathbb{P} \left[Q_{s+t-1} \leq 1 - \beta_C \right]$ where
+$Q_{s+t-1}$ is the posterior distribution of reaching a trial failure
+at the $s+t-1$ step.
 
-%The SNB is being used to generalize the Simon design by providing separate
-%criteria for futility and efficacy.
-%The Simon design tests for a single response probability and time-to-event
-%parameter for both the first
-%and second stage. The SNB is being used to generalize this design by 
-%allowing these parameters to vary for the two stages, and even allow
-%information about patients in the first stage to be used in the second
-%stage. Early results show the design provides
-%both early testing for futility along with the ability
-%to make statistically sound decisions sooner than traditional trials.
+These two results imply a relatively simple procedure for finding the sample
+size for trials of this type. A minimum response rate, maximum significance,
+and minimum power are selected. The task is to find the values of $s$ and
+$t$ that fulfill these requirements given the minimum response. Start with 
+$s = t = 1$. If the maximum significance criterion is not met then increase
+$s$ by one. If the minimum power criterion is not met then increase $t$ by
+one. Repeat the procedure until both criteria have been met. The sample
+size is then determined by the calculation $s+t-1$.
 
-%A second avenue for methodological innovation comes directly from
-%Corollary \ref{conditional_distribution} and Proposition \ref{prop:bayesian}.
-%Our knowledge of the response probability $p$ comes from published reports
-%yielding a prior distribution.
-%While a trial is being conducted the response probabilities are 
-%updated as new results are received. The number of individual successes
-%and failure are used to learn the shape characteristics of the corresponding
-%beta distribution and resulting posterior
-%distribution. An estimate of the probability of reaching the success (and
-%failure) endpoints can be provided at each step of the trial.
+\section{A Bayesian Sequential Probability Ratio Test}
 
-%There are also several avenues for extending the SNB itself. First is the 
-%development of a stopped negative multinomial distribution allowing
-%for more than two endpoints. This extension would have clinical trial
-%applications including dose escalation where the outcomes are response
-%to a therapy, failure to respond, and an adverse outcome endpoint where
-%an enrollee is removed from the trial with neither response or non-response
-%due to side effects.
+Keeping $s$ and $t$ constant for all time steps in the trial provides 
+mathematical convenience since the distribution can be calculated in closed 
+form. It should be noted though that any set of endpoints where every endpoint 
+can be reached defines a valid probability distribution. This fact allows us 
+to define new stopping criteria when defining success and failure endpoints.
 
-%A second, more theoretical extension is to the asymptotic setting. Under
-%proper reparameterization, the process from which the SNB is derived 
-%can be shown to converge to a Brownian motion. In this case, we conjecture
-%that the SNB can be defined in terms of the L\'{e}vy-Bachelier 
-%\citep{Bachelier1900} formula
-%thereby relating the SNB to the classic result in stochastic calculus.
+One such set of stopping criteria is based on the confidence sets of the 
+response rate from the previous section. Proposition (\ref{alpha_c}) shows 
+$\mathbb{P_k} [P_k \geq \alpha_c] \leq \mathbb{P}[P_{k-1} \geq \alpha_c]$. 
+That is, the probability the response rate is at least $p_{min}$ is increasing 
+in $-k$. This observation implies we can guarantee that the response rate is 
+greater than $p_min$ before reaching $s$ when a greater proportion of 
+successful outcomes are observed.
 
-\section*{References}
+Therefore, we can define a new set of success and failure endpoints that stop 
+a trial as soon as the response distribution is at least $\alpha_c$ or the 
+criteria cannot be met, based on the sample size. This design is analogous to 
+the Sequential Probability Ratio Test (SPRT) \cite{Wald1945} in that the 
+stopping criteria is defined by the ratio responders to non-responders, 
+through the beta prior. It has two distinct advantages though. First, unlike 
+the SPRT it has a maximum sample size, similar to the MaxSPRT 
+\cite{Kulldorff2011}, making it appropriate for small-sample studies. Second, 
+the stopping criteria are based on both a minimum response rate as well as the 
+degree of certainty, $1-\alpha$, that this response rate has been attained.
+
+
+
+
+\section{The Approximate Distribution for Two Linear Boundaries}
+
+Consider an alternative visualization of the sample path counting the 
+number of responders and non-responders in the vertical and horizontal 
+direction respectively, as in Figure \ref{fig:zplot}. This alternative
+formulation can be rotated and scaled to form a random walk on the integers.
+A functional central limit can be then applied when the endpoints are 
+sufficiently far from the origin and the process converges to a Brownian 
+motion. The hitting time of the success and failure endpoints is under 
+this reparameterization is a mixture of normal distributions.
+
+\begin{figure}[t!]
+\centering
+\includegraphics[width=\textwidth]{zplot.pdf}
+\caption{
+An alternative visualization of the hypothetical trial.
+}
+\label{fig:zplot}
+\end{figure}
+
+For a response rate $p$, the expected direction of each step in the sample 
+path is $\tan^{-1}(p)$ radians from the vertical direction.
+If the graph is rotated $\pi/2- \Theta$ radians then the 
+expected value of the process is zero at any time.
+Let $\Theta = tan^{-1}(p)$. Then, after rotation, the process moves 
+$\sin \Theta$ units in the horizontal direction and $\cos \Theta$ units in 
+the positive vertical direction for each response. Each non-response 
+corresponds to $\cos (\Theta)$ units in the horizontal direction and 
+$\sin \Theta$ units in the negative vertical direction. The rotation is shown 
+pictorially in Figure \ref{fig:theta_rot}.
+
+\begin{figure}[bp!] 
+\centering
+\subfloat[Before rotation]{\includegraphics[width=0.45\textwidth]{proc.pdf}}
+\hfill
+\subfloat[After rotation]{\includegraphics[width=0.45\textwidth]{proc-rot.pdf}}
+\caption{
+The direction of a single step in the binomial process before (a) and after
+rotation (b).
+}
+\label{fig:theta_rot}
+\end{figure}
+
+After the rotation, a response step is normalized by $\sin(\pi/2-\Theta)$ in the
+vertical direction and $\cos(\pi/2 - \Theta)$ in the horizontal direction.
+Likewise, a non-response step is normalized by $\sin(\Theta)$ and
+$\cos(\Theta)$ in the vertical and horizontal direction respectively. Each
+step is a Rademacher random variable. The
+resulting process forms a random walk on the integers. Let $m$ be the
+shortest path from the origin to any endpoint, let step $k=mt$
+the process, and let $R_i$ be a sample from a Rademacher random variable. Then
+it is well known that a c\'{a}dl\'{a}g version of the rescaled process on the
+natural filtration converges to a Brownian motion as $m$ gets large
+\begin{equation*}
+t \frac{1}{\sqrt{t m}} \sum_{i=0}^{t m} R_i \rightarrow
+B(t).
+\end{equation*}
+
+The density of the first time a Brownian motion hits a sloping line with
+intercept $a$ and is \cite{Bachelier1900}
+\begin{equation}
+f_{a,b}(t) = \frac{a}{t^{3/2}} \phi \left(\frac{a + bt}{\sqrt{t}} \right)
+\end{equation}
+where $\phi(t)$ is the density of the standard normal distribution at $t$.
+Therefore, for success and failure endpoints defined by lines 
+$a + bt$ and $a' + b't$ with support $[s_0 \leq t \leq s_m]$ and 
+$[r_0 \leq t \leq r_m]$ respectively, the density of the SNB approximation
+is 
+\begin{equation}
+f(t) = \frac{ f_{a,b}(t)[s_0 \leq t \leq s_m] + 
+  f_{a',b'}(t)[r_0 \leq t \leq r_m]}{
+  \int_{s_0}^{s_m} f_{a,b}(x) dx + \int_{r_0}^{r_m} f_{a',b'}(x) dx}.
+\end{equation}
+
+
 
 \bibliography{mybibfile}
 
