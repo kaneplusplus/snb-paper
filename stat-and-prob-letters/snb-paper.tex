@@ -106,8 +106,8 @@ reject this hypothesis and the treatment is deemed successful at
 a significance level of $0.1$.  If fewer than seven respond then the null 
 hypothesis is not 
 rejected and the treatment is deemed ineffective. The trial is 
-realized as a sequence of Bernoulli($p$) samples stopping when either
-the specified number of responders or non-responders is reached.
+realized as a sequence of indiependent Bernoulli($p$) samples stopping when 
+either the specified number of responders or non-responders is reached.
 
 If all 17 patients are enrolled at once, as in the classic
 design, then the sample size is 17. However, in most clinical trials the
@@ -155,7 +155,7 @@ Since the success boundary is reached, we say the treatment succeeds.
 The distribution of the sample size in a trial that stops after seven patients
 respond to treatment or 11 do not when $p=0.2$.
 }
-\label{fig:kane_viz}
+\label{fig:kane_viz_1}
 \end{figure}
 
 \begin{figure}[bp!]
@@ -165,7 +165,7 @@ respond to treatment or 11 do not when $p=0.2$.
 The effect of varying $p$ between zero and one when the trial stops after
 seven patients respond or 11 do not.
 }
-\label{fig:kane_viz}
+\label{fig:kane_viz_2}
 \end{figure}
 
 
@@ -185,14 +185,14 @@ seven patients respond or 11 do not.
 %\end{figure}
 
 The distribution of the number of trial enrollments is shown in 
-Fig.~\ref{fig:kane_viz}. There is relatively little probability mass
+Fig.~\ref{fig:kane_viz_1}. There is relatively little probability mass
 for values of sample size equal to seven through 10 since $p$ is small and it 
 is unlikely the treatment will succeed quickly.
 %The probability mass is concentrated at the 
 %$11^{\text{th}}$ and $12^{\text{th}}$ step since $p$ 
 %is small and for most realizations reach 11 
 %non-responders before reaching 2 responders.
-Fig.~\ref{fig:kane_viz} shows the expected value and variance for the
+Fig.~\ref{fig:kane_viz_2} shows the expected value and variance for the
 number of trial enrollments varying $p$ between zero and one. When $p$ is
 small then the treatment
 is more likely to fail shortly after the $11^{\text{th}}$ enrollment.
@@ -281,7 +281,9 @@ S(k, p, s) = {k-1 \choose s-1} p^s (1-p)^{k-s}
 is the negative binomial probability mass. 
 The CDF of the negative binomial is commonly expressed in terms of the
 {\em regularized incomplete beta function} \citep{Olver2010}. Using standard
-notation, (\ref{eqn:N}) is written as $\mathcal{I}_{1-p}(t, s)$.
+notation, (\ref{eqn:N}) is written as $\mathcal{I}_{1-p}(t, s)$ and has
+the property $\mathcal{I}_{1-p}(t, s) = 1 - \mathcal{I}_p(s, t)$
+\citep{Uppuluri1967}.
 
 To prove (\ref{eqn:pmf}), consider the
 process $\mathbf{X} = \left\{X(k) : k = 0,1,... \right\}$
@@ -289,14 +291,14 @@ with $X(0)=0$ and
 \begin{equation*} \label{eqn:proc}
 X_{k+1} = X_k + b_{k+1} \ I_{\{ k-t < X_k < s\}}.
 \end{equation*}
-At each step a patient's outcome is measured. In Fig.~\ref{fig:kane_viz} 
+At each step a patient's outcome is measured. In Fig.~\ref{fig:kane_viz_1} 
 we consider a graphical illustration of the plot $X_k$ against
 $k$. If the outcome of the $k$th patient responds to treatment then the process 
 advances diagonally in the positive horizontal and vertical direction. 
 If the $k$th patient does not respond
 then the sample path advances in the positive horizontal direction only. The
 process continues until either $X_k = s$ or $X_k = k-t$ corresponding to the
-success and failure boundaries in Fig. \ref{fig:kane_viz}, respectively.
+success and failure boundaries in Fig. \ref{fig:kane_viz_2}, respectively.
 
 \begin{prop}
 The distribution of the stopping time
@@ -343,7 +345,7 @@ To show (\ref{eqn:pmf}) sums to one, define
 \begin{equation*} 
 R = \sum_{k=s}^{s+t-1} S(k, p, s) + \sum_{k=t}^{s+t-1} S(k, 1-p, t).
 \end{equation*}
-If we substitute $i=k-s$ in the first summation and $j=k-t$ in the second then
+Substitute $i=k-s$ in the first summation and $j=k-t$ in the second then
 $R$ can be written as the cumulative distribution function (CDF) of two
 negative binomial distributions:
 \begin{equation} \label{eqn:transformed_sum}
@@ -351,8 +353,7 @@ R = \sum_{i=0}^{t-1} {i+s-1 \choose i} p^s (1-p)^i \; + \;
 \sum_{j=0}^{s-1} {j+t-1 \choose j} p^j (1-p)^t.
 \end{equation}
 
-The regularized incomplete beta function satisfies
-$\mathcal{I}_p(s, t) = 1-\mathcal{I}_{1-p}(t, s)$ \citep{Uppuluri1967}. Then
+Then
 \begin{align*}
 R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
 \sum_{j=0}^{s-1}  {j+t-1 \choose j} p^j  (1-p)^t \\
@@ -390,7 +391,7 @@ The SNB is a generalization of the negative
 binomial distribution. When $t$ is large then $Y-s$ has a 
 negative binomial distribution with
 \begin{equation*}                                    %   (1)   
-\mathbb{P}[Y=s+j\ |\ t \text{ is large\ }]        \label{nb1.eq}          
+\mathbb{P}[Y=s+j ]        \label{nb1.eq}          
   = {{s+j-1}\choose{s-1}} p^s (1-p)^j
 \end{equation*}
 for $\,j=0, 1,\ldots\,$. A similar statement can be made when $s$ is large
@@ -698,7 +699,7 @@ Consider the ratio of the posterior distributions
   &= \frac{1}{k(1-p)}.
 \end{align*}
 This implies that the density $f_{k+1}(p)$ is greater than $f_k(p)$ for
-all values of $0 \leq p \leq 1 - 1/k$. This implies the
+all values of $0 \leq p \leq 1 - 1/k$. The
 integral of $f_{k+1}(p)$ must also be greater than $f_k(p)$ over a similar
 interval. The result follows by realizing that this relationship is reversed
 over the complement of the interval.
@@ -723,18 +724,19 @@ size is then determined by the calculation $s+t-1$.
 
 \section{A Bayesian Sequential Probability Ratio Test}
 
-Keeping $s$ and $t$ constant for all time steps in the trial provides 
+Keeping $s$ and $t$ constant for all time steps in a trial provides 
 mathematical convenience since the distribution can be calculated in closed 
 form. It should be noted though that any set of endpoints where every endpoint 
-can be reached defines a valid probability distribution. This fact allows us 
+can be reached by the process $\mathbf X$ defines a valid probability 
+distribution. This fact allows us 
 to define new stopping criteria when defining success and failure endpoints.
 
 One such set of stopping criteria is based on the confidence sets of the 
 response rate from the previous section. Proposition (\ref{alpha_c}) shows 
-$\mathbb{P_k} [P_k \geq \alpha_c] \leq \mathbb{P}[P_{k-1} \geq \alpha_c]$. 
+$\mathbb{P} [P_k \geq \alpha_c] \leq \mathbb{P}[P_{k-1} \geq \alpha_c]$. 
 That is, the probability the response rate is at least $p_{min}$ is increasing 
 in $-k$. This observation implies we can guarantee that the response rate is 
-greater than $p_min$ before reaching $s$ when a greater proportion of 
+greater than $p_{min}$ before reaching $s$ when a greater proportion of 
 successful outcomes are observed.
 
 Therefore, we can define a new set of success and failure endpoints that stop 
@@ -748,7 +750,25 @@ the SPRT it has a maximum sample size, similar to the MaxSPRT
 the stopping criteria are based on both a minimum response rate as well as the 
 degree of certainty, $1-\alpha$, that this response rate has been attained.
 
+As an example, consider the design of the hypothetical trial from the
+first section. Assume that we are testing for a response rate of at least
+0.2 and a uniform prior on the response rate then, by Proposition 
+\ref{alpha_c}, the design implies a confidence of at least 98\% 
+($\alpha_c = 0.02)$. That is, at each of the success endpoints, 
+we believe the response rate is at least 0.2 with 98\% confidence. This also 
+implies that $\beta = 2.24526 * 10^{-5}$.
+Figure \ref{fig:bsprt} shows the success and failure boundaries for the 
+SNB trial design from Section 1 along with the Bayesian SPRT analogue.
 
+\begin{figure}[t!]
+\centering
+\includegraphics[width=\textwidth]{bsprt.pdf}
+\caption{
+Success and failure boundaries for the Bayesian SPRT analogue (BSPRT) and SNB
+trial designs of the hypothetical trial.
+}
+\label{fig:bsprt}
+\end{figure}
 
 
 \section{The Approximate Distribution for Two Linear Boundaries}

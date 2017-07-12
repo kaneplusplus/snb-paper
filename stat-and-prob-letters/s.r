@@ -3,50 +3,6 @@ library(ggplot2)
 library(tidyr)
 library(latex2exp)
 
-## kplot
-
-#kplot = function(flips, s, t) {
-#  if (!is.list(flips)) {
-#    d = flips_to_kplot_df(flips)
-#    p = qplot(k, path, data = d, geom = "line") +
-#      scale_x_continuous(breaks = 0:(t + s), limits = c(0, t + s - 1)) +
-#      scale_y_continuous(breaks = 0:s, limits=c(0, s+0.15)) +
-#      geom_segment(x=s, y=s, xend=(t+s-1), yend=s, linetype=2) +
-#      geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, linetype=2)
-##      geom_segment(x=s, y=s, xend=(t+s-1), yend=s, color="green", linetype=1) +
-##      geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, col="red")
-#  } else {
-#    flip_set = lapply(flips, flips_to_kplot_df)
-#    for (i in 1:length(flip_set)) {
-#      flip_set[[i]]$num = as.factor(i)
-#      flip_set[[i]]$k = jitter(flip_set[[i]]$k)
-#      flip_set[[i]]$k[flip_set[[i]]$k < 0] = 0
-#    }
-#    d = Reduce(rbind, flip_set)[, -(4:5)]
-#    p = qplot(k, path, data = d, geom = "path", group = num) +
-#        scale_x_continuous(breaks=0:(t+s), limits = c(0, t+s)) +
-#        geom_segment(x = s, y = s, xend = (t + s - 1), yend = s,
-#                     linetype=2) +
-#        geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, linetype=2)
-##        geom_segment(x = s, y = s, xend = (t + s - 1), yend = s,
-##                     color = "green") +
-##        geom_segment(x=t, y=0, xend=(s+t-1), yend=s-1, col="red")
-#    p
-#  }
-#  p
-#}
-
-#flips_to_kplot_df = function (flips) {
-#  d = data.frame(k = 0:length(flips))
-#  d$head = c(0, cumsum(flips))
-#  d$tail = c(0, cumsum(1 - flips))
-#  d$headEnd = c(d$head[-1], NA)
-#  d$tailEnd = c(d$tail[-1], NA)
-#  d$path = c(0, cumsum(flips))
-#  d$k = 0:(nrow(d) - 1)
-#  d
-#}
-
 outcomes = c(rep(0, 2), 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1)
 
 p = kplot( outcomes, s=7, t=11, bw=TRUE) +
@@ -54,12 +10,12 @@ p = kplot( outcomes, s=7, t=11, bw=TRUE) +
   ylab("Number of Responders to Treatment") +
   geom_text(data=NULL, x=11.5, y=6.5, label="Success Boundary") +
   geom_text(data=NULL, x=14.5, y=2.75, label="Failure Boundary",
-            angle=(45+90)/2-25) + 
-  geom_text(data=NULL, x=6, y=2.5, label="Sample Path") +
+            angle=(45+90)/2-17) + 
+  geom_text(data=NULL, x=5.8, y=2.5, label="One Possible\nSample Path") +
   theme_bw() + scale_fill_grey()
 p
 
-ggsave("KanePlot.pdf", p, width=10, height=3.5)
+ggsave("KanePlot.pdf", p, width=10, height=5)
 
 # SNB distribution shapes.
 
@@ -71,7 +27,7 @@ approx_plots_start = list(
     labs(x="", y="", title="normal approximation (0.35, 50, 50)") + theme_bw() +
     scale_fill_grey(),
   dsnb_stack_plot(0.06, 10, 10) + scale_x_discrete(breaks=seq(10, 20, by=2))+
-    labs(x="", y="", title="Poisson approximation (0.06, 10, 10)") + 
+    labs(x="", y="", title="geometric or Poisson approximation (0.06, 10, 10)") + 
     theme_bw() + scale_fill_grey(),
   dsnb_stack_plot(0.06, 3, 175) + scale_x_discrete(breaks=seq(3, 180, by=30))+
     labs(x="", y="", title="gamma approximation (0.06, 3, 175)") + theme_bw()+
@@ -229,12 +185,12 @@ p = ggplot(y, aes(x=p, y=value)) + geom_line() +
   theme(text = element_text(size=15)) + theme_bw()
 ggsave("mean-and-variance.pdf")
 
-# Assume the Jeffreys prior.
+# Assume the uniform prior.
 pp = function(x, k, s, t) {
   denom = choose(k-1, s-1) * beta(s, k-s) + choose(k-1, t-1) * beta(k-t, t)
   ret = foreach(p = x, .combine=rbind) %do% {
-    c(choose(k-1, s-1) * p^(s-1+.5) * (1-p)^(k-s-1+.5), 
-      choose(k-1, t-1) * p^(k-t-1+.5) * (1-p)^(t-1+.5))
+    c(choose(k-1, s-1) * p^(s-1+1) * (1-p)^(k-s-1+1), 
+      choose(k-1, t-1) * p^(k-t-1+1) * (1-p)^(t-1+1))
   }
   ret = cbind(ret, x)
   colnames(ret) = c("success", "failure", "p")
@@ -370,3 +326,258 @@ cum_approx = function(q, prob, s, t) {
   }
   (u_num + l_num) /  (u_denom + l_denom)
 } 
+
+success = data.frame(list(non_resp=0:10, 
+  resp=c(2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7)))
+
+failure = data.frame(list(resp=0:6, non_resp=c(6:11, 11)))
+
+df = as.data.frame(matrix( c(2, 2, 4, 3, 5, 3, 7, 4, 8, 4, 10, 5, 11, 5,
+  13, 6, 14, 6, 16,7,17,7, 6, 0, 8, 1, 10, 2, 12, 3, 14, 4, 16, 5, 17, 6), 
+  ncol=2, byrow=TRUE))
+names(df) = c("k", "y")
+df$boundary = "failure"
+df$boundary[1:11] = "success"
+df = rbind(df, data.frame(list(k=c(7, 17), y=c(7, 7), boundary="old_success")),
+  data.frame(list(k=c(11, 17), y=c(0, 6), boundary="old_failure"))) 
+
+# Confidence sets.
+#df = snb:::flips_to_zplot_df(outcomes)
+
+p = ggplot() +
+  geom_step(data=df[df$boundary=="success",], aes(x=k, y=y), direction="vh") +
+  geom_step(data=df[df$boundary=="failure",], aes(x=k, y=y), direction="hv") +
+  geom_line(data=df[df$boundary=="old_success",], aes(x=k, y=y), linetype=2) +
+  geom_line(data=df[df$boundary=="old_failure",], aes(x=k, y=y), linetype=2) +
+  scale_y_continuous(breaks=0:7, limits=c(0, 7.2), minor_breaks=NULL) + 
+  scale_x_continuous(breaks=0:17, limits=c(0, 17), minor_breaks=NULL) +
+  ylab("Response") + 
+  xlab("Non-Response") + theme_bw() + 
+  annotate("text", x=11.5, y=7.2, label="SNB Success Boundary") +
+  annotate("text", x=14.5, y=2.75, label="SNB Failure Boundary",
+            angle=(45+90)/2-25) + 
+  annotate("text", x=5, y=4.5, label="BSPRT Success Boundary") +
+  annotate("text", x=8, y=1.2, label="BSPRT Failure Boundary") +
+  theme_bw() + scale_fill_grey()
+p
+
+ggsave("bsprt.pdf", p, width=10, height=3.5)
+
+# Brownian Motion approximation.
+p = 0.2
+s = 700
+t =1100
+
+theta = atan(0.2)
+df = data.frame(list(
+  x=c(seq(0, t-1, length.out=1000), rep(t, 1000)),
+  y=c(rep(s, 1000), seq(0, s-1, length.out=1000))))
+df$barrier = "failure"
+df$barrier[1:1000] = "success"
+  
+ggplot(df, aes(x=x, y=y, group=barrier)) + geom_line()
+
+# Transform the top barrier
+df$xp[1:1000] = df$x[1:1000] * cos(theta) + s * sin(theta)
+df$yp[1:1000] = -df$x[1:1000] * sin(theta) + s * cos(theta)
+
+# Transform the right barrier.
+df$xp[1001:2000] = df$y[1001:2000] * sin(theta) + t * cos(theta)
+df$yp[1001:2000] = df$y[1001:2000] * cos(theta) - t * sin(theta)
+
+ggplot(df, aes(x=xp, y=yp, group=barrier)) + geom_line()
+
+# Scale the top barrier.
+df$xpp[1:1000] = df$xp[1:1000] / sin(theta)
+df$ypp[1:1000] = df$yp[1:1000] / cos(- theta)
+
+# Scale the right barrier.
+df$xpp[1001:2000] = df$xp[1001:2000] / cos(pi/2 - theta)
+df$ypp[1001:2000] = df$yp[1001:2000] / sin(pi/2 - theta)
+
+ggplot(df, aes(x=xpp, y=ypp, group=barrier)) + geom_line()
+
+# Get the intercept for the transformed barriers.
+success_slope = (df$ypp[1] - df$ypp[2])/(df$xpp[1] - df$xpp[2])
+success_intercept = df$ypp[1] - success_slope*df$ypp[2]
+
+failure_slope = (df$ypp[1001] - df$ypp[1002])/(df$xpp[1001] - df$xpp[1002])
+failure_intercept = df$ypp[1001] - success_slope*df$ypp[1002]
+
+df$density[1:1000] = success_intercept / df$xpp[1:1000]^(3/2) * 
+  dnorm(df$ypp[1:1000]/sqrt(df$xpp[1:1000]))
+
+df$density[1001:2000] = -failure_intercept / df$xpp[1001:2000]^(3/2) * 
+  dnorm(-df$ypp[1001:2000]/sqrt(df$xpp[1001:2000]))
+
+ggplot(df, aes(x=x, y=density, group=barrier)) + geom_line()
+density = df$density[df$barrier=="success"] + df$density[df$barrier=="failure"]
+
+df$k = df$x + df$y
+
+library(snb)
+library(tidyverse)
+library(foreach)
+
+p = seq(0, 1, by=0.01)
+s = 7
+t = 11
+y = 10
+
+snb_ll = function(y, s, t, p=seq(0, 1, by=0.01)) {
+  p1 = choose(y-1, s-1) * p^s*(1-p)^(y-s)
+  p1[y < s] = 0
+  p2 = choose(y-1, t-1) * (1-p)^t*p^(y-t)
+  p2[y < t] = 0
+  p1 + p2
+}
+
+p = seq(0, 1, by=0.01)
+Y = c(7, 11, 13, 17)
+lls = foreach(y=Y, .combine=cbind) %do% {
+  snb_ll(y, s, t, p)
+}
+
+colnames(lls) = Y
+lldf = as.data.frame(cbind(p, lls))
+llldf = gather(lldf, Y, "Likelihood", -p)
+p = ggplot(llldf, aes(x=p, y=Likelihood, group=Y, color=Y)) + 
+  geom_line(size=2) +
+  xlab(expression(italic(p))) + ylab("Likelihood") + 
+  labs(color=expression(Y[1])) + theme_bw() # +  scale_color_grey()
+
+ggsave("likelihood.pdf", p, width=11, height=7)
+
+# Counter 
+
+plot(snb_ll(9, s, t, p))
+
+
+library(ggplot2)
+library(snb)
+library(grid)
+library(latex2exp)
+library(foreach)
+library(tidyverse)
+library(ggplot2)
+
+# Interim ANALYSIS
+
+outcomes = c(rep(0, 2), 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1)[1:10]
+s = 7
+t = 11
+
+# Assume the uniform prior.
+pp = function(x, k, s, t) {
+  denom = choose(k-1, s-1) * beta(s, k-s) + choose(k-1, t-1) * beta(k-t, t)
+  ret = foreach(p = x, .combine=rbind) %do% {
+    c(choose(k-1, s-1) * p^(s-1+1) * (1-p)^(k-s-1+1), 
+      choose(k-1, t-1) * p^(k-t-1+1) * (1-p)^(t-1+1))
+  }
+  ret = cbind(ret, x)
+  colnames(ret) = c("success", "failure", "p")
+  rownames(ret) = NULL
+  as.data.frame(ret)
+}
+
+x = pp(seq(0, 1, by=0.01), 15, s, t)
+x = gather(x, p)
+names(x) = c("p", "Outcome", "value")
+x$Outcome = relevel(factor(x$Outcome), "failure")
+#p = ggplot(x, aes(x=p, y=value, fill=Outcome)) + geom_area(position="stack") +
+p = ggplot(x, aes(x=p, y=value, fill=Outcome)) + 
+  geom_area(alpha=0.8, position="identity") +
+  theme_bw() + scale_fill_grey(start=0.8, end=0.2) + xlab(expression(x)) +
+  ylab(TeX("f_{P|Y}(x | k, s, t)")) 
+ggsave("beta-mixture-interim.pdf", p, width=10, height=3.5)
+
+p = kplot(outcomes, s=7, t=11, bw=TRUE) +
+  xlab("Number of Patients Enrolled") + 
+  ylab("Number of Responders to Treatment") +
+  geom_text(data=NULL, x=11.5, y=6.5, label="Success Boundary") +
+  geom_text(data=NULL, x=14.5, y=2.75, label="Failure Boundary",
+            angle=(45+90)/2-25) + 
+  geom_text(data=NULL, x=6, y=2.5, label="Sample Path") +
+  theme_bw() + scale_fill_grey() 
+ggsave("kplot-interim.pdf", p, width=10, height=3.5)
+
+# POST-HOC ANALYSIS
+
+outcomes = c(rep(0, 2), 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1)
+
+# The kplot.
+p = kplot(outcomes, s=7, t=11, bw=TRUE) +
+  xlab("Number of Patients Enrolled") + 
+  ylab("Number of Responders to Treatment") +
+  ylim(0, 9) +
+  geom_text(data=NULL, x=11.5, y=6.5, label="Success Boundary") +
+  geom_text(data=NULL, x=14.5, y=2.75, label="Failure Boundary",
+            angle=(45+90)/2-18) + 
+  geom_text(data=NULL, x=6, y=2.5, label="Sample Path") +
+  theme_bw() + scale_fill_grey() 
+
+# The density plot.
+df = data.frame(list(
+  Density=dbeta(seq(0, 1, by=0.01), sum(outcomes)+1, sum(outcomes==0)+1),
+  p=seq(0, 1, by=0.01)))
+dp = ggplot(df, aes(x=p, y=Density)) + 
+  geom_area(alpha=0.8, position="identity") +
+  xlab(expression(x)) + ylab(TeX("f_P(x)")) + 
+  labs(title="Posterior Distribution")
+
+vp = viewport(width=0.3, height=0.2, x=0.8, y=0.88)
+pdf("KanePlotEmbedded.pdf", width=10, height=6)
+print(p)
+print(dp, vp=vp)
+dev.off()
+
+library(snb)
+library(tidyverse)
+library(foreach)
+s = 7
+t = 11
+n = s+t-1
+p0 = 0.2
+p1 = 0.4
+
+significance = function(p0, s, t) {
+  dsnb_stacked(min(s, t):(s+t-1), p=p0, s=s, t=t)[,'s'] %>% sum
+}
+
+power = function(p1, s, t) {
+  dsnb_stacked(min(s, t):(s+t-1), p=p1, s=s, t=t)[,'s'] %>% sum
+}
+
+designs = foreach (si=seq_len(n-1), .combine=rbind) %do% {
+  ti = n + 1 - si
+  c(si, ti, significance(p0, si, ti), power(p1, si, ti),
+    esnb(p0, si, ti))
+}
+rownames(designs) = NULL
+colnames(designs) = c("s", "t", "Significance", "Power", "ess")
+designs = as.data.frame(designs)
+
+designs_long = gather(designs, `Design Feature`, value, Significance:Power)
+
+ggplot(designs_long, aes(x=s, y=value, color=`Design Feature`)) + 
+  geom_line() + ylab("Probability") + 
+  xlab("Number of Responses to Stop the Trial") + theme_bw() +
+  scale_x_continuous(breaks=seq_len(n-1))
+
+ggsave("all-hypothetical-designs.pdf")
+
+ggplot(designs, aes(x=s, y=ess)) +
+  geom_line() + ylab("Expected Sample Size Under the Null") +
+  xlab("Number of Responses to Stop the Trial") + theme_bw() +
+  scale_x_continuous(breaks=designs$s)
+
+ggsave("expected-sample-size.pdf")
+
+data_pos = designs[, c("Power", "Significance", "s")]
+data_pos$Power = data_pos$Power + 0.1
+data_pos$Significance = data_pos$Significance + 0.1
+
+ggplot(designs, aes(x=Power, y=1-Significance)) + 
+  geom_line() +   
+  geom_text(data=data_pos, aes(x=Power, y=1-Significance, label=s))
+  
