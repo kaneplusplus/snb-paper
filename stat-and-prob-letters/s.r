@@ -157,7 +157,7 @@ ggsave("bayesian-sample-variance.pdf")
 
 dsnb_plot(p, s, t) + ylab("Probability") + theme(text = element_text(size=15)) +
   theme_bw()
-ggsave("snb-first-plot.pdf")
+ggsave("../sii/snb-first-plot.pdf", width=8, height=5)
 
 ps = seq(0, 1, by=0.01)
 moments = foreach(p=ps, .combine=rbind) %do% {
@@ -441,10 +441,15 @@ lls = foreach(y=Y, .combine=cbind) %do% {
 colnames(lls) = Y
 lldf = as.data.frame(cbind(p, lls))
 llldf = gather(lldf, Y, "Likelihood", -p)
-p = ggplot(llldf, aes(x=p, y=Likelihood, group=Y, color=Y)) + 
-  geom_line(size=2) +
-  xlab(expression(italic(p))) + ylab("Likelihood") + 
-  labs(color=expression(Y[1])) + theme_bw() # +  scale_color_grey()
+p = ggplot(llldf, aes(x=p, y=Likelihood, group=Y)) + 
+  geom_line(size=1.5) +
+  xlab(expression(italic(p))) + ylab("Likelihood") +
+  geom_text(data=NULL, x=0.08, y=0.75, label="Y=11") +
+  geom_text(data=NULL, x=0.92, y=0.75, label="Y=7") +
+  geom_text(data=NULL, x=0.2, y=0.27, label="Y=13") +
+  geom_text(data=NULL, x=0.45, y=0.21, label="Y=17") +
+  theme_bw() + scale_fill_grey()
+  # labs(color=expression(Y[1])) + theme_bw() # +  scale_color_grey()
 
 ggsave("likelihood.pdf", p, width=11, height=7)
 
@@ -561,23 +566,27 @@ designs_long = gather(designs, `Design Feature`, value, Significance:Power)
 
 ggplot(designs_long, aes(x=s, y=value, color=`Design Feature`)) + 
   geom_line() + ylab("Probability") + 
-  xlab("Number of Responses to Stop the Trial") + theme_bw() +
+  xlab("Number of Responses to Stop the Trial (s)") + theme_bw() +
   scale_x_continuous(breaks=seq_len(n-1))
 
 ggsave("all-hypothetical-designs.pdf")
 
 ggplot(designs, aes(x=s, y=ess)) +
   geom_line() + ylab("Expected Sample Size Under the Null") +
-  xlab("Number of Responses to Stop the Trial") + theme_bw() +
+  xlab("Number of Responses to Stop the Trial (s)") + theme_bw() +
   scale_x_continuous(breaks=designs$s)
 
 ggsave("expected-sample-size.pdf")
 
-data_pos = designs[, c("Power", "Significance", "s")]
-data_pos$Power = data_pos$Power + 0.1
-data_pos$Significance = data_pos$Significance + 0.1
+data_pos = designs[1:11, c("Power", "Significance", "s")]
+data_pos$Power = data_pos$Power + 0.02
+data_pos$Significance = data_pos$Significance - 0.02
 
 ggplot(designs, aes(x=Power, y=1-Significance)) + 
   geom_line() +   
-  geom_text(data=data_pos, aes(x=Power, y=1-Significance, label=s))
+  geom_text(data=data_pos, aes(x=Power, y=1-Significance, label=s)) +
+  theme_bw()
+
+ggsave("power-vs-significance.pdf")
+
   
