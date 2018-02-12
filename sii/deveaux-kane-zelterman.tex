@@ -55,8 +55,8 @@
 % \address{line 1\\ line 2\\ \printead{e1}\\ \printead{e2}}
 
 \begin{aug}
-\author{\fnms{Michelle} \snm{DeVeaux} \ead[label=e1]{michelle.deveaux@yale.edu}}
-\address{Department of Biostatistics\\ School of Epidemiology and Public Health \\ Yale University, New Haven, CT \\ \printead{e1}}
+\author{\fnms{Michelle} \snm{DeVeaux} \ead[label=e1]{michelle.deveaux@regeneron.com}}
+\address{Regeneron Pharmaceuticals Inc.\\ Tarrytown, NY\\ \printead{e1}}
 \and
 \author{\fnms{Michael J.} \snm{Kane}\thanksref{t2}\corref{} \ead[label=e2]{michael.kane@yale.edu}}
 \address{Department of Biostatistics\\ School of Epidemiology and Public Health \\ Yale University, New Haven, CT \\ \printead{e2}}
@@ -74,9 +74,7 @@
 
 \begin{abstract}
 We introduce a discrete distribution suggested by curtailed
-sampling rules common in early-stage clinical trials unifying the
-negative, minimum negative (riff-shuffle), and
-maximum negative binomial distributions. We derive the
+sampling rules common in early-stage clinical trials. We derive the
 distribution of the smallest number of independent and identically
 distributed Bernoulli trials needed to observe either $s$ successes 
 or $t$ failures. This report provides a closed-form expression for the 
@@ -118,32 +116,12 @@ If all 17 patients are enrolled at once, as in the classic
 design, then the sample size is 17. However, in most clinical trials the
 patients are enrolled sequentially over time.
 In the present example, observing seven
-patients responding to treatment ends the trial and so the number of 
-enrollees required could be as small as seven. Similarly 11
-observed treatment non-responses would also end the trial. This sampling mechanism, in
+successful patients ends the trial and so the number of enrollees required
+could be as small as seven. Similarly 11
+observed treatment failures would also end the trial. This sampling mechanism, in
 which the experiment ends as soon as either predefined endpoint is reached, is
 called {\em curtailed sampling}. Under curtailed sampling, the range of the
 sample size for this trial is seven through 17.
-
-\begin{figure*}
-\centering
-\includegraphics[width=0.8\textwidth]{snb-first-plot.pdf}
-\caption{
-The distribution of the sample size in a trial that stops after either seven patients
-respond to treatment or 11 do not when $p=0.2$.
-}
-\label{fig:kane_viz_1}
-\end{figure*}
-
-\begin{figure*}[htbp!]
-\centering
-\includegraphics[width=\textwidth]{mean-and-variance.pdf}
-\caption{
-The mean and variance of the sample size for the probability of success $p$ 
-when the trial stops after $s=7$ patients respond or $t=11$ fail to respond.
-}
-\label{fig:kane_viz_2}
-\end{figure*}
 
 The distribution of the number of trial enrollments is shown in 
 Figure~\ref{fig:kane_viz_1}. There is relatively little probability mass
@@ -154,8 +132,8 @@ number of trial enrollments varying the success rate $p$ between zero and one. W
 is likely to fail shortly after the $11^{\text{th}}$ enrollment.
 When $p$ is large then the treatment is more likely to succeed and the 
 number of enrollees approaches seven from above. 
-When $p=0$ or $1$ then the sequence of resposes is deterministic and the 
-variance is zero.
+
+When $p=0$ or $1$ then the processes are deterministic and variance is zero.
 Values of $p$ between zero and one change the mixing proportions of 
 the two endpoints. When $p$ is close to zero, most of the variance
 is contributed from the failure endpoint. The saddle around $p=0.25$ results 
@@ -168,10 +146,9 @@ as the Stopped Negative Binomial (SNB).
 In Section 2 we derive the distribution function and explores its properties.
 Section 3 derives the moment generating function.
 Section 4 describes the likelihood function.
-Section 5 relates the distribution to other standard
+Section 5 describes the posterior and predictive probability distributions. Section 6 relates the distribution to other standard
 distributions and connects the SNB tail probability to the binomial tail 
-probability. Section 6 considers single arm, early-phase trial design with the 
-SNB.
+probability. Section 7 shows how to design a trial using the SNB in a prototypical setting.
 
 \section{Probability Mass Function}
 \label{notation.section}
@@ -187,25 +164,18 @@ variable $Y$ as the smallest
 integer value such that $\,\{b_1, \ldots , b_Y\}\,$ contains {\em either}
 $\,s\,$ responders {\em or} $\,t\,$ non-responders. That is, the SNB 
 distribution of $Y$ is the smallest integer such that either
-$\sum_i^Y b_i = s$ or $\sum_i^Y 1-b_i = t$.
+$\sum_i^Y b_i = s$ or $\sum_i^Y (1-b_i) = t$.
 
 The sequence of Bernoulli random variables can be modeled as the process 
-$\mathbf{X} = \left\{X(k) : k = 0,1,... \right\}$
-with $X(0)=0$ and
+$\mathbf{X} = \left\{X_k : k = 0,1,... \right\}$
+with $X_0=0$ and
 \begin{equation*} \label{eqn:proc}
 X_{k+1} = X_k + b_{k+1} \ \mathbbm{1}_{\{ k-t < X_k < s\}}.
 \end{equation*}
-At each step a patient's outcome is measured. The process continues until either 
-$X_k = s$ or $X_k = k-t$ corresponding to the success and failure boundaries.
-
-\begin{figure*}
-\centering
-\includegraphics[width=\textwidth]{KanePlot.pdf}
-\caption{
-A hypothetical realization of the trial.
-}
-\label{fig:kane_viz}
-\end{figure*}
+where $\mathbbm{1}_{\{f\}}$ is the {\em indicator function}, taking the value 
+of one if $f$ is true and zero otherwise, and
+At each step a patient's outcome is measured. If it is a response, the response count increases, otherwise it stays the same. The process continues until either 
+$X_k = s$ or $X_k = k-t$ corresponding to the success and failure boundaries
 
 In Figure~\ref{fig:kane_viz} provides a graphical illustration of $X_k$ against
 $k$ for one possible realization where $s=7$ and $t=11$. The vertical axis denotes the number of
@@ -216,17 +186,16 @@ endpoints for the trial. In this case, the seventh response was reached on
 the $15^{\text{th}}$ enrollment.
 Since the success boundary is reached, we would reject the null hypothesis in this example.
 
-We next derive the mass function of $Y$. The distribution of $\,Y\,$ has support on integer values in the range
+We next derive the probability mass function of $Y$. The distribution of $\,Y\,$ has support on integer values in the range
 \begin{equation*}               
      \min(s,t) \leq \; Y \;\leq s+t-1  \label{range.y.eq}.
 \end{equation*}
 In Proposition \ref{stopping_time} below, we show the probability mass function of $Y$ is
 \begin{align} \label{eqn:pmf}
-\mathbb{P} [Y=k] =& S(k, p, s) \ \mathbbm{1}_{\{s \leq k \leq s+t-1\}} \ + \nonumber \\
-  & S(k, 1-p, t) \ \mathbbm{1}_{\{ t \leq k \leq s+t-1 \}}
+\mathbb{P} [Y=k] =& \ S(k, p, s) \ \mathbbm{1}_{\{s \leq k \leq s+t-1\}} \nonumber \\
+  & + S(k, 1-p, t) \ \mathbbm{1}_{\{ t \leq k \leq s+t-1 \}}
 \end{align}
-where $\mathbbm{1}_{\{f\}}$ is the {\em indicator function}, taking the value 
-of one if $f$ is true and zero otherwise, and
+where
 \begin{equation} \label{eqn:N}
 S(k, p, s) = {k-1 \choose s-1} p^s (1-p)^{k-s} 
 \end{equation}
@@ -266,7 +235,7 @@ satisfies
  &=\; (1-p)\, {k-1 \choose t-1} (1-p)^{t-1} p^{k-t} \nonumber \\
 &=\; {k-1 \choose t-1} (1-p)^{t} p^{k-t}.
 \end{align}
-The result follows by summing (\ref{prop11}) and (\ref{prop12}).
+The result (\ref{eqn:pmf}) follows by summing (\ref{prop11}) and (\ref{prop12}).
 
 To show (\ref{eqn:pmf}) sums to one, define
 \begin{equation*} 
@@ -281,8 +250,8 @@ R = \sum_{i=0}^{t-1} &{i+s-1 \choose i} p^s (1-p)^i +
    &= 1-\mathcal{I}_p(s, t) + 1 - \mathcal{I}_{1-p}(t, s) \\
    &= 1
 \end{align*}
-using (\ref{ribf}). This completes the proof (\ref{eqn:pmf}) is the distribution 
-of the stopping time and is a valid probability mass function.
+using (\ref{ribf}). This completes the proof that (\ref{eqn:pmf}) is the distribution 
+of the stopping time and it is a valid probability mass function.
 \end{proof}
 
 We next consider an interim analysis of a clinical trial after $s'$ 
@@ -296,24 +265,15 @@ Having observed $s'$ responders and $t'$ non-responders, there are $s-s'$
 additional responders needed to reach the success endpoint and $t-t'$ additional 
 non-responders needed to reach the failure endpoint.
 
-\begin{figure*}
-\begin{center}
-\includegraphics[width=0.8\textwidth]{likelihood.pdf}
-\end{center}
-\caption{Shapes of the likelihood function for given values of $Y$ with 
-$s=7$ and $t=11$.
-\label{likelihood.fig}}
-\end{figure*}
-
 \section{The Moment Generating Function} \label{sect:mgf}
 
 \begin{prop} Let $Y$ be distributed SNB with parameters $p$, $s$, and $t$.
 Then the moment generating function (MGF) of $Y$ is
-\begin{align} \label{eqn:mgf}
-\mathbb{E}~e^{xY} = &\left(\frac{p e^x}{1 - qe^x}\right)^s 
-  \mathcal{I}_{1-qe^x} (s, t) \ + \nonumber \\
-  & \left(\frac{qe^x}{1-pe^x}\right)^t \mathcal{I}_{1-pe^x}(t, s)
-\end{align}
+\begin{equation} \label{eqn:mgf}
+\mathbb{E}~e^{xY} = \left(\frac{p e^x}{1 - qe^x}\right)^s 
+  \mathcal{I}_{1-qe^x} (s, t) + \left(\frac{qe^x}{1-pe^x}\right)^t 
+  \mathcal{I}_{1-pe^x}(t, s)
+\end{equation}
 for $q = 1-p$ and is defined for 
 $x < \min \left\{\log(1/p), \log(1/q) \right\}$.
 \end{prop}
@@ -350,12 +310,13 @@ one. The proof follows by realizing
 over the support of $x$.
 \end{proof}
 
-
 \section{The Likelihood Function} \label{sect:likelihood}
+
+In this section we derive the likelihood function for the SNB for a single trial. In early-stage clinical trial only a single trial is performed, usually because of resource constraints, and the object of interest is $p$ parameter, which determines if a therapy will be delivered to the market. A multi-sample version is less relevant for this use case but is represented as a product of mixtures of Beta distributions. Deriving it's theoretical characteristics not straight-forward. 
 
 Let $Y$ be distributed SNB($p, s, t$). Then, the likelihood of $Y$ is proportional to a mixture of Beta distributions.
 \begin{equation*} \label{eqn:likelihood}
-\mathcal{L} (p | s, t, Y) \propto B_1 \, \mathbbm{1}_{\{s \leq Y_1\}} + B_2 \, \mathbbm{1}_{\{t \leq Y_1 \}}
+\mathcal{L} (p | s, t, Y) = B_1 \, \mathbbm{1}_{\{s \leq Y_1\}} + B_2 \, \mathbbm{1}_{\{t \leq Y_1 \}}
 \end{equation*}
 where $B_1 =$ Beta$\left(s, Y - s\right)$ and $B_2 =$ Beta$\left(Y - t, t\right)$ and
 \begin{equation*}
@@ -400,18 +361,64 @@ the two modes are converging. At $Y=17$ the endpoints contributed likelihoods wi
 
 After an endpoint has been reached, the resulting conditional likelihood is either $B_1$ or $B_2$, depending if the trial was a success or failure. However, when the endpoint is not known, such as the planning phase of a trial, unintuitive situations may arise. Since the likelihood is bimodal, there are even settings where we may reject the null despite a poorer alternative. Suppose in the hypothetical trial $p_0=0.25$ and $p_1=0.5$, the outcome is unknown, and the trial completes after 11 enrollees, as shown in Figure~\ref{likelihood.fig} labeled $Y=11$. Since the null is at a ``trough'' in the likelihood we fail to reject even though it is closer to the most likely value of $p=0$. 
 
+\section{The Posterior and Predictive Probability Distribution} \label{bayesian_extension}
+
+Consider the Bayesian setting where $Y$ is an SNB($P$, $s$, $t$) distribution and the rate parameter, $P$ 
+is distributed as Beta($\alpha$, $\beta$). The posterior distribution $P|Y$ is proportional to the 
+likelihood, given by the function
+%f_P(p, \alpha, \beta ) f_{Y|P}(p, k, s, t) &= 
+\begin{align} \label{eqn:ptl}
+f_{P|Y}(p, k, s, t, \alpha, \beta) \; \propto \ &
+  \ \frac{ {k-1 \choose s-1} }{B(\alpha, \beta)} p^{\alpha +s -1} 
+    (1-p)^{k+\beta-s-1} \\
+  & + \frac{ {k-1 \choose t-1} }{B(\alpha, \beta)} p^{k+\alpha -t -1} 
+    (1-p)^{\beta+t-1} \nonumber
+\end{align}
+where $0 \leq p \leq 1$ and $\min(s, t) \leq k \leq s+k-1$.
+
+The predictive distribution of the SNB can be found as by integrating
+$p$ over the interval zero to one and applying the definition of the 
+beta function.
+\begin{align} \label{eqn:predictive}
+f_{Y}(&k, s, t, \alpha, \beta) = 
+  \int_0^1 f_P(p | \alpha, \beta )  f_{Y|P}(p, k, s, t) dp \\ 
+  = & {k-1 \choose s-1} \frac{B\left(\alpha+s, k-s+\beta \right)}{B(\alpha, \beta)} 
+     \nonumber \\
+  & + {k-1 \choose t-1} 
+    \frac{B\left(\alpha + k - t, t+\beta\right)}{B(\alpha, \beta)} \nonumber
+\end{align}
+If both $\alpha$ and $\beta$ are non-negative integers then the predictive
+distribution is a mixture of negative-hypergeometric distributions. 
+\begin{align*} \label{eqn:hypergeo}
+f_{Y}(k, s, t, \alpha, \beta) = & 
+  \frac{ {k - 1 \choose s - 1 } 
+         {\alpha + \beta \choose \alpha} }{
+         {\alpha + \beta + k - 1 \choose \alpha + s}}
+  \frac{\alpha}{\alpha + \beta}
+  \frac{ \beta }{ k-s+\beta } \\ & +
+  \frac{ {k - 1 \choose t - 1} 
+         {\alpha + \beta \choose \beta} 
+         }{
+         {\alpha + \beta + k -1 \choose t + \beta}
+       }
+  \frac{ \beta }{ \alpha + \beta}
+  \frac{ \alpha }{ k-t + \alpha}
+\end{align*}
+The ratio of combinations in the first term can be interpreted as the
+probability of $s-1$ responders from $k-1$ patients in $\alpha + s$ draws
+from a population size of $\alpha + \beta + k - 1$. This value is multiplied
+by $\alpha / (\alpha + \beta)$, the expected response rate of the prior. 
+The final term in the product weights the prior based on the number
+of non-responders ($k-s$). Terms in the second summand are interpreted similarly
+for non-responders.
+
+The ratio of (\ref{eqn:ptl}) divided by (\ref{eqn:predictive}) gives the 
+posterior distribution of $P$. It is a mixture of beta distributions. The
+mixing parameter depend on the endpoints ($s$ and $t$), the number of enrollees needed to reach an endpoint ($k$), and the prior parameters ($\alpha$ and
+$\beta$).
+
+
 \section{Connections and Approximations to Other Distributions}
-
-\begin{figure*}
-\begin{center}
-\includegraphics[width=\textwidth]{shapes.pdf}
-\end{center}
-\caption{Different shapes of the SNB mass function with parameters 
-($p$, $s$, $t$) given. Black areas indicate the mass contributed by reaching
-$s$ responders before $t$ non-responders. Grey indicates
-mass contributed by reaching $t$ non-responders first. \label{shapes.fig}}
-\end{figure*}
-
 
 Examples of different 
 shapes of the SNB are shown in in Figure~\ref{shapes.fig} varying parameters $p$, 
@@ -478,19 +485,6 @@ the summation in (\ref{eqn:success}) can be rewritten as
 completing the proof.
 \end{proof}
 
-\begin{figure*}
-\centering
-\subfloat[SNB distribution]{\includegraphics[width=0.5\textwidth]{snb_density.pdf}}
-\hfill
-\subfloat[binomial distribution]{\includegraphics[width=0.5\textwidth]{bin_density.pdf}}
-\caption{
-SNB(0.2, 7, 11) with mass contributed from 
-7 responders (black) or 11 non-responders (grey) along with 
-Binomial(0.2, 17) with at least 2 responders (black) or fewer (grey).
-}
-\label{fig:snb_bin_compare}
-\end{figure*}
-
 To illustrate this result, let us return to our initial example
 where $s=7$, $t=11$, and $p=0.2$.  The probability masses in
 Figure~\ref{fig:snb_bin_compare} represented in 
@@ -503,80 +497,157 @@ probability of zero through six responders.
 
 \section{Trial Design with the SNB}
 
-\begin{figure*}
-\centering
-\subfloat[ROC Curve]{\includegraphics[width=0.45\textwidth]{power-vs-significance.pdf}}
-\hfill
-\subfloat[Expected Sample Size]{\includegraphics[width=0.45\textwidth]{expected-sample-size.pdf}}
-\caption{
-The ROC and expected sample sizes of all trial designs where the maximum
-number of patients is 17, $p=0.2$ under the null, and $p=0.4$ under
-the alternative. The numerical values in the ROC curve indicate the number
-of responses $s$ required to reach the success endpoint.
-}
-\label{fig:all_sample_sizes}
-\end{figure*}
+Consider the problem of designing a trial using curtailed sampling and the SNB. Assume that the maximum number of patients $n$ is given along with the null and alternative hypotheses. In this case, the parameter $s$ tells how many responses are needed to reach the success endpoint, can vary between 1 and $n-1$. For fixed $s$ and $n$  the value of $t$ is determined by the relation $t=n-s+1$. The ROC curves for all trial designs in the prototype, where $n=17$, $p=0.2$ under the null, and $p=0.4$ under the alternative, are shown in Figure~\ref{fig:all_sample_sizes_power_vs_signif}. In designing these trials, small significance and large power values are attained by either increasing the value of $n$ or increasing the difference between the alternative and null response rates. Figure~\ref{fig:all_sample_sizes} shows the expected number of enrollees for each of these trials as a function of the number of responses required to reach the success endpoint.
 
-Consider the problem of designing a trial using curtailed sampling and the SNB. 
-Assume that the maximum number of patients $n$ is given along with the null 
-and alternative hypotheses. In this case, the parameter $s$ tells how many 
-responses are needed to reach the success endpoint, can vary between 1 and 
-$n-1$. For fixed $s$ and $n$  the value of $t$ is determined by the relation 
-$t=n-s+1$. The ROC curves for all trial designs in the prototype, 
-where $n=17$, $p=0.2$ under the null, and $p=0.4$ under the alternative, are 
-shown in Figure~\ref{fig:all_sample_sizes} (a). In designing these trials, 
-small significance and large power values are attained by either increasing 
-the value of $n$ or increasing the difference between the alternative and null 
-response rates. Figure~\ref{fig:all_sample_sizes} (b) shows the expected 
-number of enrollees for each of these trials as a function of the number of 
-responses required to reach the success endpoint.
-The curve reaches its maximum of 15 patients when $s=5$. The prototype 
-design ($p=0.2$, $s=7$, and $t=11$) has an expected sample size of 14 enrollees.
 
-\section{Appendix: Proof of the MGF of the SNB}
-Let $Y$ be distributed SNB with parameters $p$, $s$, and $t$.
-Then the moment generating function (MGF) of $Y$ is
-\begin{equation} 
-\mathbb{E}~e^{xY} = \left(\frac{p e^x}{1 - qe^x}\right)^s 
-  \mathcal{I}_{1-qe^x} (s, t) + \left(\frac{qe^x}{1-pe^x}\right)^t 
-  \mathcal{I}_{1-pe^x}(t, s)
-\end{equation}
-for $q = 1-p$ and is defined for 
-$x < \min \left\{\log(1/p), \log(1/q) \right\}$.
-\begin{proof}
-The MGF of the SNB is, by definition:
-\begin{equation*}
-\mathbb{E}~e^{xY} = \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s q^{k-s} e^{kx} 
-  + \sum_{k=t}^{s+t-1} {k-1 \choose t-1} p^{k-t} q^t e^{kx}
-\end{equation*}
-and can be rewritten as:
-\begin{align} \label{eqn:first_sum}
-\mathbb{E}~e^{xY} =& 
-  \sum_{k=s}^{s+t-1}{k-1 \choose s-1} (pe^x)^{s} (qe^x)^{k-s} \ + \nonumber \\
-  & \sum_{k=t}^{s+t-1}{k-1 \choose t-1} (qe^x)^t (pe^x)^{k-t}.
-\end{align}
-The first summation in (\ref{eqn:first_sum}) satisfies
-\begin{align*}
-\sum_{k=s}^{s+t-1} & {k-1 \choose s-1} (pe)^{sx} (qe^x)^{k-s} \\ 
-  &= \left(\frac{pe^x}{1 - qe^x}\right)^s \ \ \sum_{k=s}^{s+t-1} {k-1 \choose s-1} 
-    (qe^x)^{k-s} (1-qe^x)^s \\
-  &= \left(\frac{pe^x}{1 - qe^x}\right)^s \mathcal{I}_{1-qe^x}(s, t).
-\end{align*}
-Since the $p$ parameter in $\mathcal{I}_p$ has domain zero 
-to one, we have $0 \leq pe^x < 1$. This implies $x < -\log(p)$.
-A similar expression can be derived for the second summation in 
-(\ref{eqn:first_sum}) and results in
-the constraint $x < -\log(1-p)$.
-\end{proof}
+The expected number of enrollees for each trial is shown in Figure~\ref{fig:all_sample_sizes}. The curve reaches its maximum of 15 patients when $s=5$. The prototype design ($p=0.2$, $s=7$, and $t=11$) has an expected sample size of 14 enrollees.
 
 \section*{Acknowledgements}
 This research was supported by grants R01CA131301, 
 R01CA157749, R01CA148996, R01CA168733, and PC50CA196530 awarded by the 
 National Cancer Institute along with support from the Yale Comprehensive Cancer 
 Center and the Yale Center for Outcomes Research. We would also like 
-to thank Rick Landin at Ignyta Inc. for his suggestions.
+to thank Rick Landin at LaJolla Pharmaceutical for his suggestions.
+
+
+\section*{APPENDIX: PROOF OF PROPOSITION 2}
+%Let $Y$ be distributed SNB with parameters $p$, $s$, and $t$.
+%Then the moment generating function (MGF) of $Y$ is
+%\begin{equation} 
+%\mathbb{E}~e^{xY} = \left(\frac{p e^x}{1 - qe^x}\right)^s 
+%  \mathcal{I}_{1-qe^x} (s, t) + \left(\frac{qe^x}{1-pe^x}\right)^t 
+%  \mathcal{I}_{1-pe^x}(t, s)
+%\end{equation}
+%for $q = 1-p$ and is defined for 
+%$x < \min \left\{\log(1/p), \log(1/q) \right\}$.
+%\begin{proof}
+The MGF of the SNB is, by definition:
+\begin{align*}
+\mathbb{E}~e^{xY} = & \sum_{k=s}^{s+t-1} {k-1 \choose s-1} p^s q^{k-s} e^{kx} \\
+  & + \sum_{k=t}^{s+t-1} {k-1 \choose t-1} p^{k-t} q^t e^{kx}
+\end{align*}
+and can be rewritten as:
+\begin{align} \label{eqn:first_sum}
+\mathbb{E}~e^{xY} = & \sum_{k=s}^{s+t-1}{k-1 \choose s-1} (pe^x)^{s} (qe^x)^{k-s} \nonumber \\
+  & + \sum_{k=t}^{s+t-1}{k-1 \choose t-1} (qe^x)^t (pe^x)^{k-t}.
+\end{align}
+The first summation in (\ref{eqn:first_sum}) satisfies
+\begin{align*}
+\sum_{k=s}^{s+t-1} &{k-1 \choose s-1}  (pe)^{sx} (qe^x)^{k-s}  \\
+  & = \left(\frac{pe^x}{1 - qe^x}\right)^s \ \ \sum_{k=s}^{s+t-1} {k-1 \choose s-1} 
+    (qe^x)^{k-s} (1-qe^x)^s \\
+  & = \left(\frac{pe^x}{1 - qe^x}\right)^s \mathcal{I}_{1-qe^x}(s, t).
+\end{align*}
+Since the $p$ parameter in $\mathcal{I}_p$ has domain zero 
+to one, we have $0 \leq pe^x < 1$. This implies $x < -\log(p)$.
+A similar expression can be derived for the second summation in 
+(\ref{eqn:first_sum}) and results in
+the constraint $x < -\log(1-p)$.
+%\end{proof}
 
 \bibliographystyle{acm}
 \bibliography{mybibfile}
+
+
+\pagebreak
+
+\onecolumn 
+
+\section*{Figures}
+
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=\textwidth]{snb-first-plot.pdf}
+\caption{
+The distribution of the sample size in a trial that stops after either seven patients
+respond to treatment or 11 do not when $p=0.2$.
+}
+\label{fig:kane_viz_1}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=\textwidth]{mean-and-variance.pdf}
+\caption{
+The mean and variance of the sample size for the probability of success $p$ 
+when the trial stops after $s=7$ patients respond or $t=11$ fail to respond.
+}
+\label{fig:kane_viz_2}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=\textwidth]{KanePlot.pdf}
+\caption{
+A hypothetical realization of the trial.
+}
+\label{fig:kane_viz}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}[htbp!]
+\begin{center}
+\includegraphics[width=\textwidth]{likelihood.pdf}
+\end{center}
+\caption{Shapes of the likelihood function for given values of $Y$ with 
+$s=7$ and $t=11$.
+\label{likelihood.fig}}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}[htbp!]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{shapes.pdf}
+\end{center}
+\caption{Different shapes of the SNB mass function with parameters 
+($p$, $s$, $t$) given. Black areas indicate the mass contributed by reaching
+$s$ responders before $t$ non-responders. Grey indicates
+mass contributed by reaching $t$ non-responders first. \label{shapes.fig}}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}[htbp!]
+\centering
+\subfloat[SNB distribution]{\includegraphics[width=0.5\textwidth]{snb_density.pdf}}
+\hfill
+\subfloat[binomial distribution]{\includegraphics[width=0.5\textwidth]{bin_density.pdf}}
+\caption{
+SNB(0.2, 7, 11) with mass contributed from 
+7 responders (black) or 11 non-responders (grey) along with 
+Binomial(0.2, 17) with at least 2 responders (black) or fewer (grey).
+}
+\label{fig:snb_bin_compare}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=\textwidth]{power-vs-significance.pdf}
+\caption{
+ROC curve of the all trial designs where the maximum number of patients is 17, $p=0.2$ under the null and $p=0.4$ under the alternative. The numerical values indicate the number of responses $s$ required reach the success endpoint.
+}
+\label{fig:all_sample_sizes_power_vs_signif}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=\textwidth]{expected-sample-size.pdf}
+\caption{
+The expected sample size all trial designs where the maximum number
+of patients is 17 and $p=0.2$.}
+\label{fig:all_sample_sizes}
+\end{figure}
+
+\pagebreak
 
 \end{document}
