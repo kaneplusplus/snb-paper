@@ -123,6 +123,16 @@ which the experiment ends as soon as either predefined endpoint is reached, is
 called {\em curtailed sampling}. Under curtailed sampling, the range of the
 sample size for this trial is seven through 17.
 
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{snb-first-plot.pdf}
+\caption{
+The distribution of the sample size in a trial that stops after either seven patients
+respond to treatment or 11 do not when $p=0.2$.
+}
+\label{fig:kane_viz_1}
+\end{figure}
+
 The distribution of the number of trial enrollments is shown in 
 Figure~\ref{fig:kane_viz_1}. There is relatively little probability mass
 for values of sample sizes from seven through 10 since $p$ is small and it 
@@ -132,6 +142,16 @@ number of trial enrollments varying the success rate $p$ between zero and one. W
 is likely to fail shortly after the $11^{\text{th}}$ enrollment.
 When $p$ is large then the treatment is more likely to succeed and the 
 number of enrollees approaches seven from above. 
+
+\begin{figure*}
+\centering
+\includegraphics[width=0.7\textwidth]{mean-and-variance.pdf}
+\caption{
+The mean and variance of the sample size for the probability of success $p$ 
+when the trial stops after $s=7$ patients respond or $t=11$ fail to respond.
+}
+\label{fig:kane_viz_2}
+\end{figure*}
 
 When $p=0$ or $1$ then the processes are deterministic and variance is zero.
 Values of $p$ between zero and one change the mixing proportions of 
@@ -174,8 +194,19 @@ X_{k+1} = X_k + b_{k+1} \ \mathbbm{1}_{\{ k-t < X_k < s\}}.
 \end{equation*}
 where $\mathbbm{1}_{\{f\}}$ is the {\em indicator function}, taking the value 
 of one if $f$ is true and zero otherwise, and
-At each step a patient's outcome is measured. If it is a response, the response count increases, otherwise it stays the same. The process continues until either 
+At each step a patient's outcome is measured. If it is a response, then
+the response count increases, otherwise it stays the same. The process 
+continues until either 
 $X_k = s$ or $X_k = k-t$ corresponding to the success and failure boundaries
+
+\begin{figure*}%[htbp!]
+\centering
+\includegraphics[width=0.7\textwidth]{KanePlot.pdf}
+\caption{
+A hypothetical realization of the trial.
+}
+\label{fig:kane_viz}
+\end{figure*}
 
 In Figure~\ref{fig:kane_viz} provides a graphical illustration of $X_k$ against
 $k$ for one possible realization where $s=7$ and $t=11$. The vertical axis denotes the number of
@@ -359,6 +390,14 @@ failure endpoint where no responses are observed. Similarly, when $Y_1=13$
 we see contributions from both the success and failure endpoints but
 the two modes are converging. At $Y=17$ the endpoints contributed likelihoods with similar modes and the result is unimodal.
 
+\begin{figure*}%[htbp!]
+\centering
+\includegraphics[width=0.7\textwidth]{likelihood.pdf}
+\caption{Shapes of the likelihood function for given values of $Y$ with 
+$s=7$ and $t=11$.}
+\label{likelihood.fig}
+\end{figure*}
+
 After an endpoint has been reached, the resulting conditional likelihood is either $B_1$ or $B_2$, depending if the trial was a success or failure. However, when the endpoint is not known, such as the planning phase of a trial, unintuitive situations may arise. Since the likelihood is bimodal, there are even settings where we may reject the null despite a poorer alternative. Suppose in the hypothetical trial $p_0=0.25$ and $p_1=0.5$, the outcome is unknown, and the trial completes after 11 enrollees, as shown in Figure~\ref{likelihood.fig} labeled $Y=11$. Since the null is at a ``trough'' in the likelihood we fail to reject even though it is closer to the most likely value of $p=0$. 
 
 \section{The Posterior and Predictive Probability Distribution} \label{bayesian_extension}
@@ -420,8 +459,19 @@ $\beta$).
 
 \section{Connections and Approximations to Other Distributions}
 
+\begin{figure*}
+\centering
+\includegraphics[width=0.7\textwidth]{shapes.pdf}
+\caption{Different shapes of the SNB mass function with parameters 
+($p$, $s$, $t$) given. Black areas indicate the mass contributed by reaching
+$s$ responders before $t$ non-responders. Grey indicates
+mass contributed by reaching $t$ non-responders first.}
+\label{fig:shapes}
+\end{figure*}
+
+
 Examples of different 
-shapes of the SNB are shown in in Figure~\ref{shapes.fig} varying parameters $p$, 
+shapes of the SNB are shown in in Figure~\ref{fig:shapes} varying parameters $p$, 
 $s$, and $t$. The SNB distribution is a generalization of the negative 
 binomial. As a result, the SNB can approximate other distributions in the same
 manner as the negative binomial. When $t$ is large then $Y-s$ has a 
@@ -438,7 +488,6 @@ SNB inherits the ability to approximate other distributions. For example,
 when $s=1$ and $t \rightarrow \infty$, the SNB($p$, $s$, $t$) converges
 to an negative binomial distribution with index parameter $s$ and rate parameter $p$. When $s=1$, this is the geometric distribution. The connection between the negative binomial and the gamma distribution
 are well-studied in the literature (see \cite{Best1974,Ord1968,Guenther1972} for examples) as well the connection to the Poisson \cite{Anscombe1950}.
-
 
 The SNB generalizes both the minimum (riff-shuffle) and maximum negative
 binomial distributions up to a translation of the support.
@@ -485,6 +534,19 @@ the summation in (\ref{eqn:success}) can be rewritten as
 completing the proof.
 \end{proof}
 
+\begin{figure}[htbp!]
+\centering
+\subfloat[SNB distribution]{\includegraphics[width=0.5\textwidth]{snb_density.pdf}}
+\hfill
+\subfloat[binomial distribution]{\includegraphics[width=0.5\textwidth]{bin_density.pdf}}
+\caption{
+SNB(0.2, 7, 11) with mass contributed from 
+7 responders (black) or 11 non-responders (grey) along with 
+Binomial(0.2, 17) with at least 2 responders (black) or fewer (grey).
+}
+\label{fig:snb_bin_compare}
+\end{figure}
+
 To illustrate this result, let us return to our initial example
 where $s=7$, $t=11$, and $p=0.2$.  The probability masses in
 Figure~\ref{fig:snb_bin_compare} represented in 
@@ -499,8 +561,25 @@ probability of zero through six responders.
 
 Consider the problem of designing a trial using curtailed sampling and the SNB. Assume that the maximum number of patients $n$ is given along with the null and alternative hypotheses. In this case, the parameter $s$ tells how many responses are needed to reach the success endpoint, can vary between 1 and $n-1$. For fixed $s$ and $n$  the value of $t$ is determined by the relation $t=n-s+1$. The ROC curves for all trial designs in the prototype, where $n=17$, $p=0.2$ under the null, and $p=0.4$ under the alternative, are shown in Figure~\ref{fig:all_sample_sizes_power_vs_signif}. In designing these trials, small significance and large power values are attained by either increasing the value of $n$ or increasing the difference between the alternative and null response rates. Figure~\ref{fig:all_sample_sizes} shows the expected number of enrollees for each of these trials as a function of the number of responses required to reach the success endpoint.
 
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=0.4\textwidth]{power-vs-significance.pdf}
+\caption{
+ROC curve of the all trial designs where the maximum number of patients is 17, $p=0.2$ under the null and $p=0.4$ under the alternative. The numerical values indicate the number of responses $s$ required reach the success endpoint.
+}
+\label{fig:all_sample_sizes_power_vs_signif}
+\end{figure}
 
 The expected number of enrollees for each trial is shown in Figure~\ref{fig:all_sample_sizes}. The curve reaches its maximum of 15 patients when $s=5$. The prototype design ($p=0.2$, $s=7$, and $t=11$) has an expected sample size of 14 enrollees.
+
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=0.4\textwidth]{expected-sample-size.pdf}
+\caption{
+The expected sample size all trial designs where the maximum number
+of patients is 17 and $p=0.2$.}
+\label{fig:all_sample_sizes}
+\end{figure}
 
 \section*{Acknowledgements}
 This research was supported by grants R01CA131301, 
@@ -547,107 +626,5 @@ the constraint $x < -\log(1-p)$.
 
 \bibliographystyle{acm}
 \bibliography{mybibfile}
-
-
-\pagebreak
-
-\onecolumn 
-
-\section*{Figures}
-
-\begin{figure}[htbp!]
-\centering
-\includegraphics[width=\textwidth]{snb-first-plot.pdf}
-\caption{
-The distribution of the sample size in a trial that stops after either seven patients
-respond to treatment or 11 do not when $p=0.2$.
-}
-\label{fig:kane_viz_1}
-\end{figure}
-
-\pagebreak
-
-\begin{figure}[htbp!]
-\centering
-\includegraphics[width=\textwidth]{mean-and-variance.pdf}
-\caption{
-The mean and variance of the sample size for the probability of success $p$ 
-when the trial stops after $s=7$ patients respond or $t=11$ fail to respond.
-}
-\label{fig:kane_viz_2}
-\end{figure}
-
-\pagebreak
-
-\begin{figure}[htbp!]
-\centering
-\includegraphics[width=\textwidth]{KanePlot.pdf}
-\caption{
-A hypothetical realization of the trial.
-}
-\label{fig:kane_viz}
-\end{figure}
-
-\pagebreak
-
-\begin{figure}[htbp!]
-\begin{center}
-\includegraphics[width=\textwidth]{likelihood.pdf}
-\end{center}
-\caption{Shapes of the likelihood function for given values of $Y$ with 
-$s=7$ and $t=11$.
-\label{likelihood.fig}}
-\end{figure}
-
-\pagebreak
-
-\begin{figure}[htbp!]
-\begin{center}
-\includegraphics[width=0.8\textwidth]{shapes.pdf}
-\end{center}
-\caption{Different shapes of the SNB mass function with parameters 
-($p$, $s$, $t$) given. Black areas indicate the mass contributed by reaching
-$s$ responders before $t$ non-responders. Grey indicates
-mass contributed by reaching $t$ non-responders first. \label{shapes.fig}}
-\end{figure}
-
-\pagebreak
-
-\begin{figure}[htbp!]
-\centering
-\subfloat[SNB distribution]{\includegraphics[width=0.5\textwidth]{snb_density.pdf}}
-\hfill
-\subfloat[binomial distribution]{\includegraphics[width=0.5\textwidth]{bin_density.pdf}}
-\caption{
-SNB(0.2, 7, 11) with mass contributed from 
-7 responders (black) or 11 non-responders (grey) along with 
-Binomial(0.2, 17) with at least 2 responders (black) or fewer (grey).
-}
-\label{fig:snb_bin_compare}
-\end{figure}
-
-\pagebreak
-
-\begin{figure}[htbp!]
-\centering
-\includegraphics[width=\textwidth]{power-vs-significance.pdf}
-\caption{
-ROC curve of the all trial designs where the maximum number of patients is 17, $p=0.2$ under the null and $p=0.4$ under the alternative. The numerical values indicate the number of responses $s$ required reach the success endpoint.
-}
-\label{fig:all_sample_sizes_power_vs_signif}
-\end{figure}
-
-\pagebreak
-
-\begin{figure}[htbp!]
-\centering
-\includegraphics[width=\textwidth]{expected-sample-size.pdf}
-\caption{
-The expected sample size all trial designs where the maximum number
-of patients is 17 and $p=0.2$.}
-\label{fig:all_sample_sizes}
-\end{figure}
-
-\pagebreak
 
 \end{document}

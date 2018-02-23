@@ -72,8 +72,8 @@ n = s+t-1
 plot.new()
 d = as.data.frame(dsnb_stacked(min(s,t):(t+s-1), p = p, s = s, t = t))
 names(d)[2:3] = c("success", "failure")
-d = gather(d, x)
-names(d)[2] = "Outcome"
+d = gather(d, Outcome, value, -x)
+#names(d)[2] = "Outcome"
 d$Outcome = factor(d$Outcome)
 d$Outcome = relevel(d$Outcome, "failure")
 ggplot(data = d, aes(x = factor(x), y = value, fill = Outcome)) + 
@@ -157,7 +157,7 @@ ggsave("bayesian-sample-variance.pdf")
 
 dsnb_plot(p, s, t) + ylab("Probability") + theme(text = element_text(size=15)) +
   theme_bw()
-ggsave("../sii/snb-first-plot.pdf", width=8, height=5)
+ggsave("../sii/snb-first-plot.pdf")
 
 ps = seq(0, 1, by=0.01)
 moments = foreach(p=ps, .combine=rbind) %do% {
@@ -176,14 +176,16 @@ p = ggplot(m, aes(x=p, y=var)) + geom_line() + ylab("Distribution Variance") +
   theme(text = element_text(size=15))
 ggsave("dist-var.pdf", p)
 
-y = gather(m, p, value)
+y = gather(m, type, value, -p)
 names(y) = c("p", "type", "value")
 y$type[y$type=='exp'] = "Mean"
 y$type[y$type=='var'] = "Variance"
 p = ggplot(y, aes(x=p, y=value)) + geom_line() + 
   facet_grid(type ~ ., scales="free") + ylab("") +
   theme(text = element_text(size=15)) + theme_bw()
-ggsave("mean-and-variance.pdf")
+ggsave("../sii/mean-and-variance.pdf", width=8, height=5)
+
+stop("here")
 
 # Assume the uniform prior.
 pp = function(x, k, s, t) {
@@ -199,8 +201,8 @@ pp = function(x, k, s, t) {
 }
 
 x = pp(seq(0, 1, by=0.01), 15, s, t)
-x = gather(x, p)
-names(x) = c("p", "Outcome", "value")
+x = gather(x, Outcome, value, -p)
+#names(x) = c("p", "Outcome", "value")
 x$Outcome = relevel(factor(x$Outcome), "failure")
 #p = ggplot(x, aes(x=p, y=value, fill=Outcome)) + geom_area(position="stack") +
 p = ggplot(x, aes(x=p, y=value, fill=Outcome)) + 
@@ -486,8 +488,8 @@ pp = function(x, k, s, t) {
 }
 
 x = pp(seq(0, 1, by=0.01), 15, s, t)
-x = gather(x, p)
-names(x) = c("p", "Outcome", "value")
+x = gather(x, Outcome, value, -p)
+#names(x) = c("p", "Outcome", "value")
 x$Outcome = relevel(factor(x$Outcome), "failure")
 #p = ggplot(x, aes(x=p, y=value, fill=Outcome)) + geom_area(position="stack") +
 p = ggplot(x, aes(x=p, y=value, fill=Outcome)) + 
